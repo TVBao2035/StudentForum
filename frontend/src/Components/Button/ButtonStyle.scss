@@ -1,0 +1,12 @@
+@import '../../Scss/colors.scss';
+@import '../../Scss/fonts.scss';
+.Button{
+    .text{
+        color: $main-color;
+        @include nunito;
+    }
+
+   
+
+}
+
