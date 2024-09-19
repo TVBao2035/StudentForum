@@ -211,7 +211,7 @@ const Register = () => {
                                 </div>
                                 <div className="d-flex justify-content-center mt-4">
                                     <span className="mx-2">Đã có tài khoản?</span>
-                                    <Link to="/dang-nhap">Đăng nhập</Link>
+                                    <Link to="/login">Đăng nhập</Link>
                                 </div>
                             </div>
                         </div>
