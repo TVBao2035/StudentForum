@@ -123,7 +123,7 @@ const Register = () => {
     };
 
     return (
-        <div className="container-fluid py-5">
+        <div className="Register container-fluid py-5">
             <div className="container py-5">
                 <form onSubmit={handleRegister}>
                     <div className="row g-5">
