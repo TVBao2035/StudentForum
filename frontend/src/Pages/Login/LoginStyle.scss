@@ -1,0 +1,9 @@
+@import '../../Scss/fonts.scss';
+.Login{
+    margin: 100px auto !important;
+    @include nunito(600);
+    .title{
+        color: #0d6efd;
+        @include nunito(1000);
+    }
+}

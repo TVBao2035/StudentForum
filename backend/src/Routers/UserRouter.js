@@ -12,5 +12,5 @@ router.post('/', checkToken, UserController.create);
 router.put(`/:id`, checkToken, UserController.update);
 router.delete(`/:id`, checkToken, UserController.delete);
 router.get(`/:id`, checkToken, UserController.getDetail);
-router.get(`/`, checkToken, UserController.getAll);
+router.get(`/`, UserController.getAll);
 module.exports = router;
