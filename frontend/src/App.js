@@ -5,7 +5,6 @@ import './App.scss';
 import Register from './Pages/Register';
 import Login from './Pages/Login';
 import Layout from './Components/Layout';
-import Input from './Components/Input';
 import Home from './Pages/Home';
 
 
