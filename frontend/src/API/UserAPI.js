@@ -4,8 +4,8 @@ export const signIn = ({email, password})=>{
     return axios.post('/signIn', {email, password});
 }
 
-export const signUp = ({ userName, email, password }) => {
-    return axios.post('/signUp', { userName, email, password });
+export const signUp = ({ name, email, phone, password }) => {
+    return axios.post('/signUp', { name, email, phone, password });
 }
 
 export const getAll = () => {
