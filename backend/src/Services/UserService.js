@@ -47,6 +47,7 @@ class UserService{
             }
         })
     }
+    
     udpate(data, userId){
         return new Promise(async (resolve, reject) => {
             try {
@@ -137,6 +138,7 @@ class UserService{
             }
         })
     }
+
     getDetail(userId){
         return new Promise(async(resolve, reject) => {
             try {
