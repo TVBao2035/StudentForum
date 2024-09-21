@@ -5,8 +5,8 @@ import './LoginStyle.scss';
 import { Link, useNavigate } from 'react-router-dom';
 export default function Login() {
   const initInfor = {
-    email: "bao@gmail.com",
-    password: "12345"
+    email: "minh12345@gmail.com",
+    password: "minhabc@12345"
   }
 
   const initMessage = {
