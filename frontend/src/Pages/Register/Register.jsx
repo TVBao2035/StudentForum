@@ -1,6 +1,9 @@
 import React, { useState } from "react";
-import { Link } from 'react-router-dom';
-//import { Link, useNavigate } from 'react-router-dom';
+import { signUp } from "../../API/UserAPI";
+import Swal from 'sweetalert2';
+import { Link, useNavigate } from 'react-router-dom';
+import './RegisterStyle.scss';
+import axios from "axios";
 
 const Register = () => {
     const [credentials, setCredentials] = useState( {
@@ -13,7 +16,7 @@ const Register = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [errors, setErrors] = useState({});
 
-    //const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -114,11 +117,88 @@ const Register = () => {
             setErrorMessage('Mật khẩu và xác nhận mật khẩu không khớp!');
         }
 
-        try {
-            //const { confirmPassword, ...newCredentials } = credentials;
-            //Axios
-        } catch (error) {
-            //AxiosError
+        // try {
+        //     const { confirmPassword, ...newCredentials } = credentials;
+        //     const response = await signUp(newCredentials);
+
+        //     if (response.status === 200) {
+        //         navigate('/login');
+        //         Swal.fire({
+        //             title: 'Đăng ký thành công!',
+        //             icon: 'success',
+        //             toast: true,
+        //             position: 'top-end',
+        //             timerProgressBar: true,
+        //             showConfirmButton: false,
+        //             timer: 3000,
+        //         });
+
+        //     }
+        // } catch (error) {
+        //     console.error('Lỗi đăng ký: ', error);
+
+        //     if (axios.isAxiosError(error)) {
+        //         if( error.response && error.response.status === 404) {
+        //             const apiErrors = error.response.messages;
+        //             const newApiErrors = {};
+
+        //             apiErrors.forEach((errorMessage) => {
+        //                 if (errorMessage.includes('DuplicateUserName!')) {
+        //                     newApiErrors.userName = 'Tên đăng nhập đã tồn tại!';
+        //                 } else if (errorMessage.includes('Email')) {
+        //                     newApiErrors.email = 'Email đã tồn tại!';
+        //                 }
+        //             });
+
+        //             setErrors(newApiErrors);
+        //         }
+        //     } else {
+        //         Swal.fire({
+        //             title: 'Đăng ký thất bại! Vui lòng thử lại.',
+        //             icon: 'error',
+        //             toast: true,
+        //             position: 'top-end',
+        //             timerProgressBar: true,
+        //             showConfirmButton: false,
+        //             timer: 3000
+        //         });
+        //     }
+        // }
+        try{
+            const { confirmPassword, ...newCredentials } = credentials;
+            const response = await signUp(newCredentials);
+
+            if (response.status === 200) {
+                navigate('/login');
+                Swal.fire({
+                    title: 'Đăng ký thành công!',
+                    icon: 'success',
+                    toast: true,
+                    position: 'top-end',
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+            }
+        } catch(error) {
+            console.error('Lỗi đăng ký: ', error);
+
+            if (axios.isAxiosError(error)) {
+                if (error.response && error.response.status === 404) {
+                    const errorMsg = error.response.data.message;
+                    setErrorMessage(errorMsg || 'Đăng ký thất bại!');
+                }
+            } else {
+                Swal.fire({
+                    title: 'Đăng ký thất bại! Vui lòng thử lại.',
+                    icon: 'error',
+                    toast: true,
+                    position: 'top-end',
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+            }
         }
     };
 
