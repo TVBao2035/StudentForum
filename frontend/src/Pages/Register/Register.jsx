@@ -3,12 +3,12 @@ import { signUp } from "../../API/UserAPI";
 import Swal from 'sweetalert2';
 import { Link, useNavigate } from 'react-router-dom';
 import './RegisterStyle.scss';
-import axios from "axios";
 
 const Register = () => {
     const [credentials, setCredentials] = useState( {
         userName: '',
         email: '',
+        phone:'',
         password: '',
         confirmPassword: '',
     });
@@ -45,6 +45,23 @@ const Register = () => {
                     }));
                 } else {
                     setErrors((preErrors) => ({ ...preErrors, email: undefined }));
+                }
+            }
+        }
+
+        if (name === 'phone') {
+            if (!value) {
+                setErrors((preErrors) => ({ ...preErrors, phoneNumber: 'Số điện thoại không được để trống!' }));
+            } else {
+                const phoneNumberRegex = /^0\d{9}$/;
+
+                if (!phoneNumberRegex.test(value)) {
+                    setErrors((preErrors) => ({
+                        ...preErrors,
+                        phone: 'Số điện thoại phải bắt đầu bằng số 0 và đủ 10 chữ số',
+                    }));
+                } else {
+                    setErrors((preErrors) => ({ ...preErrors, phone: undefined }));
                 }
             }
         }
@@ -99,6 +116,10 @@ const Register = () => {
             newErrors.email = 'Email không được để trống!';
         }
 
+        if (!credentials.phone) {
+            newErrors.phone = 'Số điện thoại không được để trống!';
+        }
+
         if (!credentials.password) {
             newErrors.password = 'Mật khẩu không được để trống!';
         }
@@ -117,10 +138,8 @@ const Register = () => {
             setErrorMessage('Mật khẩu và xác nhận mật khẩu không khớp!');
         }
 
- 
         const { confirmPassword, ...newCredentials } = credentials;
         const response = await signUp(newCredentials);
-
         if (response.status === 200) {
             navigate('/login');
             Swal.fire({
@@ -132,19 +151,17 @@ const Register = () => {
                 showConfirmButton: false,
                 timer: 3000,
             });
-        }else{
+        }  else {
             Swal.fire({
                 title: response.message,
-                icon: 'warning',
+                icon: 'error',
                 toast: true,
                 position: 'top-end',
                 timerProgressBar: true,
                 showConfirmButton: false,
-                timer: 8000,
+                timer: 3000,
             });
         }
-
-
     };
 
     return (
@@ -179,6 +196,19 @@ const Register = () => {
                                         onChange={handleInputChange}
                                     />
                                     {errors.email && <div className="text-danger">{errors.email}</div>}
+                                </div>
+                                <div className="form-item">
+                                    <label htmlFor="phone" className="form-label my-3">
+                                        Số điện thoại<sup>*</sup>
+                                    </label>
+                                    <input
+                                        type="phone"
+                                        name="phone"
+                                        id="phone"
+                                        className="form-control"
+                                        onChange={handleInputChange}
+                                    />
+                                    {errors.phone && <div className="text-danger">{errors.phone}</div>}
                                 </div>
                                 <div className="form-item">
                                     <label htmlFor="password" className="form-label my-3">

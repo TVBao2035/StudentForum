@@ -6,8 +6,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 export default function Login() {
   const initInfor = {
+<<<<<<< HEAD
     email: "bao@gmail.com",
     password: "12345"
+=======
+    email: "mingzi03@gmail.com",
+    password: "mingziabc@123"
+>>>>>>> 5574a7128f62c5498622dbed08f6ad78dee09afa
   }
 
   const initMessage = {
