@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import Input from '../../Components/Input';
-import { getAll, signIn } from '../../API/UserAPI';
+import { signIn } from '../../API/UserAPI';
 import './LoginStyle.scss';
 import { Link, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 export default function Login() {
   const initInfor = {
-    email: "minh12345@gmail.com",
-    password: "minhabc@12345"
+    email: "bao@gmail.com",
+    password: "12345"
   }
 
   const initMessage = {
@@ -36,7 +37,15 @@ export default function Login() {
       }
 
       if(res.status === 200){
-        alert("Sign In Success");
+        Swal.fire({
+          title: res.message,
+          icon: 'success',
+          toast: true,
+          position: 'top-end',
+          timerProgressBar: true,
+          showConfirmButton: false,
+          timer: 8000,
+        });
         naigate('/');
       }
     }
