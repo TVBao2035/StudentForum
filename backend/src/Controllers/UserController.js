@@ -71,12 +71,12 @@ class UserController{
         }
     }
 
-    async getDetail(req, res){
+    async getDetails(req, res){
         console.log("userId");
         try {
             const userId = req.params.id;
             console.log(userId);
-            const data = await UserService.getDetail(userId);
+            const data = await UserService.getDetails(userId);
             res.status(200).json(data);
         } catch (error) {
             console.log(error);
@@ -136,6 +136,17 @@ class UserController{
             res.status(200).json(data);
         } catch (error) {
             console.log(error);
+            res.status(404).json(error);
+        }
+    }
+
+    async logout(req, res){
+        try {
+            return res.clearCookie("accessToken").status(200).json({
+                status: 200,
+                message: `Logout Success!!!`
+            })
+        } catch (error) {
             res.status(404).json(error);
         }
     }
