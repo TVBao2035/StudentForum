@@ -24,6 +24,9 @@ module.exports = {
       content: {
         type: Sequelize.STRING
       },
+      image: {
+        type: Sequelize.STRING
+      },
       isDelete: {
         type: Sequelize.BOOLEAN,
         defaultValue: false

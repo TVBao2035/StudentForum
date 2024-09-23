@@ -11,6 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Post.hasMany(models.Like, {foreignKey: "postId"});
+      Post.hasMany(models.Comment, { foreignKey: "postId" });
+      Post.belongsTo(models.User, {foreignKey: "userId"});
+      Post.belongsTo(models.Categorys, {foreignKey: "categoryId"});
+      Post.belongsTo(models.Group, { foreignKey: "groupId"});
     }
   }
   Post.init({
@@ -18,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     groupId: DataTypes.INTEGER,
     categoryId: DataTypes.INTEGER,
     content: DataTypes.STRING,
+    image: DataTypes.STRING,
     isDelete: DataTypes.BOOLEAN
 
   }, {

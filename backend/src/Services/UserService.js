@@ -139,7 +139,7 @@ class UserService{
         })
     }
 
-    getDetail(userId){
+    getDetails(userId){
         return new Promise(async(resolve, reject) => {
             try {
                 const user = await db.User.findOne({
@@ -148,6 +148,10 @@ class UserService{
                     },
                     attributes: {
                         exclude: ['password']
+                    },
+                    include: {
+                        model: db.User,
+                        as: "friends"
                     }
                 })
 
@@ -302,6 +306,8 @@ class UserService{
             }
         })
     }
+    
+    
 }
 
 module.exports = new UserService;
