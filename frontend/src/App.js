@@ -1,11 +1,8 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './App.scss';
-
-import Register from './Pages/Register';
-import Login from './Pages/Login';
-import Layout from './Components/Layout';
-import Home from './Pages/Home';
+import { Details, Group, Home, Login, MakeFriend, Notifycation, Register, Setting } from './Pages';
+import { Layout } from './Components';
 
 
 
@@ -14,6 +11,11 @@ function App() {
     <Routes>
       <Route path='' element={<Layout/>}>
         <Route path='' element={<Home/>}/>
+        <Route path='makeFriend' element={<MakeFriend />} />
+        <Route path='group' element={<Group />} />
+        <Route path='notifycation' element={<Notifycation />} />
+        <Route path='setting' element={<Setting />} />
+        <Route path='details' element={<Details/>} />
       </Route>
       <Route path="/login" element={<Login/>}/>
       <Route path="/register" element={<Register/>}/>
