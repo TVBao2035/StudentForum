@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import Input from '../../Components/Input';
+
 import { signIn } from '../../API/UserAPI';
 import './LoginStyle.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { Input } from '../../Components';
 export default function Login() {
   const initInfor = {
     email: "bao@gmail.com",

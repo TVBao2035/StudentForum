@@ -1,0 +1,25 @@
+@import '../../Scss/colors';
+.Footer{
+    background-color: white;
+    li{
+        list-style: none;
+        :hover{
+            background-color: #94929229;
+        }
+        a{
+            text-decoration: none;
+            padding: 6px 30px;
+            border-top: 2px solid #ffffff00;
+            color: $no-active;
+            display: flex;
+            align-items: center;
+            :hover{
+                background-color: #ffffff00;
+            }
+        }
+    }
+    .active {
+        color: $active;
+        border-top: 2px solid $active;
+    }
+}

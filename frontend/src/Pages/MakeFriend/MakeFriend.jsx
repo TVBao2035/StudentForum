@@ -1,10 +1,10 @@
 import React from 'react'
 
-export default function Home() {
+export default function MakeFriend() {
   return (
-    <div className='Home px-5 mx-5'>
+    <div className='MakeFriend px-5 mx-5'>
       <div className='container px-5 mx-5'>
-        <p>Home</p>
+        <p>Make Friend</p>
       </div>
     </div>
   )
