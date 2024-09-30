@@ -5,6 +5,9 @@ import './LoginStyle.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { Input } from '../../Components';
+import { useDispatch } from 'react-redux';
+import { setAll, setName } from '../../Redux/User/userSlice';
+
 export default function Login() {
   const initInfor = {
     email: "bao@gmail.com",
@@ -20,6 +23,7 @@ export default function Login() {
   const [infor, setInfor] = useState(initInfor);
   const [message, setMessage] = useState(initMessage);
   const naigate = useNavigate();
+  const dispatch = useDispatch();
   const handleChange = (e) => {
     setInfor({
       ...infor,
@@ -30,16 +34,26 @@ export default function Login() {
     let checkNotError = Object.values(message).every(e => e.length ===0);
     if (checkNotError){
       let res = await signIn(infor);
-      console.log(res);
+
       if(res.status === 404){
         setMessage({
           ...message,
           [res.data]: res.message
-        })
+        });
         return;
       }
 
       if(res.status === 200){
+        const userData = res.data;
+        dispatch(setAll({
+          id: userData.id,
+          token: userData.accessToken,
+          name: userData.name,
+          avatar: userData.avatar,
+          phone: userData.phone,
+          email: userData.email,
+          isAdmin: userData.isAdmin,
+        }));
         Swal.fire({
           title: res.message,
           icon: 'success',
@@ -49,7 +63,10 @@ export default function Login() {
           showConfirmButton: false,
           timer: 8000,
         });
+        localStorage.setItem(process.env.REACT_APP_LOGIN_LOCAL_STORAGE, true);
         naigate('/');
+
+        return;
       }
     }
   }

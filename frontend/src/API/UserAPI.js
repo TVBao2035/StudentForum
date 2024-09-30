@@ -1,5 +1,8 @@
 import axios from '../Configs/axios.js';
 
+export const logOut = () => {
+    return axios.get('/logout');
+}
 export const signIn = ({email, password})=>{
     return axios.post('/signIn', {email, password});
 }

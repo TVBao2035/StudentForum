@@ -5,16 +5,19 @@
     .icon{
         border-radius: 50%;
         padding: 8px 8px;
+        background-color: $no-active;
     }
     .item{
         padding-left: 8px;
         border-radius: 4px;
         text-decoration: none;
+        border: 1px solid #dfdfdf00;
     }
     .item:hover{
         background-color: #94929229;
+        border: 1px solid $active;
+        .icon{
+            background-color: $active;
+        }
     }
-    // a{
-       
-    // }
 }
