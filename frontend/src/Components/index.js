@@ -4,3 +4,4 @@ export {default as Input} from './Input';
 export {default as Layout} from './Layout';
 export {default as Avatar} from './Avatar';
 export {default as Navbar} from './Navbar';
+export {default as Post} from './Post';
