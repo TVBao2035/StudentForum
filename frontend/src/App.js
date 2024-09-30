@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './App.scss';
 import { Details, Group, Home, Login, MakeFriend, Notifycation, Register, Setting } from './Pages';
-import { Layout } from './Components';
+import { Layout, Post } from './Components';
 
 
 
@@ -16,6 +16,7 @@ function App() {
         <Route path='notifycation' element={<Notifycation />} />
         <Route path='setting' element={<Setting />} />
         <Route path='details' element={<Details/>} />
+        <Route path='post' element={<Post/>} />
       </Route>
       <Route path="/login" element={<Login/>}/>
       <Route path="/register" element={<Register/>}/>
