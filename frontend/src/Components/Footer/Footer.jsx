@@ -22,7 +22,7 @@ export default function Footer() {
           </NavLink>
         </li>
         <li>
-          <NavLink to={'notifycation'}>
+          <NavLink to={'notification'}>
             <IoNotifications />
           </NavLink>
         </li>

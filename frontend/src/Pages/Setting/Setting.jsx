@@ -83,7 +83,7 @@ export default function Setting() {
   return (
     <div className='Setting'>
       <div className='container w-50'>
-          <Link to={'../details'} className='d-flex justify-content-between align-items-center text-secondary text-decoration-none'>
+          <Link to={'../profile'} className='d-flex justify-content-between align-items-center text-secondary text-decoration-none'>
             <div className='d-flex gap-2 align-items-center'>
               <Avatar 
                   link={

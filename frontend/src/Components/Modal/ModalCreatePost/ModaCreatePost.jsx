@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { Editor } from '@tinymce/tinymce-react';
 
-const Post = ({ show, handleClose }) => {
+const ModalCreatePost = ({ show, handleClose }) => {
   const [content, setContent] = useState('');
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
@@ -19,12 +19,19 @@ const Post = ({ show, handleClose }) => {
     }
   };
 
+  const handleCloseModal = () => {
+    setImagePreview("");
+    setContent("");
+    handleClose();
+  }
   const handlePostSubmit = () => {
     handleClose();
+    setImagePreview("");
+    setContent("");
   };
 
   return (
-    <Modal show={show} onHide={handleClose}>
+    <Modal show={show} onHide={handleCloseModal}>
       <Modal.Header closeButton>
         <Modal.Title>Tạo bài đăng mới</Modal.Title>
       </Modal.Header>
@@ -76,7 +83,7 @@ const Post = ({ show, handleClose }) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button variant="secondary" onClick={handleCloseModal }>
           Hủy
         </Button>
         <Button variant="primary" onClick={handlePostSubmit}>
@@ -87,4 +94,4 @@ const Post = ({ show, handleClose }) => {
   );
 };
 
-export default Post;
+export default ModalCreatePost;

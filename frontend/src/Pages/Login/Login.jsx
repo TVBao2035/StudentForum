@@ -6,12 +6,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { Input } from '../../Components';
 import { useDispatch } from 'react-redux';
-import { setAll, setName } from '../../Redux/User/userSlice';
+import { setAll, setName } from '../../Redux/userSlice';
 
 export default function Login() {
   const initInfor = {
-    email: "mingzi03@gmail.com",
-    password: "mingziabc@123"
+    email: "bao@gmail.com",
+    password: "12345"
 
   }
 
