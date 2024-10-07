@@ -1,0 +1,13 @@
+@import '../../../../Scss/colors';
+.Friend_Profile{
+    .text_name{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        max-width: 100px;
+    }
+    a{
+        text-decoration: none;
+        color: $no-active;
+    }
+}

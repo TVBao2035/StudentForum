@@ -1,13 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+    token: '',
     id: '',
     name: '',
     avatar: '',
-    phone: '',
-    email: '',
     isAdmin: false,
-    token: ''
+    email: '',
+    phone: '',
+    friends: [],
 }
 
 export const userSlice = createSlice({
@@ -17,18 +18,21 @@ export const userSlice = createSlice({
         setName: (state, action) => {
             state.name = action.payload;
         },
-        setAll: (state, action) => {
+        setDataMain: (state, action) => {
             state.token = action.payload.token;
             state.id = action.payload.id;
             state.name = action.payload.name;
             state.avatar = action.payload.avatar;
             state.isAdmin = action.payload.isAdmin;
+        },
+        setData: (state, action) => {
             state.email = action.payload.email;
             state.phone = action.payload.phone;
+            state.friends = action.payload.friends;
         }
     }
 });
 
-export const {setName, setAll} = userSlice.actions;
+export const { setName, setData, setDataMain } = userSlice.actions;
 
 export default userSlice.reducer;

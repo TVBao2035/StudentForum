@@ -8,7 +8,9 @@ export default function Layout() {
   return (
     <div className='Layout'>
         <Header/>
+          <div className='my-2'>
             <Outlet/>
+          </div>
         <Footer/>
     </div>
   )

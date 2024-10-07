@@ -147,12 +147,35 @@ class UserService{
                         [Op.and]: [{id: userId}, {isDelete: false}]
                     },
                     attributes: {
-                        exclude: ['password']
+                        exclude: ['password', 'isAdmin', 'isDelete', 'createdAt', 'updatedAt']
                     },
-                    include: {
-                        model: db.User,
-                        as: "friends"
-                    }
+                    include: [
+                        {
+                            model: db.User,
+                            as: "friends",
+                            attributes: {
+                                exclude: ['password', 'isAdmin', 'isDelete', 'createdAt', 'updatedAt']
+                            },
+                        },
+                        {
+                            model: db.Post,
+                            include: [
+                                {
+                                    model: db.Categorys,
+                                    attributes: ['name']
+                                },
+                                {
+                                    model: db.User,
+                                    attributes: {
+                                        exclude: ['password', 'isAdmin', 'isDelete', 'createdAt', 'updatedAt']
+                                    },
+                                },
+                            ],
+                            attributes: {
+                                exclude: ['isDelete', 'categoryId', 'updatedAt', 'userId']
+                            }
+                        }
+                    ]
                 })
 
                 if(!user){

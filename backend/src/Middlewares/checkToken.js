@@ -6,7 +6,7 @@ const checkToken = (req, res, next) => {
     const token = tokenHeader ? tokenHeader : tokenCookie;
 
     if(!token){
-        return res.status(201).json({
+        return res.status(401).json({
             status: 401,
             message: `Please Sign In!`
         })
