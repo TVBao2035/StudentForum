@@ -30,7 +30,7 @@ const ModalCreatePost = ({ show, handleClose }) => {
     setContent("");
   };
 
-  // check main oooooo
+  
   return (
     <Modal show={show} onHide={handleCloseModal}>
       <Modal.Header closeButton>

@@ -1,0 +1,34 @@
+@import '../../Scss/colors';
+.Post{
+    .block_main{
+        margin: 10px auto;
+    }
+
+    .block_image{
+        object-fit: contain;
+        img{
+            object-fit: cover;
+            width: 100%;
+        }
+    }
+    .block_edit{
+        padding: 0px 16px;
+    }
+    .block_edit:hover{
+        background-color: $no-active--transparent;
+        border-radius: 50%;
+       
+    }
+    .block_time{
+        font-size: 12px;
+    }
+    .btn_active:hover{
+        background-color: $no-active--transparent;;
+    }
+    .small{
+        width: 65%;
+    }
+    .big{
+        width: 100%;
+    }
+}
