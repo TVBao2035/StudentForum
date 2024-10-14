@@ -8,7 +8,7 @@ import { MainLayout } from './Components/Layout';
 import { refresh } from './API/UserAPI';
 import timeOut from './Helpers/timeOut';
 import { setLoading } from './Redux/loadingSlice';
-import { Loading } from './Components';
+import { Account, Loading } from './Components';
 import { setDataMain } from './Redux/userSlice';
 import Swal from 'sweetalert2';
 
@@ -58,6 +58,7 @@ function App() {
         <Route path='message' element={<Message/>} />
       </Route>
       <Route path="/login" element={<Login/>}/>
+      <Route path='/account' element={<Account/>}/>
       <Route path="/register" element={<Register/>}/>
     </Routes>
 

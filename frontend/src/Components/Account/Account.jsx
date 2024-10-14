@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 import Avatar from '../Avatar';
 import { setAll } from "../../Redux/userSlice";
 import axios from "axios";
-import {} from "../../API/UserAPI";
+import { getDetails } from "../../API/UserAPI";
 
 export default function Account() {
     const user = useSelector((state) => state.user);
@@ -23,18 +23,26 @@ export default function Account() {
 
     const [errors, setErrors] = useState({});
 
+    const fetchApi = async (userId) => {
+        let res = await getDetails(userId);
+        if(res.status === 200){
+            setUserData({
+                name: res.data.name,
+                userName: '',
+                email: res.data.email,
+                phone: res.data.phone,
+                //address: '',
+                avatar: res.data.avatar,
+            })
+            return ;
+        }
+
+        alert(res.message);
+    }
     useEffect( () => {
-        console.log(user);
-        setUserData({
-            name: user.name,
-            userName: '',
-            email: user.email,
-            phone: user.phone,
-            //address: '',
-            avatar: user.avatar,
-        });
+        fetchApi(user.id)
         setAvatarPreview(user.avatar);
-    }, [user]);
+    }, [user.id]);
 
 
     const handleInputChange = (event) => {
@@ -220,6 +228,7 @@ export default function Account() {
 
     };
 
+    console.log(userData);
     return (
         <div className="container-fluid py-5">
             <div className="container py-5">

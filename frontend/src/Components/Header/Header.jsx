@@ -8,7 +8,7 @@ import Avatar from '../Avatar';
 import { ModalCreatePost } from '../Modal';
 import Swal from 'sweetalert2';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAll, initialState } from '../../Redux/userSlice';
+import { initialState, setDataMain } from '../../Redux/userSlice';
 import { logOut } from '../../API/UserAPI';
 
 export default function Header() {
@@ -35,7 +35,7 @@ export default function Header() {
     if (result.isConfirmed) {
       try {
         await logOut();
-        dispatch(setAll(initialState));
+        dispatch(setDataMain(initialState));
         Swal.fire('Đã đăng xuất!', '', 'success');
         navigate('/login');
       } catch (error) {
@@ -46,7 +46,7 @@ export default function Header() {
 
   useEffect(() => {
     if (!token) {
-      dispatch(setAll(initialState));
+      dispatch(setDataMain(initialState));
       navigate('/login');
     }
   }, [token, dispatch, navigate]);
