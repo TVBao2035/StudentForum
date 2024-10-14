@@ -30,6 +30,7 @@ const ModalCreatePost = ({ show, handleClose }) => {
     setContent("");
   };
 
+  
   return (
     <Modal show={show} onHide={handleCloseModal}>
       <Modal.Header closeButton>
@@ -37,7 +38,7 @@ const ModalCreatePost = ({ show, handleClose }) => {
       </Modal.Header>
       <Modal.Body>
         <Editor
-          apiKey="4ce0vh5c4o0ihudg31oaelcez8hsh2g1a94obfd5g2bc1j1t"
+          apiKey={`${process.env.API_KEY}`}
           value={content}
           init={{
             height: 200,
@@ -83,7 +84,7 @@ const ModalCreatePost = ({ show, handleClose }) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleCloseModal }>
+        <Button variant="secondary" onClick={handleCloseModal}>
           Hủy
         </Button>
         <Button variant="primary" onClick={handlePostSubmit}>

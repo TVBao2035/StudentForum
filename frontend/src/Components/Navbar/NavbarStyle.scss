@@ -11,13 +11,36 @@
         padding-left: 8px;
         border-radius: 4px;
         text-decoration: none;
-        border: 1px solid #dfdfdf00;
+        border: 1px solid white;
+        padding: 8px 10px;
     }
     .item:hover{
         background-color: #94929229;
-        border: 1px solid $active;
+        // border-color: $active;
         .icon{
             background-color: $active;
         }
     }
+
+    .horizontal{
+        display: flex !important;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 10px;
+        .item{
+            padding: 2px 8px;
+        
+            border: 2px solid white;
+        }
+        
+        .item:hover{
+            border-color: white;
+            background-color: white;
+        }
+        .active {
+            border-color: white;
+            border-bottom: 2px solid $active !important;
+        }
+    }
+ 
 }

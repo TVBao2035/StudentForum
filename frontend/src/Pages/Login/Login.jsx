@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { signIn } from '../../API/UserAPI';
 import './LoginStyle.scss';
@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { Input } from '../../Components';
 import { useDispatch } from 'react-redux';
-import { setAll, setName } from '../../Redux/userSlice';
+import { setDataMain } from '../../Redux/userSlice';
 
 export default function Login() {
   const initInfor = {
@@ -19,23 +19,25 @@ export default function Login() {
     email: "",
     password: ""
   }
-  
+
   const [infor, setInfor] = useState(initInfor);
   const [message, setMessage] = useState(initMessage);
   const naigate = useNavigate();
   const dispatch = useDispatch();
+
   const handleChange = (e) => {
     setInfor({
       ...infor,
       [e.target.name]: e.target.value
     })
   }
+
   const handleSubmit = async () => {
-    let checkNotError = Object.values(message).every(e => e.length ===0);
-    if (checkNotError){
+    let checkNotError = Object.values(message).every(e => e.length === 0);
+    if (checkNotError) {
       let res = await signIn(infor);
 
-      if(res.status === 404){
+      if (res.status === 404) {
         setMessage({
           ...message,
           [res.data]: res.message
@@ -43,15 +45,13 @@ export default function Login() {
         return;
       }
 
-      if(res.status === 200){
+      if (res.status === 200) {
         const userData = res.data;
-        dispatch(setAll({
+        dispatch(setDataMain({
           id: userData.id,
           token: userData.accessToken,
           name: userData.name,
           avatar: userData.avatar,
-          phone: userData.phone,
-          email: userData.email,
           isAdmin: userData.isAdmin,
         }));
         Swal.fire({
@@ -61,7 +61,7 @@ export default function Login() {
           position: 'top-end',
           timerProgressBar: true,
           showConfirmButton: false,
-          timer: 8000,
+          timer: 5000,
         });
         localStorage.setItem(process.env.REACT_APP_LOGIN_LOCAL_STORAGE, true);
         naigate('/');
@@ -70,42 +70,45 @@ export default function Login() {
       }
     }
   }
+  useEffect(()=> {
+    localStorage.clear(process.env.REACT_APP_LOGIN_LOCAL_STORAGE);
+  }, []);
   return (
     <div className='Login container px-5 py-5 w-50 border user-select-none rounded-4 border-primary'>
       <div className=''>
-          <div className='container gap-4 fs-3 '>
-            <p className='title'>Đăng Nhập</p>
-          </div>
+        <div className='container gap-4 fs-3 '>
+          <p className='title'>Đăng Nhập</p>
+        </div>
 
-          <div className='container d-flex flex-column gap-4'>
-            <Input 
-                label={"email"} 
-                type='email'
-                name='email'
-                message={message.email} 
-                setMessage={setMessage}
-                handleChange={handleChange}
-                value={infor.email}
-            />
+        <div className='container d-flex flex-column gap-4'>
+          <Input
+            label={"email"}
+            type='email'
+            name='email'
+            message={message.email}
+            setMessage={setMessage}
+            handleChange={handleChange}
+            value={infor.email}
+          />
 
-            <Input 
-                label='Mật Khẩu'
-                type='password'
-                name='password'
-                message={message.password}
-                setMessage={setMessage}
-                handleChange={handleChange}
-                value={infor.password}
-            />
-    
-            <div className='d-flex justify-content-center flex-column  align-items-center gap-1'>
-              <button 
-                className={`btn btn-primary`}
-                onClick={handleSubmit}
-              >Đăng Nhập</button>
-              <Link to={'/register'}>Đăng Ký</Link>
-            </div>
+          <Input
+            label='Mật Khẩu'
+            type='password'
+            name='password'
+            message={message.password}
+            setMessage={setMessage}
+            handleChange={handleChange}
+            value={infor.password}
+          />
+
+          <div className='d-flex justify-content-center flex-column  align-items-center gap-1'>
+            <button
+              className={`btn btn-primary`}
+              onClick={handleSubmit}
+            >Đăng Nhập</button>
+            <Link to={'/register'}>Đăng Ký</Link>
           </div>
+        </div>
       </div>
     </div>
   )

@@ -2,13 +2,13 @@ import React from 'react'
 import { Avatar, Navbar } from '../../Components'
 import { MdOutlineKeyboardArrowRight, MdBrightness6 } from "react-icons/md";
 import { IoLogOutSharp, IoSettings } from "react-icons/io5";
-import { BsBrightnessHigh, BsBrightnessHighFill } from "react-icons/bs";
 import './SettingStyle.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { logOut } from '../../API/UserAPI';
 import Swal from 'sweetalert2';
 import { useSelector } from 'react-redux';
 import defaultAvatar from '../../Assets/images/defaultAvatar';
+
 export default function Setting() {
   const navigation = useNavigate();
   const user = useSelector(state => state.user);
@@ -39,7 +39,7 @@ export default function Setting() {
         position: 'top-end',
         timerProgressBar: true,
         showConfirmButton: false,
-        timer: 8000,
+        timer: 5000,
       });
       localStorage.clear(process.env.REACT_APP_LOGIN_LOCAL_STORAGE);
       navigation('/login');
@@ -53,7 +53,7 @@ export default function Setting() {
         position: 'top-end',
         timerProgressBar: true,
         showConfirmButton: false,
-        timer: 8000,
+        timer: 5000,
       });
       }
 
@@ -83,7 +83,11 @@ export default function Setting() {
   return (
     <div className='Setting'>
       <div className='container w-50'>
-          <Link to={'../profile'} className='d-flex justify-content-between align-items-center text-secondary text-decoration-none'>
+          <Link 
+            to={`../@${user.id}`} 
+            className='d-flex justify-content-between align-items-center text-secondary text-decoration-none'
+            
+          >
             <div className='d-flex gap-2 align-items-center'>
               <Avatar 
                   link={

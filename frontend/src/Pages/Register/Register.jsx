@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { signUp } from "../../API/UserAPI";
 import Swal from 'sweetalert2';
 import { Link, useNavigate } from 'react-router-dom';
@@ -163,7 +163,9 @@ const Register = () => {
             });
         }
     };
-
+    useEffect(() => {
+        localStorage.clear(process.env.REACT_APP_LOGIN_LOCAL_STORAGE);
+    }, []);
     return (
         <div className="Register container-fluid py-5">
             <div className="container py-5">

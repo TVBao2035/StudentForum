@@ -176,7 +176,7 @@ class PostService{
                         {
                             model: db.Categorys,
                             attributes: {
-                                exclude: ['isDelete', 'updatedAt', 'createdAt']
+                                exclude: ['isDelete', 'updatedAt', 'creaedAt']
                             },
                         },
                         {
@@ -225,15 +225,23 @@ class PostService{
                         isDelete: false
                     },
                     attributes: {
-                        exclude: ['createdAt', 'updatedAt', 'isDelete']
+                        exclude: ['updatedAt', 'isDelete']
                     },
-                    include:{
-                        model: db.Categorys,
-                        attributes: ['name']
-                    },
-                    order: [
-                        ['createdAt', 'desc']
-                    ]
+                    include:[
+                        {
+                            model: db.Categorys,
+                            attributes: ['name']
+                        },
+                        {
+                            model: db.User,
+                            attributes: {
+                                exclude: ['password', 'isAdmin', 'isDelete', 'createdAt', 'updatedAt']
+                            },
+                        },
+                    ],
+                    // order: [
+                    //     ['createdAt', 'desc']
+                    // ]
                 })
 
                 resolve({
