@@ -5,3 +5,4 @@ export { default as Layout } from './Layout';
 export { default as Avatar } from './Avatar';
 export { default as Navbar } from './Navbar';
 export { default as Post } from './Modal/ModalCreatePost';
+export { default as Account } from './Account';

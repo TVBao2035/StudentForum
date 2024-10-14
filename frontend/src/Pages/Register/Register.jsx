@@ -6,7 +6,7 @@ import './RegisterStyle.scss';
 
 const Register = () => {
     const [credentials, setCredentials] = useState( {
-        userName: '',
+        name: '',
         email: '',
         phone:'',
         password: '',
@@ -21,11 +21,11 @@ const Register = () => {
     const handleInputChange = (event) => {
         const { name, value } = event.target;
 
-        if (name === 'userName') {
+        if (name === 'name') {
             if (!value) {
                 setErrors((preErrors) => ({
                     ...preErrors,
-                    userName: 'Tên đăng nhập không được để trống!',
+                    name: 'Tên đăng nhập không được để trống!',
                 }));
             } else {
                 setErrors((preErrors) => ({ ...preErrors, userName: undefined}));
@@ -108,8 +108,8 @@ const Register = () => {
 
         const newErrors = { ...errors };
 
-        if (!credentials.userName) {
-            newErrors.userName = 'Tên đăng nhập không được để trống!';
+        if (!credentials.name) {
+            newErrors.name = 'Tên đăng nhập không được để trống!';
         }
 
         if (!credentials.email) {
@@ -172,17 +172,17 @@ const Register = () => {
                         <div className="col-md-12 col-lg-6 col-xl-6 offset-lg-3 offset-xl-3">
                             <div className="border border-1 rounded p-5">
                                 <div className="form-item">
-                                    <label htmlFor="username" className="form-label mb-3">
+                                    <label htmlFor="name" className="form-label mb-3">
                                         Tên đăng nhập<sup>*</sup>
                                     </label>
                                     <input
                                         type="text"
-                                        name="userName"
-                                        id="username"
+                                        name="name"
+                                        id="name"
                                         className="form-control"
                                         onChange={handleInputChange}
                                     />
-                                    {errors.userName && <div className="text-danger">{errors.userName}</div>}
+                                    {errors.name && <div className="text-danger">{errors.name}</div>}
                                 </div>
                                 <div className="form-item">
                                     <label htmlFor="email" className="form-label my-3">

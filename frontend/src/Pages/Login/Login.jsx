@@ -10,8 +10,8 @@ import { setAll, setName } from '../../Redux/userSlice';
 
 export default function Login() {
   const initInfor = {
-    email: "bao@gmail.com",
-    password: "12345"
+    email: "mingzi03@gmail.com",
+    password: "mingziabc@123"
 
   }
 

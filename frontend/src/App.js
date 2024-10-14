@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './App.scss';
 import { Profile, Group, Home, Login, MakeFriend, Notification, Register, Setting, Message } from './Pages';
-import { Layout, Post } from './Components';
+import { Account, Layout, Post } from './Components';
 
 
 
@@ -19,6 +19,7 @@ function App() {
         <Route path='message' element={<Message/>} />
       </Route>
       <Route path="/login" element={<Login/>}/>
+      <Route path="/account" element={<Account/>}/>
       <Route path="/register" element={<Register/>}/>
     </Routes>
 

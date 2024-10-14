@@ -1,17 +1,14 @@
 import defaultAvatar from '../../Assets/images/defaultAvatar';
 import './AvatarStyle.scss';
-export default function Avatar(props) {
-    const {link, ...style} = props;
 
+export default function Avatar({ link, size = 'small' }) {
   return (
-    <div className='Avatar '>
-        <img
-            className={Object.keys(style)}
-            src={link ? link : defaultAvatar} 
-            alt="" 
-        />
-        
+    <div className='Avatar'>
+      <img
+        className={size}
+        src={link || defaultAvatar}
+        alt="User Avatar"
+      />
     </div>
-
-  )
+  );
 }
