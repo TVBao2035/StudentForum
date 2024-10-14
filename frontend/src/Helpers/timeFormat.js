@@ -2,9 +2,7 @@ const timeFormat = (time)=>{
     let date =  new Date(time).getTime();
     let now = new Date().getTime();
     let res = new Date(now - date );
-    // console.log("Created At", time);
-    // console.log("Now", Date());
-    // console.log("calculator", res);
+   
     if(res.getDate() > 30){
         date = new Date(time);
         let day = date.getDate().toString();
@@ -13,6 +11,18 @@ const timeFormat = (time)=>{
         if(month.length === 1) month = "0" + month;
         return `${day}/${month}/${date.getFullYear()}`
     }
-    return `${res.getDate()-1} ngày trước`;
+
+    if(res.getDate()-1 > 1) {
+        return `${res.getDate()-1} ngày trước`;
+    }
+    if (res.getDate() - 1 === 1) return `Hôm qua`;
+
+    
+    if (res.getHours() - 7 <= 1) {
+        if (res.getMinutes() <= 1 && res.getSeconds() <= 60) return `${res.getSeconds()} giây trước`;
+        if (res.getMinutes() <= 60) return `${res.getMinutes()} phút trước`;
+    }
+    
+    if (res.getHours()-7 <= 24 ) return `${res.getHours()} giờ trước`;
 }
 export default timeFormat;

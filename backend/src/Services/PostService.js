@@ -227,6 +227,9 @@ class PostService{
                     attributes: {
                         exclude: ['updatedAt', 'isDelete']
                     },
+                    order: [
+                        ['createdAt', "DESC"],
+                    ],
                     include:[
                         {
                             model: db.Categorys,
@@ -238,10 +241,18 @@ class PostService{
                                 exclude: ['password', 'isAdmin', 'isDelete', 'createdAt', 'updatedAt']
                             },
                         },
+                        {
+                            model: db.Like,
+                            where: {
+                                isDelete: false
+                            },
+                            required: false,
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt']
+                            },
+                        }
                     ],
-                    // order: [
-                    //     ['createdAt', 'desc']
-                    // ]
+                  
                 })
 
                 resolve({

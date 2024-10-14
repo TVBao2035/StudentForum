@@ -37,7 +37,7 @@ instance.interceptors.response.use(function (response) {
                 grow: 'row'
             });
             if (isConfirmed) {
-                window.location.href = './login';
+                window.location.href = '/login';
                 localStorage.clear(process.env.REACT_APP_LOGIN_LOCAL_STORAGE);
             }
             return Promise.resolve(error.response.data);
@@ -52,10 +52,13 @@ instance.interceptors.response.use(function (response) {
                 grow: 'row'
             });
             if(isConfirmed){
-                window.location.href = './login';
+                window.location.href = '/login';
                 localStorage.clear(process.env.REACT_APP_LOGIN_LOCAL_STORAGE);
                 return Promise.resolve(error.response.data);
             }
+        case 404: 
+            alert(error.response.data.message);
+            break;
         default: 
             return Promise.reject(error);
     }

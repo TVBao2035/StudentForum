@@ -149,16 +149,17 @@ class UserService{
                     attributes: {
                         exclude: ['password', 'isAdmin', 'isDelete', 'createdAt', 'updatedAt']
                     },
+                    order: [[db.Post, 'createdAt', 'DESC']],
                     include: [
                         {
-                            model: db.User,
-                            as: "friends",
-                            attributes: {
-                                exclude: ['password', 'isAdmin', 'isDelete', 'createdAt', 'updatedAt']
-                            },
-                        },
-                        {
                             model: db.Post,
+                            where:{
+                                isDelete: false
+                            },
+                            required: false,
+                            attributes: {
+                                exclude: ['isDelete', 'categoryId', 'updatedAt', 'userId']
+                            },
                             include: [
                                 {
                                     model: db.Categorys,
@@ -170,14 +171,18 @@ class UserService{
                                         exclude: ['password', 'isAdmin', 'isDelete', 'createdAt', 'updatedAt']
                                     },
                                 },
+                                {
+                                    model: db.Like,
+                                    where: {
+                                        isDelete: false
+                                    },
+                                    required: false,
+                                }
                             ],
-                            attributes: {
-                                exclude: ['isDelete', 'categoryId', 'updatedAt', 'userId']
-                            }
+                           
                         }
                     ]
                 })
-
                 if(!user){
                     return resolve({
                         status: 404,

@@ -1,0 +1,17 @@
+@import '../../Scss/colors';
+.SendMessage{
+    .ask_comment{
+        background-color: $no-active--transparent;
+        color: gray;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .small {
+        width: 65%;
+    }
+
+    .big {
+        width: 100%;
+    }
+}

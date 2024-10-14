@@ -1,8 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&display=swap');
 @mixin nunito($weight-value:100){
     font-family: "Nunito", sans-serif;
     font-optical-sizing: auto;
     font-weight: $weight-value;
     font-style: normal;
+}
+
+@mixin afacad($weight-value: 100){
+    font-family: "Afacad Flux", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: $weight-value;
+        font-style: normal;
+        font-variation-settings:"slnt" 0;
 }
