@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import './App.scss';
 import { Profile, Group, Home, Login, MakeFriend, Notification, Register, Setting, Message } from './Pages';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { MainLayout } from './Components/Layout';
 import { refresh } from './API/UserAPI';
@@ -10,6 +11,7 @@ import { setLoading } from './Redux/loadingSlice';
 import { Loading } from './Components';
 import { setDataMain } from './Redux/userSlice';
 import Swal from 'sweetalert2';
+
 
 
 
