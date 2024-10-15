@@ -3,7 +3,7 @@ import { getAllCommentByPostId } from '../../API/CommentAPI';
 import Comment from './Comment';
 import './CommentStyle.scss';
 import { useSelector } from 'react-redux';
-const ContaierComment = ({postId, ...style}) => {
+const  ContaierComment = ({postId, ...style}) => {
 
   const [comments, setComments] = useState([]);
 
@@ -15,11 +15,16 @@ const ContaierComment = ({postId, ...style}) => {
     }
     alert(res.message);
   }
+
+  const commentRedux = useSelector(state => state.post.comment);
+  console.log(commentRedux);
   useEffect(() => {
     fetchApi();
-  }, [useSelector(state => state.post.like.changeLike)]);
+  }, [useSelector(state => state.post.like.changeLike), useSelector(state => state.post.comment)]);
 
-  const renderComments = (comment) => {
+  let level = 5;
+  const renderComments = (comment, level) => {
+    level--;
     return <Comment
       key={`comment-${comment.id}`}
       userName={comment.User.name}
@@ -28,16 +33,17 @@ const ContaierComment = ({postId, ...style}) => {
       message={comment.content}
       likes={comment.Likes}
       commentId={comment.id}
+      disableCommentButton={level === 0}
     >
       {
-        comment.children.length && comment.children.map(e => renderComments(e))
+        comment.children.length && comment.children.map(e => renderComments(e, level))
       }
     </Comment>
   }
   return (
     <div className={`ContainerComment ${Object.keys(style).find(key => style[key]) }`}>
       {
-        comments.map(comment => renderComments(comment))
+        comments.map(comment => renderComments(comment, level))
       }
     </div>
   )

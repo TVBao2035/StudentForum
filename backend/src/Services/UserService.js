@@ -41,7 +41,7 @@ class UserService{
                 })
             } catch (error) {
                 reject({
-                    status: 404,
+                    status: 400,
                     message: `Error Create User ${error}`
                 })
             }
@@ -75,7 +75,7 @@ class UserService{
                 })
             } catch (error) {
                 reject({
-                    status: 404,
+                    status: 400,
                     message: `Error Update User ${error}`
                 })
             }
@@ -107,7 +107,7 @@ class UserService{
 
             } catch (error) {
                 reject({
-                    status: 404,
+                    status: 400,
                     message: `Error Delete User ${error}`
                 })
             }
@@ -132,7 +132,7 @@ class UserService{
                 })
             } catch (error) {
                 reject({
-                    status: 404,
+                    status: 400,
                     message: `Error Get All User ${error}`
                 })
             }
@@ -149,39 +149,6 @@ class UserService{
                     attributes: {
                         exclude: ['password', 'isAdmin', 'isDelete', 'createdAt', 'updatedAt']
                     },
-                    order: [[db.Post, 'createdAt', 'DESC']],
-                    include: [
-                        {
-                            model: db.Post,
-                            where:{
-                                isDelete: false
-                            },
-                            required: false,
-                            attributes: {
-                                exclude: ['isDelete', 'categoryId', 'updatedAt', 'userId']
-                            },
-                            include: [
-                                {
-                                    model: db.Categorys,
-                                    attributes: ['name']
-                                },
-                                {
-                                    model: db.User,
-                                    attributes: {
-                                        exclude: ['password', 'isAdmin', 'isDelete', 'createdAt', 'updatedAt']
-                                    },
-                                },
-                                {
-                                    model: db.Like,
-                                    where: {
-                                        isDelete: false
-                                    },
-                                    required: false,
-                                }
-                            ],
-                           
-                        }
-                    ]
                 })
                 if(!user){
                     return resolve({
@@ -198,7 +165,7 @@ class UserService{
 
             } catch (error) {
                 reject ({
-                    status: 404,
+                    status: 400,
                     message: `Error Get Details User ${error}`
                 })
             }
@@ -236,7 +203,7 @@ class UserService{
                 })
             } catch (error) {
                 reject({
-                    status: 404,
+                    status: 400,
                     messgage: `Error Refresh!!!`
                 })
             }
@@ -285,7 +252,7 @@ class UserService{
 
             } catch (error) {
                 reject({
-                    status: 404,
+                    status: 400,
                     message: `Error Sign In ${error}`
                 })
             }
@@ -328,7 +295,7 @@ class UserService{
                 })
             } catch (error) {
                 reject({
-                    status: 404,
+                    status: 400,
                     message: `Error Create User ${error}`
                 })
             }

@@ -7,6 +7,7 @@ export default function Post_Profile({listPost}) {
       {
         listPost?.map(post => (
           <Post 
+            key={`post-${post?.id}`}
             big
             id={post?.id}
             userId={post?.User.id}

@@ -1,6 +1,7 @@
-const { where, Op } = require("sequelize");
+const { Op } = require("sequelize");
 const db = require("../Models");
-const { message } = require("../DTOs/UserDTO/createUserDTO");
+const { required } = require("joi");
+
 
 class PostService{
 
@@ -30,7 +31,7 @@ class PostService{
                 })
             } catch (error) {
                 reject({
-                    status: 404,
+                    status: 400,
                     message: `Error Delete Post ${error}`
                 })
             }
@@ -81,7 +82,7 @@ class PostService{
                 })
             } catch (error) {
                 reject({
-                    status: 404,
+                    status: 400,
                     message: `Error Update Post ${error}`
                 })
             }
@@ -158,7 +159,7 @@ class PostService{
 
             } catch (error) {
                 reject({
-                    status: 404,
+                    status: 400,
                     message: `Error Create Post ${error}`
                 })
             }
@@ -175,16 +176,25 @@ class PostService{
                     include: [
                         {
                             model: db.Categorys,
+                            where: {
+                                isDelete: false,
+                            },
                             attributes: {
                                 exclude: ['isDelete', 'updatedAt', 'creaedAt']
                             },
                         },
                         {
                             model: db.User,
+                            where: {
+                                isDelete: false,
+                            },
                             attributes: ['id', 'name', 'avatar']
                         },
                         {
                             model: db.Group,
+                            where: {
+                                isDelete: false,
+                            },
                             attributes: ['id', 'name', 'description']
                         }
                     ],
@@ -210,7 +220,7 @@ class PostService{
 
             } catch (error) {
                 reject({
-                    status: 404,
+                    status: 400,
                     message: `Error Get Details Post ${error}`
                 })
             }
@@ -233,10 +243,16 @@ class PostService{
                     include:[
                         {
                             model: db.Categorys,
+                            where: {
+                                isDelete: false
+                            },
                             attributes: ['name']
                         },
                         {
                             model: db.User,
+                            where: {
+                                isDelete: false,
+                            },
                             attributes: {
                                 exclude: ['password', 'isAdmin', 'isDelete', 'createdAt', 'updatedAt']
                             },
@@ -262,8 +278,77 @@ class PostService{
                 })
             } catch (error) {
                 reject({
-                    status: 404,
+                    status: 400,
                     message: `Error Get All Post ${error}`
+                })
+            }
+        })
+    }
+
+    getAllPostByUserId(userId){
+        return new Promise( async (resolve, reject) => {
+            try {
+                const user = await db.User.findOne({
+                    where: {
+                        [Op.and]: [
+                            {id: userId}, {isDelete: false}
+                        ]
+                    }
+                })
+
+                if(!user){
+                    return resolve({
+                        status: 404,
+                        message: `Not Found User With Id With: ${userId}`,
+                    })
+                }
+
+                const data = await db.Post.findAll({
+                    attributes: ['content', 'image', 'createdAt', 'id'],
+                    order: [
+                        ['createdAt', "DESC"],
+                    ],
+                    where: {
+                        [Op.and]: [
+                            {userId},{isDelete: false}
+                        ]
+                    },
+                    include: [
+                        {
+                            model: db.User,
+                            where:{
+                                isDelete: false,
+                            },
+                            attributes: ['avatar', 'name', 'id']
+                        },
+                        {
+                            model: db.Categorys,
+                            where:{
+                                isDelete: false,
+                            },
+                            attributes: ['name']
+                        },
+                        {
+                            model: db.Like,
+                            where:{
+                                isDelete: false,
+                            },
+                            required: false,
+                            attributes: ['userId']
+                        }
+                    ]
+                });
+
+                resolve({
+                    status: 200,
+                    message: `Get All Posts By User Id`,
+                    data
+                })
+
+            } catch (error) {
+                reject({
+                    status: 400,
+                    message: `Error Get All Posts By User Id ${error}`
                 })
             }
         })

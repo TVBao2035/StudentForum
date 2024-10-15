@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createLike, deleteLike } from '../../API/LikeAPI';
 import { changeLike, setComment } from '../../Redux/postSlice';
 
-const Comment = ({children, userName, userId, message, avatar, likes, commentId}) => {
+const Comment = ({children, userName, userId, message, avatar, likes, commentId, disableCommentButton}) => {
   const [showMore, setShowMore] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
@@ -53,19 +53,22 @@ const Comment = ({children, userName, userId, message, avatar, likes, commentId}
               <AiOutlineLike/>
               <p>{likes?.length}</p>
             </div>
-            <div onClick={handleOpenComment}><GoComment /></div>
+            {
+              !disableCommentButton && 
+              <div onClick={handleOpenComment}><GoComment /></div>
+            }
             {
               children ? 
               <div onClick={()=>setShowMore(!showMore)}>
                 {
                   showMore ? (
                     <div className='d-flex align-items-center gap-1'>
-                      <p>more</p>
+                      <p>less</p>
                       <FaChevronUp/>
                     </div>
                   ):(
                     <div className='d-flex align-items-center gap-1'>
-                      <p>less</p>
+                      <p>more</p>
                       <FaChevronDown />
                     </div>
                   )

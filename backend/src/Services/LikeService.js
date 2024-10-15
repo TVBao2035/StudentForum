@@ -4,7 +4,6 @@ const { post } = require("../Routers/CommentRouter");
 
 class LikeService {
     create(userId, postId = null, commentId = null){
-        console.log({postId, commentId});
         return new Promise(async (resolve, reject) => {
             try {
                 const user = await db.User.findOne({
@@ -74,7 +73,7 @@ class LikeService {
                 })
             } catch (error) {
                 reject({
-                    status: 404,
+                    status: 400,
                     message: `Error Create Like ${error}`,
                 })
             }
@@ -84,7 +83,6 @@ class LikeService {
     delete(userId, postId=null, commentId=null){
         return new Promise(async(resolve, reject) => {
             try {
-                console.log({userId, postId, commentId});
                 const user = await db.User.findOne({
                     where: {
                         [Op.and]: [
@@ -150,8 +148,7 @@ class LikeService {
                     });
                 }
 
-                
-
+            
                 if(!like){
                     return resolve({
                         status: 404,
@@ -167,7 +164,7 @@ class LikeService {
                 })
             } catch (error) {
                 reject({
-                    status: 404,
+                    status: 400,
                     message: `Error Delete Like ${error}`,
                 })
             }

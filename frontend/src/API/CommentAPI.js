@@ -7,3 +7,7 @@ export const getAllCommentByPostId = async(postId)=>{
 export const getComment = async (commentId) => {
     return await axios.get(`/comment/${commentId}`);
 }
+
+export const createComment = async ({userId, postId, commentId, content}) =>{
+    return await axios.post(`/comment`, { userId, postId, commentId, content })
+}

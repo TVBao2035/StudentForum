@@ -26,6 +26,12 @@ instance.interceptors.response.use(function (response) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     switch(error.status){
+        case 400: 
+            console.log(error.response.data.message);
+            alert(error.response.data.message);
+            window.location.href = '/login';
+            localStorage.clear(process.env.REACT_APP_LOGIN_LOCAL_STORAGE);
+            break;
         case 401:
             var { isConfirmed } = await Swal.fire({
                 title: "Thông Báo :v",
@@ -57,10 +63,9 @@ instance.interceptors.response.use(function (response) {
                 return Promise.resolve(error.response.data);
             }
         case 404: 
-            alert(error.response.data.message);
-            break;
+            return Promise.resolve(error.response.data);
         default: 
-            return Promise.reject(error);
+            alert(error);
     }
 
 });

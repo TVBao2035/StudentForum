@@ -6,7 +6,8 @@ const initialState ={
     },
     comment: {
         postId: null,
-        commentId: null,
+        commentId: 0,
+        changeComment: 0
     }
 }
 
@@ -22,11 +23,12 @@ export const postSlice = createSlice({
             state.comment.commentId = action.payload.commentId;
         },
         resetCommentId: (state, action) => {
-            state.comment.commentId = null;
+            state.comment.commentId = 0;
+            state.comment.changeComment += 1;
         },
         resetComment: (state, action) => {
             state.comment.postId = null;
-            state.comment.commentId = null;
+            state.comment.commentId = 0;
         }
     }
 });

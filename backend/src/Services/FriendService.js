@@ -32,6 +32,9 @@ class FriendService{
                     include:[
                         {
                             model: db.User,
+                            where:{
+                                isDelete:false
+                            },
                             attributes: ['id', 'name', 'avatar']
                         }
                     ]
@@ -44,7 +47,7 @@ class FriendService{
                 })
             } catch (error) {
                 reject({
-                    status: 404,
+                    status: 400,
                     message: `Error Get Friends By User Id ${error}`
                 })
             }
@@ -86,7 +89,7 @@ class FriendService{
                 })
             } catch (error) {
                 reject({
-                    status: 404,
+                    status: 400,
                     message: `Error Get Friend Invitation ${error}`
                 })
             }
@@ -160,7 +163,7 @@ class FriendService{
                 })
             } catch (error) {
                 reject({
-                    status: 404,
+                    status: 400,
                     message: `Errror Create Friend Invitation ${error}`
                 })
             }
@@ -250,7 +253,7 @@ class FriendService{
                 });
             } catch (error) {
                 reject({
-                    status: 404,
+                    status: 400,
                     messsage: `Error Accepting Invitation ${error}`
                 })
             }

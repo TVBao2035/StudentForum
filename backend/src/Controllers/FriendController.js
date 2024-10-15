@@ -10,7 +10,7 @@ class FriendController{
             res.status(200).json(data);
         } catch (error) {
             console.log(error);
-            res.status(404).json(error);
+            res.status(400).json(error);
         }
     }
 
@@ -21,7 +21,7 @@ class FriendController{
             res.status(200).json(data);
         } catch (error) {
             console.log(error);
-            res.status(404).json(error);
+            res.status(400).json(error);
         }
     }
 
@@ -29,7 +29,7 @@ class FriendController{
         try {
             const {error, value} = createFriendInvitation.validate(req.body);
             if(error){
-                return res.status(200).json({
+                return res.status(404).json({
                     status: 404,
                     message: error.message,
                 })
@@ -39,7 +39,7 @@ class FriendController{
             res.status(200).json(data);
         } catch (error) {
             console.log(error);
-            res.status(404).json(error);
+            res.status(400).json(error);
         }
     }
 
@@ -47,7 +47,7 @@ class FriendController{
         try {
             const {error, value} = acceptFriendInvitation.validate(req.body);
             if (error) {
-                return res.status(200).json({
+                return res.status(404).json({
                     status: 404,
                     message: error.message,
                 })
@@ -56,7 +56,7 @@ class FriendController{
             res.status(200).json(data);
         } catch (error) {
             console.log(error);
-            res.status(404).json(error);
+            res.status(400).json(error);
         }
     }
 

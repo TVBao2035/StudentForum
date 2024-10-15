@@ -1,7 +1,48 @@
 const { Op } = require("sequelize");
 const db = require("../Models");
+const checkUser = require("../Common/checkUser");
+const checkPost = require("../Common/checkPost");
+const checkComment = require("../Common/checkComment");
 
 class CommentService{
+
+    create({userId, commentId, postId, content}){
+        return new Promise(async(resolve, reject) => {
+            try {
+                const user = await checkUser(userId);
+                if(user.status === 404){
+                    return resolve(user)
+                }
+
+                const post = await checkPost(postId);
+                if(post.status === 404){
+                    return resolve(post);
+                }
+
+                if(commentId !== 0){
+                    const comment = await checkComment(commentId);
+                    if(comment.status === 404){
+                        return resolve(comment);
+                    }
+                }
+
+                await db.Comment.create({
+                    userId, commentId, postId, content
+                })
+                resolve({
+                    status: 200,
+                    message: `Create Comment Susccess`
+                })
+               
+            } catch (error) {
+                reject({
+                    status: 400,
+                    message: `Error Create Comment ${error}`,
+                })
+            }
+        })
+    }
+
     getAllCommentByPostId(postId){
         let level = 5;
         const getChildrenComment = (level) => {
@@ -13,6 +54,9 @@ class CommentService{
                     include: [
                         {
                             model: db.User,
+                            where: {
+                                isDelete: false,
+                            },
                             attributes: ['name', 'avatar', 'id'],
                         },
                         {
@@ -34,6 +78,9 @@ class CommentService{
                 include: [
                     {
                         model: db.User,
+                        where: {
+                            isDelete: false
+                        },
                         attributes: ['name', 'avatar', 'id']
                     },
                     {
@@ -60,10 +107,10 @@ class CommentService{
                 }
                });
                if(!post){
-                return resolve({
-                    status: 404,
-                    message: `Not Found Post With Id: ${postId}`
-                })
+                    return resolve({
+                        status: 404,
+                        message: `Not Found Post With Id: ${postId}`
+                    })
                }
 
                const data = await db.Comment.findAll({
@@ -76,6 +123,9 @@ class CommentService{
                 include: [
                     {
                         model: db.User,
+                        where: {
+                            isDelete: false
+                        },
                         attributes: ['name', 'avatar', 'id']
                     },
                     {
@@ -96,12 +146,13 @@ class CommentService{
                });
             } catch (error) {
                 reject({
-                    status: 404,
+                    status: 400,
                     message: `Error Get All Comments By Post Id ${error}`,
                 })
             }
         })
     }
+
     getComment(commentId){
         return new Promise(async(resolve, reject) => {
             try {
@@ -129,7 +180,7 @@ class CommentService{
 
             } catch (error) {
                 reject({
-                    status: 404,
+                    status: 400,
                     message: `Error Get Comment ${error}`
                 })
             }
