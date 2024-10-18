@@ -203,7 +203,7 @@ class UserService{
                    
                     return resolve({
                         status: 404,
-                        message: `Tài Khoản Đã Được Đăng Kí!`,
+                        message: `Tài Khoản Chưa Được Đăng Kí!`,
                         data: "email"
                     })
                 }

@@ -82,7 +82,7 @@ export default function Header() {
               </Link>
 
               <Link to={"profile"}>
-                <Avatar link={user.avatar} size="small" />
+                <Avatar link={user.avatar} normal />
               </Link>
 
               <span
