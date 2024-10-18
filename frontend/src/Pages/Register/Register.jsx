@@ -28,7 +28,7 @@ const Register = () => {
                     name: 'Tên đăng nhập không được để trống!',
                 }));
             } else {
-                setErrors((preErrors) => ({ ...preErrors, userName: undefined}));
+                setErrors((preErrors) => ({ ...preErrors, name: undefined}));
             }
         }
 
@@ -51,7 +51,7 @@ const Register = () => {
 
         if (name === 'phone') {
             if (!value) {
-                setErrors((preErrors) => ({ ...preErrors, phoneNumber: 'Số điện thoại không được để trống!' }));
+                setErrors((preErrors) => ({ ...preErrors, phone: 'Số điện thoại không được để trống!' }));
             } else {
                 const phoneNumberRegex = /^0\d{9}$/;
 
