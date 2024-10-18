@@ -1,6 +1,9 @@
 const { Op } = require("sequelize");
 const db = require("../Models");
-const { required } = require("joi");
+const checkPost = require("../Common/checkPost");
+const checkCategory = require("../Common/checkCategory");
+const checkGroup = require("../Common/checktGroup");
+const checkUser = require("../Common/checkUser");
 
 
 class PostService{
@@ -8,26 +11,17 @@ class PostService{
     delete(id){
         return new Promise(async (resolve, reject) => {
             try {
-                const post = await db.Post.findOne({
-                    where: {
-                        [Op.and]:[
-                            {id}, {isDelete: false}
-                        ]
-                    }
-                });
+                const post = await checkPost(id)
 
-                if(!post){
-                    return resolve({
-                        status: 404,
-                        message: `Not Found Post With Id: ${id}`
-                    })
+                if(post?.status === 404){
+                    return resolve(post)
                 }
 
                 post.isDelete = true;
                 await post.save();
                 resolve({
                     status: 200,
-                    message: `Delete Post Success!!`
+                    message: `Xóa Bài Đăng Thành Công!!`
                 })
             } catch (error) {
                 reject({
@@ -41,34 +35,16 @@ class PostService{
     update({ id, categoryId, content, image }){
         return new Promise(async (resolve, reject) => {
             try {
-                const post = await db.Post.findOne({
-                    where: {
-                        [Op.and]: [
-                            {id}, {isDelete: false}
-                        ]
-                    }
-                });
-                if(!post){
-                    return resolve({
-                        status: 404,
-                        message: `Not Found Post With Id :${id}`
-                    })
+                const post = await checkPost(id);
+
+                if(post?.status === 404){
+                    return resolve(post)
                 }
 
-                const category = await db.Categorys.findOne({
-                    where: {
-                        [Op.and]: [
-                            {id: categoryId},
-                            {isDelete: false}
-                        ]
-                    }
-                });
+                const category = await checkCategory(categoryId);
 
-                if(!category){
-                    return resolve({
-                        status: 404,
-                        message: `Not Found Category With ID: ${categoryId}`
-                    })
+                if(category?.status === 404){
+                    return resolve(category);
                 }
 
 
@@ -78,7 +54,7 @@ class PostService{
                 await post.save();
                 resolve({
                     status: 200,
-                    message: `Update Post Success!!!`
+                    message: `Cập Nhật Bài Đăng Thành Công!!!`
                 })
             } catch (error) {
                 reject({
@@ -92,55 +68,22 @@ class PostService{
     create({userId, groupId, categoryId, content, image}){
         return new Promise(async(resolve, reject) => {
             try {
-                const user = await db.User.findOne({
-                    where: {
-                        [Op.and]:[
-                            {id: userId},
-                            {isDelete: false}
-                        ]
-                    }
-                });
-                if(!user){
-                    return resolve({
-                        status: 404,
-                        message: `Not Found User With Id: ${userId}`,
-                        data: "userId"
-                    })
+                const user = await checkUser(userId);
+                if(user?.status === 404){
+                    return resolve(user);
                 }
 
-                const category = await db.Categorys.findOne({
-                    where: {
-                        [Op.and]: [
-                            {id: categoryId},
-                            {isDelete: false}
-                        ]
-                    }
-                })
+                const category = await checkCategory(categoryId);
 
-                if(!category){
-                    return resolve({
-                        status: 404,
-                        message: `Not Found Category With Id: ${categoryId}`,
-                        data: `categoryId`
-                    })
+                if(category?.status === 404){
+                    return resolve(category);
                 }
 
                 if(groupId){
-                    const group = await db.Group.findOne({
-                        where: {
-                            [Op.and]: [
-                                {id: groupId},
-                                {isDelete: false}
-                            ]
-                        }
-                    });
+                    const group = await checkGroup(groupId);
 
-                    if(!group){
-                        return resolve({
-                            status: 404,
-                            message: `Not Found Group With id: ${groupId}`,
-                            data: "groupId"
-                        })
+                    if(group?.status === 404){
+                        return resolve(group);
                     }
                 }
 
@@ -154,7 +97,7 @@ class PostService{
 
                 resolve({
                     status: 200,
-                    message: `Create Post Success!!`,
+                    message: `Tạo Bài Đăng Thành Công!!`,
                 })
 
             } catch (error) {
@@ -208,13 +151,13 @@ class PostService{
                 if (!post) {
                     return resolve({
                         status: 404,
-                        message: `Not Found Post With Id: ${id}`
+                        message: `Không Tìm Tháy Bài Đăng Với Id: ${id}`
                     })
                 }
 
                 resolve({
                     status: 200,
-                    message: `Get Details Post Success!!`,
+                    message: `Lấy Chi Tiết Bài Đăng Thành Công!!`,
                     data: post
                 })
 
@@ -273,7 +216,7 @@ class PostService{
 
                 resolve({
                     status: 200,
-                    message: `Get All Post Success!!`,
+                    message: `Lấy Tất Cả Bài Đăng Thành Công!!`,
                     data
                 })
             } catch (error) {
@@ -288,19 +231,10 @@ class PostService{
     getAllPostByUserId(userId){
         return new Promise( async (resolve, reject) => {
             try {
-                const user = await db.User.findOne({
-                    where: {
-                        [Op.and]: [
-                            {id: userId}, {isDelete: false}
-                        ]
-                    }
-                })
+                const user = await checkUser(userId);
 
-                if(!user){
-                    return resolve({
-                        status: 404,
-                        message: `Not Found User With Id With: ${userId}`,
-                    })
+                if(user?.status === 404){
+                    return resolve(user);
                 }
 
                 const data = await db.Post.findAll({
@@ -341,7 +275,7 @@ class PostService{
 
                 resolve({
                     status: 200,
-                    message: `Get All Posts By User Id`,
+                    message: `Láy Tất Cả Bài Đăng Có Id Của Người Dùng Là ${userId}`,
                     data
                 })
 

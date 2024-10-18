@@ -15,13 +15,10 @@ const checkUser = (userId) => {
             if(!user){
                 return resolve({
                     status: 404,
-                    message: `Not Found User With ID: ${userId}`
+                    message: `Không Tìm Thấy Người Dùng: ${userId}`
                 })
             }
-            return resolve({
-                status: 200,
-                data: user
-            })
+            return resolve(user)
         } catch (error) {
             reject(`Error Check User ${error}`)
         }

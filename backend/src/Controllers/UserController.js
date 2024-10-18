@@ -143,7 +143,7 @@ class UserController{
         try {
             return res.clearCookie("accessToken").status(200).json({
                 status: 200,
-                message: `Logout Success!!!`
+                message: `Đăng Xuất Thành Công!!!`
             })
         } catch (error) {
             res.status(400).json(error);

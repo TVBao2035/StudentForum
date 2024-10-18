@@ -15,14 +15,11 @@ const checkPost = (postId) => {
             if(!post){
                 return resolve({
                     status: 404,
-                    message: `Not Found Post With ID: ${postId}`
+                    message: `Không Tìm Thấy Bài Đăng Với Id: ${postId}`
                 });
             }
 
-            resolve({
-                status: 200,
-                data: post
-            });
+            resolve(post);
         } catch (error) {
             reject("Error Check Post " + error);
         }

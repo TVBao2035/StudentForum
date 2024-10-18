@@ -1,57 +1,34 @@
 const { Op, where } = require("sequelize");
 const db = require("../Models");
 const { post } = require("../Routers/CommentRouter");
+const checkUser = require("../Common/checkUser");
+const checkPost = require("../Common/checkPost");
+const checkComment = require("../Common/checkComment");
 
 class LikeService {
     create(userId, postId = null, commentId = null){
         return new Promise(async (resolve, reject) => {
             try {
-                const user = await db.User.findOne({
-                    where: { 
-                        [Op.and]: [
-                            {id: userId},
-                            {isDelete: false}
-                        ]
-                     }
-                });
-                if (!user) {
-                    return resolve({
-                        status: 404,
-                        message: `Not Found User With Id: ${userId}`,
-                    });
+                const user = await checkUser(userId);
+                if (user?.status === 404) {
+                    return resolve(user);
                 }
+
                 if(postId && postId !== 'null'){
-                    const post = await db.Post.findOne({
-                        where: {
-                            [Op.and]: [
-                                { id: postId },
-                                { isDelete: false }
-                            ]
-                        }
-                    });
-                    if(!post){
-                        return resolve({
-                            status: 404,
-                            message: `Not Found Post With Id: ${postId}`
-                        })
+                    const post = await checkPost(postId)
+
+                    if (post?.status === 404) {
+                        return resolve(post)
                     }
+
                 }
                 if (commentId && commentId !== 'null') {
-                    const comment = await db.Comment.findOne({
-                        where: {
-                            [Op.and]: [
-                                {id: commentId},
-                                {isDelete: false}
-                            ]
-                        }
-                    });
-                    if (!comment) {
-                        return resolve({
-                            status: 404,
-                            message: `Not Found Comment With Id: ${commentId}`
-                        })
+                    const comment = await checkComment(commentId);
+                    if (comment.status === 404) {
+                        return resolve(comment);
                     }
                 }
+
                 const like = await db.Like.findOne({
                     where: {
                         [Op.and]: [{userId}, {postId}, {commentId}]
@@ -69,7 +46,7 @@ class LikeService {
                 }
                 resolve({
                     status: 200,
-                    message: `Create Like Success!!`
+                    message: `Tạo Lượt Thích Thành Công!!`
                 })
             } catch (error) {
                 reject({
@@ -83,36 +60,16 @@ class LikeService {
     delete(userId, postId=null, commentId=null){
         return new Promise(async(resolve, reject) => {
             try {
-                const user = await db.User.findOne({
-                    where: {
-                        [Op.and]: [
-                            { id: userId },
-                            { isDelete: false }
-                        ]
-                    }
-                });
-                if (!user) {
-                    return resolve({
-                        status: 404,
-                        message: `Not Found User With Id: ${userId}`,
-                    });
+                const user = await checkUser(userId);
+                if (user?.status === 404) {
+                    return resolve(user);
                 }
-
                 var like;
                 if(postId && postId !== 'null'){
-                    const post = await db.Post.findOne({
-                        where: {
-                            [Op.and]: [
-                                { id: postId },
-                                { isDelete: false }
-                            ]
-                        }
-                    });
-                    if (!post) {
-                        return resolve({
-                            status: 404,
-                            message: `Not Found Post With Id: ${postId}`
-                        })
+                    const post = await checkPost(postId)
+
+                    if (post?.status === 404) {
+                        return resolve(post)
                     }
                     like = await db.Like.findOne({
                         where: {
@@ -124,20 +81,11 @@ class LikeService {
                     });
                 }
                 if(commentId && commentId !== 'null'){
-                    const comment = await db.Comment.findOne({
-                        where: {
-                            [Op.and]: [
-                                { id: commentId },
-                                { isDelete: false }
-                            ]
-                        }
-                    });
-                    if (!comment) {
-                        return resolve({
-                            status: 404,
-                            message: `Not Found Comment With Id: ${commentId}`
-                        })
+                    const comment = await checkComment(commentId);
+                    if (comment.status === 404) {
+                        return resolve(comment);
                     }
+
                     like = await db.Like.findOne({
                         where: {
                             [Op.and]: [
@@ -152,7 +100,7 @@ class LikeService {
                 if(!like){
                     return resolve({
                         status: 404,
-                        message: `Not Found Like`
+                        message: `Không Tìm Thấy Lượt Thích`
                     })
                 }
 
@@ -160,7 +108,7 @@ class LikeService {
                 await like.save();
                 return resolve({
                     status: 200,
-                    message: `Delete Like Success`
+                    message: `Xóa Lượt Thích Thành Công`
                 })
             } catch (error) {
                 reject({

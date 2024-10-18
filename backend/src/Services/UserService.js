@@ -1,8 +1,9 @@
+const { Op } = require("sequelize");
+const db = require("../Models");
 const bcrypt = require("bcryptjs/dist/bcrypt");
 const hashPassword = require("../Helpers/hashPassword");
-const db = require("../Models");
 const accessToken = require("../Helpers/accessToken");
-const { where, Op } = require("sequelize");
+const checkUser = require("../Common/checkUser");
 
 class UserService{
     create(data){
@@ -17,7 +18,7 @@ class UserService{
                 if(checkEmail){
                     return resolve({
                         status: 404,
-                        message: `Email is Existing!!`
+                        message: `Email đã tồn tại!!`
                     })
                 }
 
@@ -30,14 +31,14 @@ class UserService{
                 if(checkPhone){
                     return resolve({
                         status: 404,
-                        message: `Phone is Existing!!`
+                        message: `Phone đã tồn tại!!`
                     })
                 }
                 data.password = hashPassword(data.password);
                 await db.User.create(data);
                 resolve({
                     status: 200,
-                    message: `Create User Success!!`
+                    message: `Tạo Người Thành Công!!`
                 })
             } catch (error) {
                 reject({
@@ -51,18 +52,11 @@ class UserService{
     udpate(data, userId){
         return new Promise(async (resolve, reject) => {
             try {
-                const user = await db.User.findOne({
-                    where: {
-                        [Op.and]: [{id: userId}, {isDelete: false}]
-                    }
-                })
-
-                if(!user){
-                    return resolve({
-                        status: 404,
-                        message: `Not Found User With Id: ${userId}`
-                    })
+                const user = await checkUser(userId);
+                if(user?.status === 404){
+                    return resolve(user);
                 }
+
 
                 user.email = data.email;
                 user.phone = data.phone;
@@ -71,7 +65,7 @@ class UserService{
                 await user.save();
                 resolve({
                     status: 200,
-                    message: `Update User Success!`
+                    message: `Cập Nhật Người Dùng Thành Công!`
                 })
             } catch (error) {
                 reject({
@@ -85,24 +79,17 @@ class UserService{
     delete(userId){
         return new Promise(async (resolve, reject) => {
             try {
-                const user = await db.User.findOne({
-                    where: {
-                        [Op.and]: [{id: userId}, {isDelete: false}]
-                    }
-                });
+                const user = await checkUser(userId);
 
-                if(!user){
-                    return resolve({
-                        status: 404,
-                        message: `Not Found User With Id: ${userId}`
-                    })
+                if(user?.status === 404){
+                    return resolve(user);
                 }
 
                 user.isDelete = true;
                 await user.save();
                 resolve({
                     status: 200,
-                    message: `Delete User Success`
+                    message: `Xóa Người Dùng Thành Công`
                 })
 
             } catch (error) {
@@ -127,7 +114,7 @@ class UserService{
                 });
                 resolve({
                     status: 200,
-                    message: `Get All User Success!!`,
+                    message: `Lấy Tất Cả Người Dùng Thành Công`,
                     data
                 })
             } catch (error) {
@@ -153,13 +140,13 @@ class UserService{
                 if(!user){
                     return resolve({
                         status: 404,
-                        message: `Not Found User By Id: ${userId}`
+                        message: `Không Tìm Thấy Người Dùng Với ID: ${userId}`
                     })
                 }
 
                 resolve({
                     status: 200,
-                    message: `Get Details User Success!!`,
+                    message: `Lấy Chi Tiết Người Dùng Thành Công!!`,
                     data: user
                 })
 
@@ -175,22 +162,15 @@ class UserService{
     refresh(data){
         return new Promise(async (resolve, reject) => {
             try {
-                const user = await db.User.findOne({
-                    where: {
-                        [Op.and]: [{ id: data.id }, { isDelete: false }]
-                    }
-                })
+                const user = await checkUser(data.id);
 
-                if(!user){
-                    return resolve({
-                        status: 404,
-                        message: `Not Found User!!`
-                    })
+                if(user?.status === 404){
+                    return resolve(user)
                 }
 
                 resolve({
                     status: 200,
-                    message: `Refresh Success`,
+                    message: `Làm Mới Thành Công`,
                     data: {
                         accessToken: accessToken(user),
                         id: user.id,
@@ -223,7 +203,7 @@ class UserService{
                    
                     return resolve({
                         status: 404,
-                        message: `Account Is Not Resgiter!!`,
+                        message: `Tài Khoản Đã Được Đăng Kí!`,
                         data: "email"
                     })
                 }
@@ -232,13 +212,13 @@ class UserService{
                 if(!checkPassword){
                     return resolve({
                         status: 404,
-                        message: `Password Is Wrong!!`,
+                        message: `Mật Khẩu Sai!!`,
                         data: "password"
                     })
                 }
                 resolve({
                     status: 200,
-                    message: `Sign In Success!!`,
+                    message: `Đăng Nhập Thành Công!!`,
                     data: {
                         accessToken: accessToken(user),
                         id: user.id,
@@ -270,7 +250,7 @@ class UserService{
                 if(checkEmail){
                     return resolve({
                         status: 404,
-                        message: `Email Is Existing!!`
+                        message: `Email Đã Tồn Tại!!`
                     })
                 }
                 const checkPhone = await db.User.findOne({
@@ -281,7 +261,7 @@ class UserService{
                 if(checkPhone){
                     return resolve({
                         status: 404,
-                        message: `Phone Is Existing!!`
+                        message: `Phone Đã Tồn Tại!!`
                     })
                 }
                 password = hashPassword(password);
@@ -291,7 +271,7 @@ class UserService{
 
                 resolve({
                     status: 200,
-                    message: `Create User Success!`
+                    message: `Tạo Người Dùng Thành Công!`
                 })
             } catch (error) {
                 reject({

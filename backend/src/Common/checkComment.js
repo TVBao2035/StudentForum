@@ -13,7 +13,7 @@ const checkComment = (commentId) => {
             if(!comment){
                 return resolve({
                     status: 404,
-                    message: `Not Found Comment With ID: ${commentId}`
+                    message: `Không Tìm Thấy Bình Luận Với ID: ${commentId}`
                 });
             }
 

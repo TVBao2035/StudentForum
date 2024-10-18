@@ -31,7 +31,7 @@ class CommentService{
                 })
                 resolve({
                     status: 200,
-                    message: `Create Comment Susccess`
+                    message: `Tạo Bình Luận Thành Công`
                 })
                
             } catch (error) {
@@ -98,20 +98,12 @@ class CommentService{
 
         return new Promise(async (resolve, reject) => {
             try {
-               const post = await db.Post.findOne({
-                where: {
-                    [Op.and]: [
-                        {id: postId},
-                        {isDelete: false}
-                    ]
+                const post = await checkPost(postId)
+
+                if (post?.status === 404) {
+                    return resolve(post)
                 }
-               });
-               if(!post){
-                    return resolve({
-                        status: 404,
-                        message: `Not Found Post With Id: ${postId}`
-                    })
-               }
+
 
                const data = await db.Comment.findAll({
                 where: {
@@ -141,7 +133,7 @@ class CommentService{
                });
                return resolve({
                     status: 200,
-                    message: `Get All Comments By Post Id`,
+                    message: `Lấy Tất Cả Bình Luận Theo Bài Post`,
                     data
                });
             } catch (error) {
@@ -168,13 +160,13 @@ class CommentService{
                if(!data) {
                    return resolve({
                        state: 404,
-                       message: `Not Found Comment With Id: ${commentId}`
+                       message: `Không Tìm Thấy Bình Luận Với Id ${commentId}`
                    });
                }
 
                resolve({
                 status: 200,
-                message: `Get Comment Success`,
+                message: `Lấy Bình Luận Thành Công`,
                 data
                })
 

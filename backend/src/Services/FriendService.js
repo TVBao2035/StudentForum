@@ -1,23 +1,14 @@
 const { Op } = require("sequelize")
-const db = require("../Models")
+const db = require("../Models");
+const checkUser = require("../Common/checkUser");
 
 class FriendService{
     getFriendsByUserId(userId){
         return new Promise(async(resolve, reject) => {
             try {
-                const user = await db.User.findOne({
-                    where: {
-                        [Op.and]: [
-                            {id: userId},
-                            {isDelete: false}
-                        ]
-                    }
-                });
-                if(!user ) {
-                    return resolve({
-                        status: 404,
-                        message: `Not Found User With Id: ${userId}`
-                    })
+                const user = await checkUser(userId);
+                if (user?.status === 404) {
+                    return resolve(user);
                 }
 
                 const data =  await db.Friend.findAll({
@@ -42,7 +33,7 @@ class FriendService{
 
                 resolve({
                     status: 200,
-                    message: `Get Friends By User Id Succeess`,
+                    message: `Lấy Tất Cả Bàn Bè Theo Id Của Dùng Thành Công`,
                     data
                 })
             } catch (error) {
@@ -57,21 +48,10 @@ class FriendService{
     getFriendInvitation(friendId){
         return new Promise(async (resolve, reject) => {
             try {
-                const user = await db.User.findOne({
-                    where: {
-                        [Op.and]: [
-                            { id: friendId },
-                            { isDelete: false }
-                        ]
-                    }
-                });
-                if (!user) {
-                    return resolve({
-                        status: 404,
-                        message: `Not Found User With Id: ${friendId}`
-                    })
+                const user = await checkUser(friendId);
+                if (user?.status === 404) {
+                    return resolve(user);
                 }
-
                 const data = await db.Friend.findAll({
                     where: {
                         [Op.and]: [
@@ -84,7 +64,7 @@ class FriendService{
                 });
                 resolve({
                     status: 200,
-                    message: `Get Friend Invitation Success`,
+                    message: `Lấy Tất Cả Lời Mời Thành Công`,
                     data
                 })
             } catch (error) {
@@ -97,36 +77,15 @@ class FriendService{
     }
 
     createFriendInvitation({userId, friendId}){
-        console.log({userId, friendId});
         return new Promise(async(resolve, reject) => {
             try {
-                const user = await db.User.findOne({
-                    where: {
-                        [Op.and]: [
-                            { id: userId },
-                            { isDelete: false }
-                        ]
-                    }
-                });
-                if (!user) {
-                    return resolve({
-                        status: 404,
-                        message: `Not Found User With Id: ${userId}`
-                    })
+                const user = await checkUser(userId);
+                if (user?.status === 404) {
+                    return resolve(user);
                 }
-                const friend = await db.User.findOne({
-                    where: {
-                        [Op.and]: [
-                            { id: friendId },
-                            { isDelete: false }
-                        ]
-                    }
-                });
-                if (!friend) {
-                    return resolve({
-                        status: 404,
-                        message: `Not Found User With Id: ${friendId}`
-                    })
+                const friend = await checkUser(friendId);
+                if (friend?.status === 404) {
+                    return resolve(friend)
                 }
                 
                 const invitation = await db.Friend.findOne({
@@ -140,7 +99,7 @@ class FriendService{
                 if(invitation && invitation.isDelete === false){
                     return resolve({
                         status: 404,
-                        message: `Friend Invitation Existing`
+                        message: `Lời Mời Kết Bạn Đã Tồn Tại`
                     }) 
                 }
                 // if invitation has deleted then update isDelete = false and isAccept = false;
@@ -150,7 +109,7 @@ class FriendService{
                     await invitation.save();
                     return resolve({
                         status: 200,
-                        message: `Create Friend Invitation Success`
+                        message: `Tạo Lời Mời Kết Bạn Thành Công`
                     })
                 }
 
@@ -159,7 +118,7 @@ class FriendService{
                 });
                 resolve({
                     status: 200,
-                    message: `Create Friend Invitation Success`
+                    message: `Tạo Lời Mời Kết Bạn Thành Công`
                 })
             } catch (error) {
                 reject({
@@ -173,36 +132,14 @@ class FriendService{
     acceptFriendInvitation({userId, friendId, id}){
         return new Promise(async(resolve, reject) => {
             try {
-                const user = await db.User.findOne({
-                    where: {
-                        [Op.and]: [
-                            { id: userId },
-                            { isDelete: false }
-                        ]
-                    }
-                });
-
-                if (!user) {
-                    return resolve({
-                        status: 404,
-                        message: `Not Found User With Id: ${userId}`
-                    })
+                const user = await checkUser(userId);
+                if (user?.status === 404) {
+                    return resolve(user);
                 }
 
-                const friend = await db.User.findOne({
-                    where: {
-                        [Op.and]: [
-                            { id: friendId },
-                            { isDelete: false }
-                        ]
-                    }
-                });
-
-                if (!friend) {
-                    return resolve({
-                        status: 404,
-                        message: `Not Found User With Id: ${friendId}`
-                    })
+                const friend = await checkUser(friendId);
+                if (friend?.status === 404) {
+                    return resolve(friend)
                 }
 
                 const isInvitationExisting = await db.Friend.findOne({
@@ -216,7 +153,7 @@ class FriendService{
                 if (isInvitationExisting && isInvitationExisting.isDelete === false) {
                     return resolve({
                         status: 404,
-                        message: `Friend Invitation Existing`
+                        message: `Lời Mời Kết Bạn Đã Tồn Tại`
                     })
                 }
                 // if invitation has deleted then update isDelete = false and isAccept = false;
@@ -226,7 +163,7 @@ class FriendService{
                     await isInvitationExisting.save();
                     return resolve({
                         status: 200,
-                        message: `Create Friend Invitation Success`
+                        message: `Tạo Lời Mời Kết Bạn Thành Công`
                     })
                 }
                 const invitation = await db.Friend.findOne({
@@ -237,7 +174,7 @@ class FriendService{
                 if(!invitation){
                     return resolve({
                         status: 404,
-                        message: `Not Found Invitation With Id: ${id}`
+                        message: `NKhông Tìm Thấy Lời Mời Vơi Id: ${id}`
                     })
                 }
 
@@ -249,7 +186,7 @@ class FriendService{
                 });
                 resolve({
                     status: 200,
-                    message: `Accepting Invitation Success`,
+                    message: `Chấp Nhận Lời Mời Thành Công`,
                 });
             } catch (error) {
                 reject({
