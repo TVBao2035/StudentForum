@@ -7,30 +7,106 @@ import { getDetails } from '../../API/UserAPI';
 import { setLoading, setLoadingOrther } from '../../Redux/loadingSlice';
 import timeOut from '../../Helpers/timeOut';
 import { Friend_Profile, Information_Profile, Post_Profile } from './Profile_Pages';
-
+import './ProfileStyle.scss';
+import { getFriendsByUserId } from '../../API/FriendAPI';
+import Swal from 'sweetalert2';
+import { getAllPostByUserId } from '../../API/PostAPI';
 export default function Profile() {
+  
+  const location = useLocation();
+  const dispatch = useDispatch();
+
   const user = useSelector(state => state.user);
   const loading = useSelector(state => state.loading);
-  const location = useLocation();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const id = location.pathname.split('/')[1].substring(1, location.pathname.split('/')[1].length);
+
   const [userDetails, setUserDetails] = useState(null);
-  const fetchApi = async (userId) => {
-    const res = await getDetails(userId);
+  const [listFriends, setListFriends] = useState([]);
+  const [listPosts, setListPosts] = useState([]);
+
+  const id = location.pathname.split('/')[1].substring(1, location.pathname.split('/')[1].length);
+
+  const getDetailsUser = async (userId) => {
+    let res = await getDetails(userId);
     if (res.status === 200) {
       setUserDetails(res.data);
       await timeOut(800);
       dispatch(setLoadingOrther(false));
       return;
     }
-    navigate('./');
+
+    if(res.status === 404){
+      Swal.fire({
+        title: "Thông Báo :v",
+        text: res.message,
+        icon: "question",
+        showCloseButton: true,
+        showCancelButton: true,
+        buttonsStyling: "blue",
+        confirmButtonColor: "#007bff",
+        cancelButtonColor: "#dc3545",
+        grow: 'row'
+      });
+      return;
+    }
+  }
+
+  const getFriends = async (id) => {
+    let res = await getFriendsByUserId(id);
+    if (res.status === 200) {
+      setListFriends(res.data);
+      return;
+    }
+    if (res.status === 404) {
+      Swal.fire({
+        title: "Thông Báo :v",
+        text: res.message,
+        icon: "question",
+        showCloseButton: true,
+        showCancelButton: true,
+        buttonsStyling: "blue",
+        confirmButtonColor: "#007bff",
+        cancelButtonColor: "#dc3545",
+        grow: 'row'
+      });
+      return;
+    }
+  }
+
+  const getPosts = async (userId) => {
+    let res = await getAllPostByUserId(userId);
+    
+    if(res.status === 200){
+      setListPosts(res.data);
+      return;
+    }
+
+    if(res.status === 404){
+      Swal.fire({
+        title: "Thông Báo :v",
+        text: res.message,
+        icon: "question",
+        showCloseButton: true,
+        showCancelButton: true,
+        buttonsStyling: "blue",
+        confirmButtonColor: "#007bff",
+        cancelButtonColor: "#dc3545",
+        grow: 'row'
+      });
+      return;
+    }
   }
 
   useEffect(() => {
     dispatch(setLoadingOrther(true));
-    fetchApi(id);
+    getDetailsUser(id);
+    getFriends(id);
+    getPosts(id);
   }, [id]);
+  
+  useEffect(() => {
+    getPosts(id);
+  }, [useSelector(state => state.post.like.changeLike), useSelector(state => state.post.comment)]);
+
   return (
     <div className='Profile px-5 mx-5 user-select-none'>
       {
@@ -46,7 +122,7 @@ export default function Profile() {
                   </div>
                   <div>
                     <p className='fs-3 fw-bold'>{userDetails?.name ? userDetails?.name : "Loading..."}</p>
-                    <p className='fs-6 '>{userDetails?.friends?.length} người bạn</p>
+                      <p className='fs-6 '>{listFriends.length} người bạn</p>
                   </div>
                 </div>
                 <div>
@@ -63,15 +139,16 @@ export default function Profile() {
               </div>
             </div>
             <div className='d-flex'>
-              <div className='col border-start border-end border-top p-3'>
+              <div className='col border-start border-top border-end p-3'>
                 <Information_Profile 
                   email={userDetails?.email}
-                  phone={userDetails?.phone} />
+                  phone={userDetails?.phone} 
+                />
                 <hr />
-                <Friend_Profile friends={userDetails?.friends} />
+                <Friend_Profile friends={listFriends} />
               </div>
-              <div className='col-7 border-end border-top p-4'>
-                  <Post_Profile listPost={userDetails?.Posts}/>
+              <div className='col-7 border-end border-top p-4 h-100'>
+                  <Post_Profile listPost={listPosts}/>
               </div>
             </div>
           </div>

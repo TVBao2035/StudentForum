@@ -10,7 +10,7 @@ class PostController{
             res.status(200).json(data);
         } catch (error) {
             console.log(error);
-            res.status(404).json(error);
+            res.status(400).json(error);
         }
     }
     
@@ -31,7 +31,7 @@ class PostController{
             res.status(200).json(data);
         } catch (error) {
             console.log(error);
-            res.status(404).json(error);
+            res.status(400).json(error);
         }
     }
 
@@ -39,7 +39,7 @@ class PostController{
         try {
             const {error, value} = createPostDTO.validate(req.body);
             if(error){
-                return res.status(200).json({
+                return res.status(404).json({
                     status: 404,
                     message: error.message,
                     data: error.details[0].path[0]
@@ -50,7 +50,7 @@ class PostController{
             res.status(200).json(data);
         } catch (error) {
             console.log(error);
-            res.status(404).json(error);
+            res.status(400).json(error);
         }
     }
 
@@ -61,7 +61,18 @@ class PostController{
             res.status(200).json(data);
         } catch (error) {
             console.log(error);
-            res.status(404).json(error);
+            res.status(400).json(error);
+        }
+    }
+
+    async getAllPostByUserId(req, res){
+        try {
+            const userId = req.params.userId;
+            const data = await PostService.getAllPostByUserId(userId);
+            res.status(200).json(data);
+        } catch (error) {
+            console.log(error);
+            res.status(400).json(error);
         }
     }
 
@@ -71,7 +82,7 @@ class PostController{
             res.status(200).json(data);
         } catch (error) {
             console.log(error);
-            res.status(404).json(error);
+            res.status(400).json(error);
         }
     }
 }

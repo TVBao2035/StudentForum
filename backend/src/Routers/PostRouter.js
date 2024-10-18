@@ -2,6 +2,8 @@ const express = require('express');
 const PostController = require('../Controllers/PostController');
 const router = express.Router();
 
+router.get(`/user/:userId`, PostController.getAllPostByUserId);
+
 router.delete(`/:id`, PostController.delete);
 router.put(`/:id`, PostController.update);
 router.post(`/`, PostController.create);

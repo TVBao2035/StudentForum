@@ -9,7 +9,7 @@ class UserController{
         try {
             const {error, value} = createUserDTO.validate(req.body);
             if(error){
-                return res.status(200).json({
+                return res.status(404).json({
                     status: 404,
                     message: error.message,
                     data: error.details[0].path[0]
@@ -20,7 +20,7 @@ class UserController{
             res.status(200).json(data);
         } catch (error) {
             console.log(error);
-            res.status(404).json(error);
+            res.status(400).json(error);
         }
     }
 
@@ -29,7 +29,7 @@ class UserController{
             const {error, value} = updateUserDTO.validate(req.body);
             const userId = req.params.id;
             if(error){
-                return res.status(200).json({
+                return res.status(404).json({
                     status: 404,
                     message: error.message
                 })
@@ -39,7 +39,7 @@ class UserController{
             res.status(200).json(data);
         } catch (error) {
             console.log(error);
-            res.status(404).json(error);
+            res.status(400).json(error);
         }
     }
 
@@ -50,7 +50,7 @@ class UserController{
             res.status(200).json(data);
         } catch (error) {
             console.log(error);
-            res.status(404).json(error);
+            res.status(400).json(error);
         }
     }
 
@@ -67,12 +67,11 @@ class UserController{
             }).status(200).json(data);
         } catch (error) {
             console.log(error);
-            res.status(404).json(error);
+            res.status(400).json(error);
         }
     }
 
     async getDetails(req, res){
-        console.log("userId");
         try {
             const userId = req.params.id;
             console.log(userId);
@@ -80,7 +79,7 @@ class UserController{
             res.status(200).json(data);
         } catch (error) {
             console.log(error);
-            res.status(404).json(error);
+            res.status(400).json(error);
         }
     }
 
@@ -90,7 +89,7 @@ class UserController{
             res.status(200).json(data);
         } catch (error) {
             console.log(error);
-            res.status(404).json(error);
+            res.status(400).json(error);
         }
     }
 
@@ -98,7 +97,7 @@ class UserController{
         try {
             const {error, value} = signInDTO.validate(req.body);
             if(error){
-                return res.status(200).json({
+                return res.status(404).json({
                     status: 404,
                     message: error.message,
                     data: error.details[0].path[0]
@@ -106,7 +105,7 @@ class UserController{
             }
             const data = await UserService.signIn(value);
             if(data.status === 404){
-                return res.status(200).json(data);
+                return res.status(404).json(data);
             }
             
             const timestamp = Number(process.env.TIMESTAMP) * 1000;
@@ -118,7 +117,7 @@ class UserController{
             }).status(200).json(data);
         } catch (error) {
             console.log(error);
-            res.status(404).json(error);
+            res.status(400).json(error);
         }
     }
 
@@ -126,7 +125,7 @@ class UserController{
         try {
             const {error, value} = signUpDTO.validate(req.body);
             if(error){
-                return res.status(200).json({
+                return res.status(404).json({
                     status: 404,
                     message: error.message,
                     data: error.details[0].path[0]
@@ -136,7 +135,7 @@ class UserController{
             res.status(200).json(data);
         } catch (error) {
             console.log(error);
-            res.status(404).json(error);
+            res.status(400).json(error);
         }
     }
 
@@ -144,10 +143,10 @@ class UserController{
         try {
             return res.clearCookie("accessToken").status(200).json({
                 status: 200,
-                message: `Logout Success!!!`
+                message: `Đăng Xuất Thành Công!!!`
             })
         } catch (error) {
-            res.status(404).json(error);
+            res.status(400).json(error);
         }
     }
 }

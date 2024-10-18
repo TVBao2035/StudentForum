@@ -105,7 +105,7 @@ const Register = () => {
     
     const handleRegister = async (event) => {
         event.preventDefault();
-
+    
         const newErrors = { ...errors };
 
         if (!credentials.name) {
@@ -129,6 +129,7 @@ const Register = () => {
         }
 
         setErrors(newErrors);
+
         if (Object.values(newErrors).some((error) => error)) {
             return;
         };

@@ -18,3 +18,7 @@ code {
 p{
   margin: 0;
 }
+html{
+scrollbar-width: none;
+  scrollbar-color: rgba(255, 255, 255, 0.204);
+}

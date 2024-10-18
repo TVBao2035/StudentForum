@@ -45,7 +45,8 @@ export default function Setting() {
       navigation('/login');
       return;
 
-    }else{
+    }
+    if(response.status === 404){
       Swal.fire({
         title: response.message,
         icon: 'error',

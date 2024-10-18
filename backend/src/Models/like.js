@@ -13,11 +13,13 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Like.belongsTo(models.User, {foreignKey: "userId"});
       Like.belongsTo(models.Post, {foreignKey: "postId"});
+      Like.belongsTo(models.Comment, { foreignKey: "commentId"})
     }
   }
   Like.init({
     userId: DataTypes.INTEGER,
     postId: DataTypes.INTEGER,
+    commentId: DataTypes.INTEGER,
     isDelete: DataTypes.BOOLEAN
 
   }, {

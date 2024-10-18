@@ -11,13 +11,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Friend.belongsTo(models.User, {foreignKey: 'friendId'})
     }
   }
   Friend.init({
     userId: DataTypes.INTEGER,
     friendId: DataTypes.INTEGER,
-    isDelete: DataTypes.BOOLEAN
-
+    isDelete: DataTypes.BOOLEAN,
+    isAccept: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'Friend',
