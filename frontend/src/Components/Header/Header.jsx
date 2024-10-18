@@ -69,33 +69,20 @@ export default function Header() {
         </div>
 
         <div className="right-section d-flex align-items-center">
-          {user.id ? (
-            <>
-              <span className="user-greeting d-none d-md-block me-3">Xin chào <strong>{user.name}</strong></span>
+          <span className="user-greeting d-none d-md-block me-3">Xin chào <strong>{user.name}</strong></span>
 
-              <div className="nav-link me-3" onClick={handleShow} style={{ cursor: 'pointer' }}>
-                <IoCreate className="icon-size" size={24} />
-              </div>
+          <div className="nav-link me-3" onClick={handleShow} style={{ cursor: 'pointer' }}>
+            <IoCreate className="icon-size" size={24} />
+          </div>
 
-              <Link to="/message" className="nav-link me-3">
-                <FaFacebookMessenger className="icon-size" size={24} />
-              </Link>
+          <Link to="/message" className="nav-link me-3">
+            <FaFacebookMessenger className="icon-size" size={24} />
+          </Link>
 
-              <Link to={"profile"}>
-                <Avatar link={user.avatar} normal />
-              </Link>
+          <Link to={`/@${user.id}`}>
+            <Avatar link={user.avatar} normal />
+          </Link>
 
-              <span
-                className="nav-link me-3"
-                style={{ cursor: 'pointer' }}
-                onClick={handleLogout}
-              >
-                Đăng xuất
-              </span>
-            </>
-          ) : (
-            <Link to="/login" className="btn btn-primary">Đăng nhập</Link>
-          )}
         </div>
       </div>
 
