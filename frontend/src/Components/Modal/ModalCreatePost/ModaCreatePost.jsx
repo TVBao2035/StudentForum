@@ -1,11 +1,29 @@
-import React, { useState, useRef } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import React, { useState, useRef, useEffect } from 'react';
+import { Modal, Button, Form } from 'react-bootstrap';
 import { Editor } from '@tinymce/tinymce-react';
+import { getAllPost } from '../../../API/PostAPI';
 
 const ModalCreatePost = ({ show, handleClose }) => {
   const [content, setContent] = useState('');
   const [imagePreview, setImagePreview] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('');
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await getAllPost();
+        setCategories(response.data);
+      } catch (error) {
+        console.error('Error fetching categories', error);
+      }
+    };
+    
+    if (show) {
+      fetchCategories();
+    }
+  }, [show]);
 
   const handleEditorChange = (newContent) => {
     setContent(newContent);
@@ -38,35 +56,47 @@ const ModalCreatePost = ({ show, handleClose }) => {
       </Modal.Header>
       <Modal.Body>
         <Editor
-          apiKey={`${process.env.API_KEY}`}
+          apiKey='c71zurgnk0wg3iv3upi49j8zotrzy0chhq2evkxb69yca39g'
           value={content}
           init={{
-            height: 200,
-            menubar: false,
-            // plugins: 'image',
-            // toolbar: 'undo redo | bold italic | image | alignleft aligncenter alignright | removeformat',
-            // file_picker_callback: (callback, value, meta) => {
-            //   const input = document.createElement('input');
-            //   input.setAttribute('type', 'file');
-            //   input.setAttribute('accept', 'image/*');
-            //   input.onchange = function () {
-            //     const file = this.files[0];
-            //     const reader = new FileReader();
-            //     reader.onload = () => {
-            //       const id = 'blobid' + new Date().getTime();
-            //       const blobCache = Editor.blobCache;
-            //       const base64 = reader.result.split(',')[1];
-            //       const blobInfo = blobCache.create(id, file, base64);
-            //       blobCache.add(blobInfo);
-            //       callback(blobInfo.blobUri(), { title: file.name });
-            //     };
-            //     reader.readAsDataURL(file);
-            //   };
-            //   input.click();
-            // }
+            plugins: [
+              // Core editing features
+              'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
+              // Your account includes a free trial of TinyMCE premium features
+              // Try the most popular premium features until Oct 28, 2024:
+              'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'ai', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown',
+            ],
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+            tinycomments_mode: 'embedded',
+            tinycomments_author: 'Author name',
+            mergetags_list: [
+              { value: 'First.Name', title: 'First Name' },
+              { value: 'Email', title: 'Email' },
+            ],
+            ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
           }}
+          initialValue="Chào bạn, bạn đang nghĩ gì!"
           onEditorChange={handleEditorChange}
         />
+
+        
+        {/* Categories */}
+        <Form.Group className="mt-3">
+          <Form.Label>Danh mục</Form.Label>
+          <Form.Select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
+            <option value="">Chọn danh mục</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </Form.Select>
+        </Form.Group>
+          {/* End Categories */}
+
         <div className="image-uploader mt-3">
           <input
             type="file"

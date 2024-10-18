@@ -6,4 +6,9 @@ export { default as Avatar } from './Avatar';
 export { default as Navbar } from './Navbar';
 export {default as Loading} from './Loading';
 export {default as Post} from './Post';
+
 export {default as SendMessage} from './SendMessage';
+
+export {default as Account} from './Account';
+
+

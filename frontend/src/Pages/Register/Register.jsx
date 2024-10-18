@@ -51,7 +51,7 @@ const Register = () => {
 
         if (name === 'phone') {
             if (!value) {
-                setErrors((preErrors) => ({ ...preErrors, phoneNumber: 'Số điện thoại không được để trống!' }));
+                setErrors((preErrors) => ({ ...preErrors, phone: 'Số điện thoại không được để trống!' }));
             } else {
                 const phoneNumberRegex = /^0\d{9}$/;
 
@@ -129,7 +129,6 @@ const Register = () => {
         }
 
         setErrors(newErrors);
-        console.log(errors);
 
         if (Object.values(newErrors).some((error) => error)) {
             return;
@@ -142,7 +141,6 @@ const Register = () => {
         const { confirmPassword, ...newCredentials } = credentials;
         const response = await signUp(newCredentials);
         if (response.status === 200) {
-            navigate('/login');
             Swal.fire({
                 title: 'Đăng ký thành công!',
                 icon: 'success',
@@ -152,6 +150,7 @@ const Register = () => {
                 showConfirmButton: false,
                 timer: 3000,
             });
+            navigate('/login');
         }  else {
             Swal.fire({
                 title: response.message,
@@ -175,13 +174,13 @@ const Register = () => {
                         <div className="col-md-12 col-lg-6 col-xl-6 offset-lg-3 offset-xl-3">
                             <div className="border border-1 rounded p-5">
                                 <div className="form-item">
-                                    <label htmlFor="username" className="form-label mb-3">
+                                    <label htmlFor="name" className="form-label mb-3">
                                         Tên đăng nhập<sup>*</sup>
                                     </label>
                                     <input
                                         type="text"
                                         name="name"
-                                        id="username"
+                                        id="name"
                                         className="form-control"
                                         onChange={handleInputChange}
                                     />

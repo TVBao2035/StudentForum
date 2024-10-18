@@ -1,17 +1,55 @@
-import React, { useState } from 'react';
-import { Dropdown } from 'react-bootstrap';
-import { Link, NavLink } from 'react-router-dom';
-import { IoHomeSharp, IoCreate,  } from 'react-icons/io5';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { IoCreate } from 'react-icons/io5';
 import { FaFacebookMessenger } from "react-icons/fa";
 import logoIcon from '../../resources/img/logo.png';
 import './HeaderStyle.scss';
 import Avatar from '../Avatar';
 import { ModalCreatePost } from '../Modal';
+import Swal from 'sweetalert2';
+import { useDispatch, useSelector } from 'react-redux';
+import { initialState, setDataMain } from '../../Redux/userSlice';
+import { logOut } from '../../API/UserAPI';
 
 export default function Header() {
   const [showPostModal, setShowPostModal] = useState(false);
   const handleShow = () => setShowPostModal(true);
   const handleClose = () => setShowPostModal(false);
+
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+  //console.log(user);
+
+  const navigate = useNavigate();
+  const token = user.token;
+
+  const handleLogout = async () => {
+    const result = await Swal.fire({
+      title: 'Bạn có chắc chắn muốn đăng xuất?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Có, đăng xuất!',
+      cancelButtonText: 'Không, quay lại'
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await logOut();
+        dispatch(setDataMain(initialState));
+        Swal.fire('Đã đăng xuất!', '', 'success');
+        navigate('/login');
+      } catch (error) {
+        Swal.fire('Có lỗi xảy ra!', 'Vui lòng thử lại sau.', 'error');
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (!token) {
+      dispatch(setDataMain(initialState));
+      navigate('/login');
+    }
+  }, [token, dispatch, navigate]);
 
   return (
     <header className="Header">
@@ -30,57 +68,38 @@ export default function Header() {
           </div>
         </div>
 
-        {/* <div className="middle-section d-none d-md-flex">
-        <nav className="nav">
-          <NavLink to="/" className="nav-link d-flex align-items-center">
-            <IoHomeSharp className="nav-icon me-2" size={24} />
-            Trang chủ
-          </NavLink>
-          <NavLink to="/categories" className="nav-link d-flex align-items-center">
-            <IoIosListBox className="nav-icon me-2" size={24} />
-            Danh mục
-          </NavLink>
-        </nav>
-      </div> */}
-
         <div className="right-section d-flex align-items-center">
-          <span className="user-greeting d-none d-md-block me-3">Xin chào <strong>Tên Người Dùng</strong></span>
+          {user.id ? (
+            <>
+              <span className="user-greeting d-none d-md-block me-3">Xin chào <strong>{user.name}</strong></span>
 
-          <div className="nav-link me-3" onClick={handleShow} style={{ cursor: 'pointer' }}>
-            <IoCreate className="icon-size" size={24} />
-          </div>
+              <div className="nav-link me-3" onClick={handleShow} style={{ cursor: 'pointer' }}>
+                <IoCreate className="icon-size" size={24} />
+              </div>
 
-          <Link to="/message" className="nav-link me-3">
-            <FaFacebookMessenger className="icon-size" size={24} />
-          </Link>
+              <Link to="/message" className="nav-link me-3">
+                <FaFacebookMessenger className="icon-size" size={24} />
+              </Link>
 
-          <Link to={"profile"}>
-            <Avatar small />
-          </Link>
+              <Link to={"profile"}>
+                <Avatar link={user.avatar} size="small" />
+              </Link>
 
-          {/* <Dropdown className="ms-3">
-              <Dropdown.Toggle id="dropdown-basic">
-                <IoPersonCircle
-                  className="avatar rounded-circle"
-                  style={{ width: '40px' }}
-                  size={40}
-                />
-              </Dropdown.Toggle> */}
-
-          {/* <Dropdown.Menu>
-                <Dropdown.Item as={Link} to="/profile">Tài khoản</Dropdown.Item>
-                <Dropdown.Item as={Link} to="/settings">Cài đặt</Dropdown.Item>
-                <Dropdown.Item as={Link} to="/donggop-ykien">Đóng góp ý kiến</Dropdown.Item>
-                <Dropdown.Item as={Link} to="/chinhsach-baomat">Chính sách bảo mật</Dropdown.Item>
-                <Dropdown.Item as={Link} to="/login">Đăng xuất</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown> */}
+              <span
+                className="nav-link me-3"
+                style={{ cursor: 'pointer' }}
+                onClick={handleLogout}
+              >
+                Đăng xuất
+              </span>
+            </>
+          ) : (
+            <Link to="/login" className="btn btn-primary">Đăng nhập</Link>
+          )}
         </div>
       </div>
 
       <ModalCreatePost show={showPostModal} handleClose={handleClose} />
     </header>
-
-
   );
 };
