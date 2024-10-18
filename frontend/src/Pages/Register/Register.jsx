@@ -129,7 +129,6 @@ const Register = () => {
         }
 
         setErrors(newErrors);
-
         if (Object.values(newErrors).some((error) => error)) {
             return;
         };
@@ -141,7 +140,6 @@ const Register = () => {
         const { confirmPassword, ...newCredentials } = credentials;
         const response = await signUp(newCredentials);
         if (response.status === 200) {
-            navigate('/login');
             Swal.fire({
                 title: 'Đăng ký thành công!',
                 icon: 'success',
@@ -151,6 +149,7 @@ const Register = () => {
                 showConfirmButton: false,
                 timer: 3000,
             });
+            navigate('/login');
         }  else {
             Swal.fire({
                 title: response.message,
