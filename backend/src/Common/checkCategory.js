@@ -5,6 +5,7 @@ const checkCategory = (categoryId) => {
     return new Promise(async (resolve, reject) => {
         try {
             const category = await db.Categorys.findOne({
+                attributes: ['id', 'name'],
                 where: {
                     [Op.and]: [{ id: categoryId }, { isDelete: false }]
                 }
