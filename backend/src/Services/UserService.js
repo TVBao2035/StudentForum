@@ -3,99 +3,40 @@ const db = require("../Models");
 const bcrypt = require("bcryptjs/dist/bcrypt");
 const hashPassword = require("../Helpers/hashPassword");
 const accessToken = require("../Helpers/accessToken");
-const checkUser = require("../Common/checkUser");
+const checkUser = require("../Common/checks/checkUser");
+const checkGroup = require("../Common/checks/checktGroup");
 
 class UserService{
-    create(data){
+    
+    getByGroupId(groupId){
         return new Promise(async(resolve, reject) => {
             try {
-                const checkEmail = await db.User.findOne({
-                    where: {
-                        [Op.and]: [{email: data.email}, {isDelete: false}]
+                const group = await checkGroup(groupId);
+                if(group.status === 404) return resolve(group);
+
+                const data = await db.User.findAll({
+                    attributes: ["id", "name", "phone", "email", "avatar", "isAdmin"],
+                    where: { isDelete: false },
+                    include: {
+                        model: db.Group,
+                        where: {
+                            [Op.and]: [
+                                {isDelete: false},
+                                {id: groupId}
+                            ]
+                        }
                     }
-                })
+                });
 
-                if(checkEmail){
-                    return resolve({
-                        status: 404,
-                        message: `Email đã tồn tại!!`
-                    })
-                }
-
-                const checkPhone = await db.User.findOne({
-                    where: {
-                        [Op.and]: [{phone: data.phone}, {isDelete: false}]
-                    }
-                })
-
-                if(checkPhone){
-                    return resolve({
-                        status: 404,
-                        message: `Phone đã tồn tại!!`
-                    })
-                }
-                data.password = hashPassword(data.password);
-                await db.User.create(data);
                 resolve({
                     status: 200,
-                    message: `Tạo Người Thành Công!!`
+                    message: `Lấy tất cả thành viên nhóm thành công`,
+                    data
                 })
             } catch (error) {
                 reject({
                     status: 400,
-                    message: `Error Create User ${error}`
-                })
-            }
-        })
-    }
-    
-    udpate(data, userId){
-        return new Promise(async (resolve, reject) => {
-            try {
-                const user = await checkUser(userId);
-                if(user?.status === 404){
-                    return resolve(user);
-                }
-
-
-                user.email = data.email;
-                user.phone = data.phone;
-                user.name = data.name;
-                user.avatar = data.avatar;
-                await user.save();
-                resolve({
-                    status: 200,
-                    message: `Cập Nhật Người Dùng Thành Công!`
-                })
-            } catch (error) {
-                reject({
-                    status: 400,
-                    message: `Error Update User ${error}`
-                })
-            }
-        })
-    }
-
-    delete(userId){
-        return new Promise(async (resolve, reject) => {
-            try {
-                const user = await checkUser(userId);
-
-                if(user?.status === 404){
-                    return resolve(user);
-                }
-
-                user.isDelete = true;
-                await user.save();
-                resolve({
-                    status: 200,
-                    message: `Xóa Người Dùng Thành Công`
-                })
-
-            } catch (error) {
-                reject({
-                    status: 400,
-                    message: `Error Delete User ${error}`
+                    message: `Lỗi lấy tất cả thành viên nhóm ${error}`
                 })
             }
         })
@@ -154,6 +95,101 @@ class UserService{
                 reject ({
                     status: 400,
                     message: `Error Get Details User ${error}`
+                })
+            }
+        })
+    }
+
+    create(data) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const checkEmail = await db.User.findOne({
+                    where: {
+                        [Op.and]: [{ email: data.email }, { isDelete: false }]
+                    }
+                })
+
+                if (checkEmail) {
+                    return resolve({
+                        status: 404,
+                        message: `Email đã tồn tại!!`
+                    })
+                }
+
+                const checkPhone = await db.User.findOne({
+                    where: {
+                        [Op.and]: [{ phone: data.phone }, { isDelete: false }]
+                    }
+                })
+
+                if (checkPhone) {
+                    return resolve({
+                        status: 404,
+                        message: `Phone đã tồn tại!!`
+                    })
+                }
+                data.password = hashPassword(data.password);
+                await db.User.create(data);
+                resolve({
+                    status: 200,
+                    message: `Tạo Người Thành Công!!`
+                })
+            } catch (error) {
+                reject({
+                    status: 400,
+                    message: `Error Create User ${error}`
+                })
+            }
+        })
+    }
+
+    udpate(data, userId) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const user = await checkUser(userId);
+                if (user?.status === 404) {
+                    return resolve(user);
+                }
+
+
+                user.email = data.email;
+                user.phone = data.phone;
+                user.name = data.name;
+                user.avatar = data.avatar;
+                await user.save();
+                resolve({
+                    status: 200,
+                    message: `Cập Nhật Người Dùng Thành Công!`
+                })
+            } catch (error) {
+                reject({
+                    status: 400,
+                    message: `Error Update User ${error}`
+                })
+            }
+        })
+    }
+
+    delete(userId) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const user = await checkUser(userId);
+
+                if (user?.status === 404) {
+                    return resolve(user);
+                }
+
+                user.isDelete = true;
+                await user.save();
+                resolve({
+                    status: 200,
+                    message: `Xóa Người Dùng Thành Công`
+                })
+
+            } catch (error) {
+                reject({
+                    status: 400,
+                    message: `Error Delete User ${error}`
                 })
             }
         })

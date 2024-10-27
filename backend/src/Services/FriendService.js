@@ -1,6 +1,6 @@
 const { Op } = require("sequelize")
 const db = require("../Models");
-const checkUser = require("../Common/checkUser");
+const checkUser = require("../Common/checks/checkUser");
 
 class FriendService{
     getFriendsByUserId(userId){

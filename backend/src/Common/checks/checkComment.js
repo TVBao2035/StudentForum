@@ -1,5 +1,5 @@
 const { Op } =  require( "sequelize");
-const  db = require("../Models")
+const  db = require("../../Models")
 
 const checkComment = (commentId) => {
     return new Promise(async(resolve, reject) => {

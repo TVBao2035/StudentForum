@@ -1,19 +1,53 @@
 const { Op } = require("sequelize");
 const db = require("../Models");
-const checkPost = require("../Common/checkPost");
-const checkCategory = require("../Common/checkCategory");
-const checkGroup = require("../Common/checktGroup");
-const checkUser = require("../Common/checkUser");
+const checkPost = require("../Common/checks/checkPost");
+const checkCategory = require("../Common/checks/checkCategory");
+const checkGroup = require("../Common/checks/checktGroup");
+const checkUser = require("../Common/checks/checkUser");
+const postInclude = require("../Common/includesQuery/postInclude");
 
 
-class PostService{
+class PostService {
 
-    delete(id){
+    getByGroupId(groupId){
+        return new Promise(async(resolve, reject) => {
+            try {
+                const group = await checkGroup(groupId);
+                if(group.status === 404) return resolve(group);
+
+                const data = await db.Post.findAll({
+                    attributes: ["id", "content", "image", "createdAt", "updatedAt"],
+                    where: {
+                        [Op.and]: [
+                            {isDelete: false},
+                            {groupId}
+                        ]
+                    },
+                    include: postInclude
+                });
+
+                resolve({
+                    status: 200,
+                    message: `Lấy tất cả bài đăng của nhóm thành công`,
+                    data
+                })
+            } catch (error) {
+                reject(
+                    {
+                        status: 400,
+                        message: `Lỗi lấy tất cả bài đăng của nhóm ${error}`
+                    }
+                )
+            }
+        })
+    }
+
+    delete(id) {
         return new Promise(async (resolve, reject) => {
             try {
                 const post = await checkPost(id)
 
-                if(post?.status === 404){
+                if (post?.status === 404) {
                     return resolve(post)
                 }
 
@@ -32,18 +66,18 @@ class PostService{
         })
     }
 
-    update({ id, categoryId, content, image }){
+    update({ id, categoryId, content, image }) {
         return new Promise(async (resolve, reject) => {
             try {
                 const post = await checkPost(id);
 
-                if(post?.status === 404){
+                if (post?.status === 404) {
                     return resolve(post)
                 }
 
                 const category = await checkCategory(categoryId);
 
-                if(category?.status === 404){
+                if (category?.status === 404) {
                     return resolve(category);
                 }
 
@@ -65,24 +99,24 @@ class PostService{
         })
     }
 
-    create({userId, groupId, categoryId, content, image}){
-        return new Promise(async(resolve, reject) => {
+    create({ userId, groupId, categoryId, content, image }) {
+        return new Promise(async (resolve, reject) => {
             try {
                 const user = await checkUser(userId);
-                if(user?.status === 404){
+                if (user?.status === 404) {
                     return resolve(user);
                 }
 
                 const category = await checkCategory(categoryId);
 
-                if(category?.status === 404){
+                if (category?.status === 404) {
                     return resolve(category);
                 }
 
-                if(groupId){
+                if (groupId) {
                     const group = await checkGroup(groupId);
 
-                    if(group?.status === 404){
+                    if (group?.status === 404) {
                         return resolve(group);
                     }
                 }
@@ -108,39 +142,15 @@ class PostService{
             }
         })
     }
-    
-    getDeltails(id){
+
+    getDeltails(id) {
         return new Promise(async (resolve, reject) => {
             try {
                 const post = await db.Post.findOne({
-                    attributes:{
+                    attributes: {
                         exclude: ['isDelete', 'groupId', 'userId', 'categoryId']
                     },
-                    include: [
-                        {
-                            model: db.Categorys,
-                            where: {
-                                isDelete: false,
-                            },
-                            attributes: {
-                                exclude: ['isDelete', 'updatedAt', 'creaedAt']
-                            },
-                        },
-                        {
-                            model: db.User,
-                            where: {
-                                isDelete: false,
-                            },
-                            attributes: ['id', 'name', 'avatar']
-                        },
-                        {
-                            model: db.Group,
-                            where: {
-                                isDelete: false,
-                            },
-                            attributes: ['id', 'name', 'description']
-                        }
-                    ],
+                    include: postInclude,
                     where: {
                         [Op.and]: [
                             { id }, { isDelete: false }
@@ -170,8 +180,8 @@ class PostService{
         })
     }
 
-    getAll(){
-        return new Promise( async (resolve, reject) => {
+    getAll() {
+        return new Promise(async (resolve, reject) => {
             try {
                 const data = await db.Post.findAll({
                     where: {
@@ -183,7 +193,7 @@ class PostService{
                     order: [
                         ['createdAt', "DESC"],
                     ],
-                    include:[
+                    include: [
                         {
                             model: db.Categorys,
                             where: {
@@ -211,7 +221,7 @@ class PostService{
                             },
                         }
                     ],
-                  
+
                 })
 
                 resolve({
@@ -228,12 +238,12 @@ class PostService{
         })
     }
 
-    getAllPostByUserId(userId){
-        return new Promise( async (resolve, reject) => {
+    getAllPostByUserId(userId) {
+        return new Promise(async (resolve, reject) => {
             try {
                 const user = await checkUser(userId);
 
-                if(user?.status === 404){
+                if (user?.status === 404) {
                     return resolve(user);
                 }
 
@@ -244,27 +254,27 @@ class PostService{
                     ],
                     where: {
                         [Op.and]: [
-                            {userId},{isDelete: false}
+                            { userId }, { isDelete: false }
                         ]
                     },
                     include: [
                         {
                             model: db.User,
-                            where:{
+                            where: {
                                 isDelete: false,
                             },
                             attributes: ['avatar', 'name', 'id']
                         },
                         {
                             model: db.Categorys,
-                            where:{
+                            where: {
                                 isDelete: false,
                             },
                             attributes: ['name']
                         },
                         {
                             model: db.Like,
-                            where:{
+                            where: {
                                 isDelete: false,
                             },
                             required: false,

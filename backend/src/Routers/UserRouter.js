@@ -11,6 +11,9 @@ router.get(`/refresh`, checkToken, UserController.refresh);
 router.post('/', checkToken, UserController.create);
 router.put(`/:id`, checkToken, UserController.update);
 router.delete(`/:id`, checkToken, UserController.delete);
+
+router.get('/user/group/:id', UserController.getByGroupId);
 router.get(`/:id`, checkToken, UserController.getDetails);
-router.get(`/`, UserController.getAll);
+router.get(`/`, checkToken, UserController.getAll);
+
 module.exports = router;

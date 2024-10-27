@@ -1,8 +1,8 @@
 const { Op } = require("sequelize");
 const db = require("../Models");
-const checkUser = require("../Common/checkUser");
-const checkPost = require("../Common/checkPost");
-const checkComment = require("../Common/checkComment");
+const checkUser = require("../Common/checks/checkUser");
+const checkPost = require("../Common/checks/checkPost");
+const checkComment = require("../Common/checks/checkComment");
 
 class CommentService{
 

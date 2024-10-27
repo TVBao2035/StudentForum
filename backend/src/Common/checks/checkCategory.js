@@ -1,10 +1,11 @@
 const { Op } = require("sequelize");
-const db = require("../Models")
+const db = require("../../Models")
 
 const checkCategory = (categoryId) => {
     return new Promise(async (resolve, reject) => {
         try {
             const category = await db.Categorys.findOne({
+                attributes: ['id', 'name'],
                 where: {
                     [Op.and]: [{ id: categoryId }, { isDelete: false }]
                 }
