@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const db = require('../Models');
+const db = require('../../Models');
 
 const checkUser = (userId) => {
 

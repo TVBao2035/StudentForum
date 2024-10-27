@@ -5,6 +5,18 @@ const updateUserDTO = require("../DTOs/UserDTO/updateUserDTO");
 const UserService = require("../Services/UserService");
 require('dotenv').config();
 class UserController{
+
+    async getByGroupId(req, res){
+        try {
+            const groupId = req.params.id;
+            const data = await UserService.getByGroupId(groupId);
+            res.status(200).json(data);
+        } catch (error) {
+            console.log(error);
+            res.status(400).json(error);
+        }
+    }
+
     async create(req, res){
         try {
             const {error, value} = createUserDTO.validate(req.body);

@@ -3,6 +3,16 @@ const updatePostDTO = require("../DTOs/PostDTO/updatePostDTO");
 const PostService = require("../Services/PostService");
 
 class PostController{
+    async getByGroupId(req, res){
+        try {
+            const groupId = req.params.id;
+            const data = await PostService.getByGroupId(groupId);
+            res.status(200).json(data);
+        } catch (error) {
+            console.log(error);
+            res.status(400).json(error);
+        }
+    }
     async delete(req, res){
         try {
             const id = req.params.id;

@@ -1,6 +1,6 @@
 const { Op } = require("sequelize");
 const db = require("../Models");
-const checkCategory = require("../Common/checkCategory");
+const checkCategory = require("../Common/checks/checkCategory");
 const { message } = require("../DTOs/CategoryDTO/createCategoryDTO");
 
 class CategoryService{
