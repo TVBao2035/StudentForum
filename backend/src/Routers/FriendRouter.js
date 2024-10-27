@@ -4,6 +4,6 @@ const router = express.Router();
 
 router.get('/user/:userId', FriendController.getFriendsByUserId);
 router.get('/invite/:friendId', FriendController.getFriendInvitation);
-router.post('/invite', FriendController.createFriendInvitation);
 router.post('/accept', FriendController.acceptFriendInvitation);
+router.post('/invite', FriendController.createFriendInvitation);
 module.exports = router;

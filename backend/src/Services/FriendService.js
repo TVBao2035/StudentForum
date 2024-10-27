@@ -23,6 +23,7 @@ class FriendService{
                     include:[
                         {
                             model: db.User,
+                            as: "yourFriend",
                             where:{
                                 isDelete:false
                             },
@@ -60,7 +61,15 @@ class FriendService{
                             { isAccept: false }
                         ]
                     },
-                    attributes: ['id', 'userId', 'friendId', 'createdAt']
+                    include: [
+                        {
+                            model: db.User,
+                            as: "user",
+                            attributes: ['id', 'name', 'avatar']
+                            
+                        }
+                    ],
+                    attributes: ['id', 'createdAt']
                 });
                 resolve({
                     status: 200,
