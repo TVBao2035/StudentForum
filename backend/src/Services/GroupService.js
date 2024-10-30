@@ -84,6 +84,12 @@ class GroupService {
             try {
                 const data = await db.Group.findAll({
                     attributes: ['id', 'name', 'description'],
+                    include: [
+                        {
+                            model: db.User,
+                            attributes: ["id"]
+                        }
+                    ],
                     where: {
                         isDelete: false
                     }

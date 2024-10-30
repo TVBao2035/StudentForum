@@ -1,0 +1,9 @@
+.Group{
+    .group_name,
+    .group_description {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 210px;
+    }
+}

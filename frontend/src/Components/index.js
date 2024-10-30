@@ -9,6 +9,5 @@ export {default as Post} from './Post';
 
 export {default as SendMessage} from './SendMessage';
 
-export {default as Account} from './Account';
 
 
