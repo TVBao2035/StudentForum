@@ -44,12 +44,12 @@ export default function Header() {
     }
   };
 
-  useEffect(() => {
-    if (!token) {
-      dispatch(setDataMain(initialState));
-      navigate('/login');
-    }
-  }, [token, dispatch, navigate]);
+  // useEffect(() => {
+  //   if (!token) {
+  //     dispatch(setDataMain(initialState));
+  //     navigate('/login');
+  //   }
+  // }, [token, dispatch, navigate]);
 
   return (
     <header className="Header">
