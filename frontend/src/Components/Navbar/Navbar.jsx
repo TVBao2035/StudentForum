@@ -6,7 +6,7 @@ export default function Navbar({ listItems, ...style }) {
     <div className='Navbar'>
       <nav className={`${Object.keys(style)}`}>
         {
-            listItems.map((item, index) => {
+            listItems?.map((item, index) => {
               let Type = "li";
               if(item.type !== 'text'){
                 Type = item.type === 'link' ? Link : NavLink;

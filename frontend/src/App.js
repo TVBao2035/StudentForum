@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import './App.scss';
-import { GroupDetail, Profile, Group, Home, Login, MakeFriend, Notification, Register, Setting, Message, Account } from './Pages';
+import { GroupDetail, Profile, Group, Home, Login, MakeFriend, Notification, Register, Setting, Message, Account, GroupJoin } from './Pages';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { GroupLayout, MainLayout } from './Components/Layout';
@@ -55,8 +55,9 @@ function App() {
         <Route path={`/:id`} element={<Profile/>}/>
         <Route path='/message' element={<Message/>} />
       </Route>
-      <Route path='group' element={<GroupLayout />}>
-        <Route path='' element={<Group />}/>
+      <Route path='group' element={loading.isLoading ? <Loading/>: <GroupLayout />}>
+        <Route path='discover' element={<Group />}/>
+        <Route path='join' element={<GroupJoin/>} />
         <Route path={`:id`} element={<GroupDetail />}/>
       </Route>
       <Route path="/login" element={<Login/>}/>

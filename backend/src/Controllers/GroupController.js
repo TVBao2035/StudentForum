@@ -31,6 +31,7 @@ class GroupController{
             res.status(400).jon(error);
         }
     }
+
     async create(req, res){
         try {
             const {error, value} = createGroupDTO.validate(req.body);
@@ -47,6 +48,7 @@ class GroupController{
             res.status(400).json(error);
         }
     }
+
     async getById(req, res){
         try {
             const groupId = req.params.id;
@@ -57,6 +59,18 @@ class GroupController{
             res.status(400).json(error);
         }
     }
+
+    async getByUserId(req, res){
+        try {
+            const userId = req.params.userId;
+            const data = await GroupService.getByUserId(userId);
+            res.status(200).json(data);
+        } catch (error) {
+            console.log(error);
+            res.status(400).json(error);
+        }
+    }
+
     async getAll(req, res){
         try {
             const data = await GroupService.getAll();

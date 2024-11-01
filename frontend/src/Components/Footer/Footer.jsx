@@ -17,7 +17,7 @@ export default function Footer() {
           </NavLink>
         </li>
         <li>
-          <NavLink to={'../group'} >
+          <NavLink to={'../group/discover'} >
             <IoPeople />
           </NavLink>
         </li>

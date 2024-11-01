@@ -1,6 +1,7 @@
-const { Op } = require('sequelize');
+const { Op, col } = require('sequelize');
 const db = require('../Models');
 const checkGroup = require('../Common/checks/checktGroup');
+const checkUser = require('../Common/checks/checkUser');
 class GroupService {
     update({id, name, description}){
         return new Promise(async(resolve, reject) => {
@@ -79,6 +80,45 @@ class GroupService {
             }
         })
     }
+
+    getByUserId(userId){
+        return new Promise(async (resolve, reject) => {
+            try {
+                const user = await checkUser(userId);
+                if(user.status === 404){
+                    return resolve(user);
+                }
+                const data = await db.Group.findAll({
+                    attributes: ['id', 'name', 'description'],
+                    include: [
+                        {
+                            model: db.User,
+                            attributes: ["id"],
+                            where: {
+                                id: userId
+                            }
+                        }
+                    ],
+                    where: {
+                        isDelete: false
+                    }
+                });
+
+                resolve({
+                    status: 200,
+                    message: `Lấy tất cả nhóm thành công!`,
+                    data
+                })
+            } catch (error) {
+                reject({
+                    status: 400,
+                    message: `Lỗi lấy tất cả nhóm ${error}`
+                })
+            }
+        })
+    }
+
+
     getAll() {
         return new Promise(async (resolve, reject) => {
             try {
@@ -87,11 +127,13 @@ class GroupService {
                     include: [
                         {
                             model: db.User,
-                            attributes: ["id"]
+                            attributes: ["id"],
+                            
                         }
                     ],
                     where: {
                         isDelete: false
+
                     }
                 });
 

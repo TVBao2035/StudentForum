@@ -9,3 +9,4 @@ export {default as Profile} from './Profile';
 export { default as Message } from './Message';
 export { default as Account } from './Account';
 export {default as GroupDetail} from './GroupDetail';
+export {default as GroupJoin} from './GroupJoin';
