@@ -5,9 +5,10 @@ import { useSelector } from 'react-redux';
 import { Avatar } from '../../Components';
 import './MakeFriendStyle.scss';
 //import moment from 'moment';
-import { formatDistanceToNow } from "date-fns";
-import { vi } from "date-fns/locale";
+// import { formatDistanceToNow } from "date-fns";
+// import { vi } from "date-fns/locale";
 import { Link } from 'react-router-dom';
+import timeFormat from '../../Helpers/timeFormat';
 
 // Component cho mỗi lời mời kết bạn
 function FriendInvitation({ invitation, onAccept, onCancel }) {
@@ -23,11 +24,12 @@ function FriendInvitation({ invitation, onAccept, onCancel }) {
           <div className="name mb-1">{invitation.user.name}</div> {/* Tên người gửi */}
           {/* <div className="time text-muted">{moment(invitation.createdAt).fromNow()}</div> Thời gian gửi */}
           <div className="time text-muted">
-            {formatDistanceToNow(new Date(invitation.createdAt), { addSuffix: true, locale: vi })} 
+            {timeFormat(invitation.createdAt)}
+            {/* {formatDistanceToNow(new Date(invitation.createdAt), { addSuffix: true, locale: vi })}  */}
           </div>
         </Col>
         <Col xs={4} className="text-end">
-          <Button variant="primary" className="btn-accept mb-1" onClick={() => onAccept(invitation.id, invitation.userId)}>
+          <Button variant="primary" className="btn-accept mb-1" onClick={() => onAccept(invitation.id, invitation.user.id)}>
             Chấp Nhận
           </Button>
           <Button variant="secondary" className="btn-cancel" onClick={() => onCancel(invitation.id)}>
@@ -93,9 +95,12 @@ export default function MakeFriend() {
 
   const handleAccept = async (invitationId, friendId) => {
     try {
+      console.log({
+        invitationId, friendId
+      });
       const res = await acceptFriendInvitation(invitationId, userId, friendId);
       console.log(res.data);
-      setInvitations(invitations.filter((invite) => invite.id !== invitationId));
+      setInvitations(invitations.filter((invite) => invite.id !== invitationId))
     } catch (error) {
       console.error('Error accepting friend request:', error);
       setError('Không thể chấp nhận lời mời. Vui lòng thử lại sau.');
@@ -119,6 +124,7 @@ export default function MakeFriend() {
               <Row xs={1} sm={2} md={3} className="g-3">
                 {invitations.map((invite) => (
                   <Col key={invite.id}>
+                  
                     <FriendInvitation 
                       invitation={invite} 
                       onAccept={handleAccept} 
