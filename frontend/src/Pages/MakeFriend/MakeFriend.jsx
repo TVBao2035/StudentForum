@@ -13,14 +13,14 @@ import timeFormat from '../../Helpers/timeFormat';
 // Component cho mỗi lời mời kết bạn
 function FriendInvitation({ invitation, onAccept, onCancel }) {
   return (
-    <Card className="friend-invitation-card p-3">
-      <Row className="align-items-center">
-        <Col xs={2} className="text-center">
+    <Card className="friend-invitation-card p-3 d-flex justify-content-between">
+      <Row className="align-items-center w-100 ">
+        <Col xs={3} className="text-center p-0">
           <Link to={`/@${invitation.user.id}`}>
             <Avatar link={invitation.user.avatar} big />
           </Link>
         </Col>
-        <Col xs={6} className="text-start">
+        <Col xs={4} className="text-start p-0">
           <div className="name mb-1">{invitation.user.name}</div> {/* Tên người gửi */}
           {/* <div className="time text-muted">{moment(invitation.createdAt).fromNow()}</div> Thời gian gửi */}
           <div className="time text-muted">
@@ -28,7 +28,7 @@ function FriendInvitation({ invitation, onAccept, onCancel }) {
             {/* {formatDistanceToNow(new Date(invitation.createdAt), { addSuffix: true, locale: vi })}  */}
           </div>
         </Col>
-        <Col xs={4} className="text-end">
+        <Col xs={5} className="text-end">
           <Button variant="primary" className="btn-accept mb-1" onClick={() => onAccept(invitation.id, invitation.user.id)}>
             Chấp Nhận
           </Button>

@@ -1,6 +1,7 @@
 const { Op } = require("sequelize")
 const db = require("../Models");
 const checkUser = require("../Common/checks/checkUser");
+const checkInvitation = require("../Common/checks/checkInvitation");
 
 class FriendService{
     getFriendsByUserId(userId){
@@ -201,6 +202,27 @@ class FriendService{
                 reject({
                     status: 400,
                     messsage: `Error Accepting Invitation ${error}`
+                })
+            }
+        })
+    }
+
+    deleteFriendInvitation(id){
+        return new Promise(async(resolve, reject) => {
+            try {
+                const invitation = await checkInvitation(id);
+                if(invitation.status === 404) return resolve(invitation);
+
+                invitation.isDelete = true;
+                await invitation.save();
+                resolve({
+                    status: 200,
+                    message: `Xóa Lời Mời Thành Công`
+                })
+            } catch (error) {
+                reject({
+                    status: 400,
+                    message: `Lỗi Xóa Lời Mời ${error}`
                 })
             }
         })
