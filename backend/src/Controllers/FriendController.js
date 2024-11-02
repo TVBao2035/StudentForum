@@ -3,6 +3,16 @@ const createFriendInvitation = require("../DTOs/FriendDTO/createFriendInvitation
 const FriendService = require("../Services/FriendService");
 
 class FriendController{
+    async deleteFriendInvitation(req, res) {
+        try {
+            const invitationId = req.params.id;
+            const data = await FriendService.deleteFriendInvitation(invitationId);
+            res.status(200).json(data);
+        } catch (error) {
+            console.log(error);
+            res.status(400).json(error);
+        }
+    }
     async getFriendsByUserId(req, res){
         try {
             const userId = req.params.userId;
