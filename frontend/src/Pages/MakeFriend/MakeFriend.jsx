@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Row, Col, Button, Card, Tab, Tabs, Alert } from 'react-bootstrap';
-import { getFriendsByUserId, getFriendInvitation, acceptFriendInvitation } from '../../API/FriendAPI';
+import { getFriendsByUserId, getFriendInvitation, acceptFriendInvitation, deleteFriendInvitation } from '../../API/FriendAPI';
 import { useSelector } from 'react-redux'; 
 import { Avatar } from '../../Components';
 import './MakeFriendStyle.scss';
@@ -70,7 +70,7 @@ export default function MakeFriend() {
     setLoading(true);
     try {
       const response = await getFriendsByUserId(userId);
-      //console.log(response.data);
+      console.log(response.data);
       if (response.data) {
         setFriends(response.data);
       } else {
@@ -95,20 +95,29 @@ export default function MakeFriend() {
 
   const handleAccept = async (invitationId, friendId) => {
     try {
-      console.log({
-        invitationId, friendId
-      });
-      const res = await acceptFriendInvitation(invitationId, userId, friendId);
-      console.log(res.data);
-      setInvitations(invitations.filter((invite) => invite.id !== invitationId))
+      //console.log( {invitationId, friendId });
+      //const res = await acceptFriendInvitation(invitationId, userId, friendId);
+      //console.log(res.data);
+      await acceptFriendInvitation(invitationId, userId, friendId);
+      setInvitations(invitations.filter((invite) => invite.id !== invitationId));
     } catch (error) {
       console.error('Error accepting friend request:', error);
       setError('Không thể chấp nhận lời mời. Vui lòng thử lại sau.');
     }
   };
 
-  const handleCancel = (id) => {
-    console.log('Invitation Cancelled:', id);
+  const handleCancel = async (invitationId) => {
+    try
+    {
+      //console.log( {invitationId} );
+      //const response = await deleteFriendInvitation(invitationId);
+      //console.log(response.data);
+      await deleteFriendInvitation(invitationId);
+      setInvitations(invitations.filter((invite) => invite.id !== invitationId));
+    } catch (error) {
+      console.error("Error canceling invitation:", error);
+      setError('Không thể hủy lời mời. Vui lòng thử lại sau.');
+    }
   };
 
   return (
@@ -140,10 +149,10 @@ export default function MakeFriend() {
                   <Col key={friend.id}>
                     <Card className="friend-card text-center p-3">
                       {/* <div className="avatar mb-2"></div> */}
-                      <Link to={`/@${friend.id}`}>
-                        <Avatar link={friend.avatar} big />
+                      <Link to={`/@${friend.yourFriend.id}`}>
+                        <Avatar link={friend.yourFriend.avatar} big />
                       </Link>                      
-                      <div className="name mb-2">{friend.name}</div>
+                      <div className="name mb-2">{friend.yourFriend.name}</div>
                       <Button className="btn-message">Nhắn Tin</Button>
                     </Card>
                   </Col>

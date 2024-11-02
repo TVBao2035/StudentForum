@@ -11,3 +11,7 @@ export const getFriendInvitation = async (friendId) => {
 export const acceptFriendInvitation = async (id, userId, friendId) => {
     return await axios.post('/friend/accept', {id, userId, friendId});
 }
+
+export const deleteFriendInvitation = async (invitationId) => {
+    return await axios.delete(`/friend/invite/${invitationId}`);
+}
