@@ -29,8 +29,8 @@ instance.interceptors.response.use(function (response) {
         case 400: 
             console.log(error.response.data.message);
             alert(error.response.data.message);
-            window.location.href = '/login';
-            localStorage.clear(process.env.REACT_APP_LOGIN_LOCAL_STORAGE);
+            // window.location.href = '/login';
+            // localStorage.clear(process.env.REACT_APP_LOGIN_LOCAL_STORAGE);
             break;
         case 401:
             var { isConfirmed } = await Swal.fire({

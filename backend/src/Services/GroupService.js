@@ -2,6 +2,7 @@ const { Op, col } = require('sequelize');
 const db = require('../Models');
 const checkGroup = require('../Common/checks/checktGroup');
 const checkUser = require('../Common/checks/checkUser');
+const { required } = require('joi');
 class GroupService {
     update({id, name, description}){
         return new Promise(async(resolve, reject) => {
@@ -89,14 +90,26 @@ class GroupService {
                     return resolve(user);
                 }
                 const data = await db.Group.findAll({
-                    attributes: ['id', 'name', 'description'],
+                    attributes: ['id', 'name', 'description', 'image'],
                     include: [
                         {
-                            model: db.User,
-                            attributes: ["id"],
+                            model: db.GroupUser,
+                            as: 'groupuser',
                             where: {
-                                id: userId
-                            }
+                                [Op.and]: [
+                                    { isAccept: true},
+                                    {userId: user.id},
+                                    {isDelete: false}
+                                ]
+                               
+                            }, 
+                            required: true
+                        },
+                        {
+                            model: db.User,
+                            as: 'captain',
+                            attributes: ["id"],
+                            
                         }
                     ],
                     where: {
@@ -123,13 +136,23 @@ class GroupService {
         return new Promise(async (resolve, reject) => {
             try {
                 const data = await db.Group.findAll({
-                    attributes: ['id', 'name', 'description'],
+                    attributes: ['id', 'name', 'description', "image"],
                     include: [
+                        { 
+                            model: db.GroupUser, as: 'groupuser', 
+                            attributes: ['userId'],
+                            include: { 
+                                        model: db.User, as: "invitation", 
+                                        where: {isDelete: false}, 
+                                        attributes: ['id', 'name', 'avatar']
+                                    }, 
+                            where: {isAccept: true}, required: false
+                        },
                         {
-                            model: db.User,
-                            attributes: ["id"],
-                            
+                            model: db.User, as: "captain",
+                            attributes: ["id", 'name', 'avatar'],
                         }
+                      
                     ],
                     where: {
                         isDelete: false

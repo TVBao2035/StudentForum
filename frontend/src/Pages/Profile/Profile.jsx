@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { MdEdit } from "react-icons/md";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getDetails } from '../../API/UserAPI';
-import { setLoading, setLoadingOrther } from '../../Redux/loadingSlice';
+import {  setLoadingOrther } from '../../Redux/loadingSlice';
 import timeOut from '../../Helpers/timeOut';
 import { Friend_Profile, Information_Profile, Post_Profile } from './Profile_Pages';
 import './ProfileStyle.scss';

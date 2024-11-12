@@ -7,3 +7,7 @@ export const getAllGroupJoin = async (userId) => {
 export const getAllGroup = async() => {
     return await axios.get('/group');
 }
+
+export const getDetailGroup = async (groupId) => {
+    return await axios.get(`/group/${groupId}`);
+}

@@ -31,7 +31,11 @@ const GroupJoin = () => {
     <div className='GroupJoin'>
       <div className='container row'>
         {
-          listGroups.map(group => <GroupItem isJoin group={group} />)
+          listGroups.map((group, index) => <GroupItem 
+                                    image={group.image} 
+                                    isJoin
+                                    key={`${group.image}-${index}`} 
+                                    group={group} />)
         }
       </div>
     </div>

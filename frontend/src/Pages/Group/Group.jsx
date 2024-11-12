@@ -22,11 +22,13 @@ export default function Group() {
   }, []);
   return (
     <div className='Group'>
-        <div className='container row'>
+        <div className='container d-flex flex-wrap'>
           {
-            listGroups.map(group => (
+            listGroups.map((group, index) => (
               <GroupItem 
-                isJoin={group.Users.some(userGroup => userGroup.id === user.id)}
+                key={`${group.image} - ${index}`}
+                image={group.image}
+                isJoin={group.groupuser.some(userGroup => userGroup.invitation.id == user.id)}
                 group={group} />
             ))
           }

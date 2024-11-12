@@ -19,6 +19,7 @@ class UserService{
                     where: { isDelete: false },
                     include: {
                         model: db.Group,
+                        as: "members",
                         where: {
                             [Op.and]: [
                                 {isDelete: false},

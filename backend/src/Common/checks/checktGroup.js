@@ -6,11 +6,12 @@ const checkGroup = (groupId) => {
     return new Promise(async (resolve, reject) => {
         try {
             const group = await db.Group.findOne({
-                attributes: ['id', 'name', 'description'],
+                attributes: ['id', 'name', 'description', 'image'],
                 include: [
                     {
                         model: db.User,
                         attributes: ['id', 'name', 'avatar'],
+                        as: "members",
                         where: {
                             isDelete: false
                         },
