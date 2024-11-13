@@ -1,19 +1,26 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import { Editor } from '@tinymce/tinymce-react';
-import { getAllPost } from '../../../API/PostAPI';
+import { getAll } from '../../../API/CategoryAPI';
+import { createPost } from '../../../API/PostAPI';
+import { useSelector } from 'react-redux';
 
 const ModalCreatePost = ({ show, handleClose }) => {
+  const user = useSelector(state => state.user);
   const [content, setContent] = useState('');
   const [imagePreview, setImagePreview] = useState(null);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const fileInputRef = useRef(null);
+  const [error, setError] = useState('');
+  //const [images, setImages] = useState(null);
+  const [groupId, setGroupId] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await getAllPost();
+        const response = await getAll();
         setCategories(response.data);
       } catch (error) {
         console.error('Error fetching categories', error);
@@ -34,18 +41,65 @@ const ModalCreatePost = ({ show, handleClose }) => {
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setImagePreview(imageUrl);
+      //setImages(imageUrl);
     }
   };
 
   const handleCloseModal = () => {
     setImagePreview("");
     setContent("");
+    setSelectedCategory("");
+    setError("");
+    setGroupId(null);
+    //setImages(null);
+    setSuccessMessage("");
     handleClose();
   }
-  const handlePostSubmit = () => {
-    handleClose();
-    setImagePreview("");
-    setContent("");
+  const handlePostSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setSuccessMessage("");
+    if (!selectedCategory) {
+      setError("Please select a category!");
+      return;
+    }
+
+    if (!content) {
+      setError("Please enter content!")
+      return;
+    }
+
+    
+    try {
+      
+      //const cleanContent = content.replace(/^<p>(.*)<\/p>$/, '$1');
+      // const formData = new FormData();
+      // formData.append("userId", userId);
+      // formData.append("groupId", null);
+      // formData.append("content", content);
+      // formData.append("categoryId", selectedCategory);
+      // if (images)
+      //   formData.append("image", images);
+      const postData = {
+        userId: user?.id,
+        groupId: groupId,
+        categoryId: selectedCategory,
+        content: content,
+        image: imagePreview,
+      };
+
+      const response = await createPost(postData);
+      if (response.status === 200) {
+        setSuccessMessage('Post created successfully!');
+        handleClose();
+      }
+      else {
+        setError(response.message || 'Something went wrong!');
+      }
+    } catch (error) {
+      console.error("Error creating post", error);
+      setError("An error occurred while creating the post!");
+    }
   };
 
   
@@ -55,6 +109,10 @@ const ModalCreatePost = ({ show, handleClose }) => {
         <Modal.Title>Tạo bài đăng mới</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+
+        {error && <Alert variant='danger'>{error}</Alert>}
+        {successMessage && <Alert variant='success'>{successMessage}</Alert>}
+
         <Editor
           apiKey='c71zurgnk0wg3iv3upi49j8zotrzy0chhq2evkxb69yca39g'
           value={content}

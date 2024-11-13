@@ -70,7 +70,7 @@ export default function MakeFriend() {
     setLoading(true);
     try {
       const response = await getFriendsByUserId(userId);
-      console.log(response.data);
+      //console.log(response.data);
       if (response.data) {
         setFriends(response.data);
       } else {
