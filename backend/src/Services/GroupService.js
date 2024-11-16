@@ -2,7 +2,7 @@ const { Op, col } = require('sequelize');
 const db = require('../Models');
 const checkGroup = require('../Common/checks/checktGroup');
 const checkUser = require('../Common/checks/checkUser');
-const { required } = require('joi');
+
 class GroupService {
     update({id, name, description}){
         return new Promise(async(resolve, reject) => {
@@ -25,6 +25,7 @@ class GroupService {
             }
         })
     }
+
     delete(groupId){
         return new Promise(async(resolve, reject) => {
             try {
@@ -44,6 +45,7 @@ class GroupService {
             }
         })
     }
+
     create(group){
         return new Promise(async(resolve, reject) => {
             try {
@@ -60,6 +62,7 @@ class GroupService {
             }
         })
     }
+
     getById(groupId) {
         return new Promise(async (resolve, reject) => {
             try {
@@ -130,7 +133,6 @@ class GroupService {
             }
         })
     }
-
 
     getAll() {
         return new Promise(async (resolve, reject) => {

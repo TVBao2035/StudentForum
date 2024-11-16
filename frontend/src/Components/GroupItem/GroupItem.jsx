@@ -20,7 +20,7 @@ import { useSelector } from 'react-redux';
           <div className='col'>
               {
                     isJoin ? (
-                      <Link to={`../G@${group.id}`} className='btn btn-primary w-100'>
+                      <Link to={`../G@${group.id}`} className='btn btn-outline-primary w-100'>
                           <p>Xem Nhóm</p>
                       </Link>
                   ) : (

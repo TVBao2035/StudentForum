@@ -16,11 +16,6 @@ const checkGroup = (groupId) => {
                             isDelete: false
                         },
                         required: false
-                    },
-                    {
-                        model: db.Post,
-                        attributes: ['id', 'content', 'image', 'createdAt'],
-                        include: postInclude
                     }
                 ],
                 where: {

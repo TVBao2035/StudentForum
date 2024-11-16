@@ -3,21 +3,28 @@ import { Link, useLocation } from 'react-router-dom'
 import { getDetailGroup } from '../../API/GroupAPI';
 import { Avatar, Post } from '../../Components';
 import { ListGroup } from 'react-bootstrap';
+import { getAllPostByGroupId } from '../../API/PostAPI';
+import { useSelector } from 'react-redux';
 
 const GroupDetail = () => {
   const location = useLocation();
   const groupId = location.pathname.split("@")[1];
 
   const [inforGroup, setInforGroup] = useState();
+  const [groupPosts, setGroupPosts] = useState([]);
 
   const getGroup = async (groupId) => {
     let res = await getDetailGroup(groupId);
    setInforGroup(res.data);
   }
-
+  const getGroupPosts = async(groupId) => {
+    let res = await getAllPostByGroupId(groupId);
+    setGroupPosts(res.data);
+  }
   useEffect(()=> {
     getGroup(groupId);
-  }, [groupId])
+    getGroupPosts(groupId);
+  }, [groupId, useSelector(state => state.post.like.changeLike)])
   return (
     <div className='GroupDetail'>
       <header className='d-flex gap-2 align-items-center'>
@@ -28,7 +35,7 @@ const GroupDetail = () => {
             <div>
               <h5>{inforGroup?.name}</h5>
               <p>{inforGroup?.description}</p>
-              <p>{`${inforGroup?.members.length} thành viên + ${inforGroup?.Posts.length} bài đăng trên nhóm`}</p>
+            <p>{`${inforGroup?.members.length} thành viên + ${groupPosts?.length} bài đăng trên nhóm`}</p>
             </div>
             <div className='d-flex gap-1 align-items-center'>
               {
@@ -45,7 +52,7 @@ const GroupDetail = () => {
       </header>
       <body>
         {
-          inforGroup?.Posts.map(post => <Post
+          groupPosts?.map(post => <Post
                                           small
                                           key={`post-${post?.id}`}
                                           id={post?.id}
