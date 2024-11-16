@@ -3,7 +3,9 @@ import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import { Editor } from '@tinymce/tinymce-react';
 import { getAll } from '../../../API/CategoryAPI';
 import { createPost } from '../../../API/PostAPI';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setGroupId } from '../../../Redux/postSlice';
+import { useLocation } from 'react-router-dom';
 
 const ModalCreatePost = ({ show, handleClose }) => {
   const user = useSelector(state => state.user);
@@ -14,9 +16,11 @@ const ModalCreatePost = ({ show, handleClose }) => {
   const fileInputRef = useRef(null);
   const [error, setError] = useState('');
   //const [images, setImages] = useState(null);
-  const [groupId, setGroupId] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
-
+  
+  const groupId = useSelector(state => state.post.group);
+  const dispatch =  useDispatch();
+  const location = useLocation();
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -29,8 +33,12 @@ const ModalCreatePost = ({ show, handleClose }) => {
     
     if (show) {
       fetchCategories();
+      if (location.pathname === "/group"){
+        dispatch(setGroupId(1));
+      }
+      console.log(groupId);
     }
-  }, [show]);
+  }, [show, groupId]);
 
   const handleEditorChange = (newContent) => {
     setContent(newContent);
@@ -46,11 +54,11 @@ const ModalCreatePost = ({ show, handleClose }) => {
   };
 
   const handleCloseModal = () => {
+    dispatch(setGroupId(null));
     setImagePreview("");
     setContent("");
     setSelectedCategory("");
     setError("");
-    setGroupId(null);
     //setImages(null);
     setSuccessMessage("");
     handleClose();

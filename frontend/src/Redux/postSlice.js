@@ -1,6 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState ={
+    group: {
+        groupId: null
+    },
     like: {
         changeLike: 0
     },
@@ -15,6 +18,9 @@ export const postSlice = createSlice({
     name: 'post',
     initialState: initialState,
     reducers: {
+        setGroupId: (state, action) => {
+            state.group.groupId = action.payload;
+        },
         changeLike: (state, action) => {
             state.like.changeLike += 1;
         },
@@ -33,6 +39,6 @@ export const postSlice = createSlice({
     }
 });
 
-export const { changeLike, setComment, resetComment, resetCommentId } = postSlice.actions;
+export const { changeLike, setComment, resetComment, resetCommentId, setGroupId } = postSlice.actions;
 
 export default postSlice.reducer;

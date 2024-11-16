@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Post } from '../../Components'
 import { getAllPost } from '../../API/PostAPI'
 import './HomeStyle.scss';
 import Swal from 'sweetalert2';
+import { setGroupId } from '../../Redux/postSlice';
 export default function Home() {
   const [listPost, setListPost] = useState([]);
-
+  const dispatch = useDispatch();
   const fetchApi = async () => {
     let res = await getAllPost();
     if(res?.status === 200){

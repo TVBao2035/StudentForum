@@ -1,4 +1,6 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { setGroupId } from '../../Redux/postSlice';
 
 export default function Group() {
   return (
