@@ -35,15 +35,15 @@ const GroupDetail = () => {
             <div>
               <h5>{inforGroup?.name}</h5>
               <p>{inforGroup?.description}</p>
-            <p>{`${inforGroup?.members.length} thành viên + ${groupPosts?.length} bài đăng trên nhóm`}</p>
+            <p>{`${inforGroup?.groupuser.length} thành viên + ${groupPosts?.length} bài đăng trên nhóm`}</p>
             </div>
             <div className='d-flex gap-1 align-items-center'>
               {
-                inforGroup?.members.map((member, index) => {
+              inforGroup?.groupuser.map((member, index) => {
                   if(index == 2){
-                    return <p className='pb-1 text-dark'>{`+${parseInt(inforGroup?.members?.length - 2)}`}</p>
+                    return <p className='pb-1 text-dark'>{`+${parseInt(inforGroup?.groupuser?.length - 2)}`}</p>
                   }else if(index < 2){
-                    return <Link to={`/@${member?.id}`}><Avatar key={`${member.avatar}-${index}`} small link={member.avatar} /></Link> 
+                    return <Link to={`/@${member?.invitation.id}`}><Avatar key={`${member.invitation.avatar}-${index}`} small link={member.invitation.avatar} /></Link> 
                   }
                 })
               }

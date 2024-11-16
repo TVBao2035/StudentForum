@@ -142,13 +142,14 @@ class GroupService {
                     include: [
                         { 
                             model: db.GroupUser, as: 'groupuser', 
-                            attributes: ['userId'],
+                            attributes: ['userId', 'isAccept'],
                             include: { 
                                         model: db.User, as: "invitation", 
                                         where: {isDelete: false}, 
                                         attributes: ['id', 'name', 'avatar']
                                     }, 
-                            where: {isAccept: true}, required: false
+                           // where: {isAccept: true},
+                             required: false
                         },
                         {
                             model: db.User, as: "captain",

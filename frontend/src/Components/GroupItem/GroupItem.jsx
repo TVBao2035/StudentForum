@@ -5,6 +5,7 @@ import './GroupItemStyle.scss';
 import { useSelector } from 'react-redux';
  const GroupItem = ({group, isJoin, image}) => {
     const user = useSelector(state => state.user);
+     console.log(isJoin);
   return (
       <div className='GroupItem d-flex col-xl-3 col-md-6 col-12 flex-column gap-3  p-3'>
           <div className='d-flex gap-2 '>
@@ -20,13 +21,17 @@ import { useSelector } from 'react-redux';
           <div className='col'>
               {
                     isJoin ? (
-                      <Link to={`../G@${group.id}`} className='btn btn-outline-primary w-100'>
+                      <Link to={`../G@${group.id}`} className='btn btn-primary w-100'>
                           <p>Xem Nhóm</p>
                       </Link>
                   ) : (
-                      <div className='btn btn-secondary w-100'>
-                          <p>Tham gia</p>
-                      </div>
+                    group.groupuser.some(userGroup => userGroup.invitation.id === user.id) ?
+                      <div className='btn btn-outline-primary btn-outline w-100'>
+                          <p>Đã Gửi Yêu Cầu</p>
+                      </div> :
+                        <div className='btn btn-secondary w-100'>
+                            <p>Tham gia</p>
+                        </div>
                   )
               }
           </div>

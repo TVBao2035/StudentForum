@@ -28,7 +28,7 @@ export default function Group() {
               <GroupItem 
                 key={`${group.image} - ${index}`}
                 image={group.image}
-                isJoin={group.groupuser.some(userGroup => userGroup.invitation.id == user.id)}
+                isJoin={group.groupuser.some(userGroup => userGroup.invitation.id === user.id && userGroup.isAccept===true)}
                 group={group} />
             ))
           }

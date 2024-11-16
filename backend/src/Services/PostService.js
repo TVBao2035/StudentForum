@@ -185,10 +185,7 @@ class PostService {
             try {
                 const data = await db.Post.findAll({
                     where: {
-                        [Op.and]: [
-                            {isDelete: false},
-                            {groupId: null}
-                        ]
+                        isDelete: false
                     },
                     attributes: {
                         exclude: ['updatedAt', 'isDelete']
@@ -202,7 +199,7 @@ class PostService {
 
                 resolve({
                     status: 200,
-                    message: `Lấy Tất Cả Bài Đăng Thành Công!!!!!`,
+                    message: `Lấy Tất Cả Bài Đăng Thành Công!!`,
                     data
                 })
             } catch (error) {
