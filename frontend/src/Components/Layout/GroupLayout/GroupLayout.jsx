@@ -29,7 +29,7 @@ const GroupLayout = () => {
             <div className='col-2 mt-1'>
                 <Navbar listItems={items} />
             </div>
-            <div className='col'>
+            <div className='col-9'>
                 <Outlet />
             </div>
         </div>

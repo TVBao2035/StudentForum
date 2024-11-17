@@ -10,3 +10,4 @@ export { default as Message } from './Message';
 export { default as Account } from './Account';
 export {default as GroupDetail} from './GroupDetail';
 export {default as GroupJoin} from './GroupJoin';
+export {default as GroupInvitation} from './GroupInvitation';

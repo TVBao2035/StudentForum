@@ -4,6 +4,63 @@ const checkGroup = require('../Common/checks/checktGroup');
 const checkUser = require('../Common/checks/checkUser');
 
 class GroupService {
+    createInvitation(invitation){
+        return new Promise(async (resolve, reject) => {
+            try {
+                const data = await db.GroupUser.create(invitation);
+                // data.isAccept = false;
+                // await data.save();
+                resolve({
+                    status: 200,
+                    message: 'Tạo lời mời tham gia nhóm thành công',
+                })
+            } catch (error) {
+                reject({
+                    status: 400,
+                    message: `Lỗi tạo lời mời tham gia nhóm ${error}`
+                })
+            }
+        })
+    }
+
+    getInvitation(groupId){
+        return new Promise(async (resolve, reject) => {
+            try {
+                const group = await checkGroup(groupId);
+
+                if(group.status === 404) return resolve(group);
+                
+                const data = await db.GroupUser.findAll({
+                    attributes: [`createdAt`, 'groupId', ],
+                    where: {
+                        [Op.and]:[
+                            {groupId},
+                            {isAccept: false},
+                            {isDelete: false}
+                        ]
+                    },
+                    include:[
+                        {
+                            model: db.User,
+                            as: 'invitation',
+                            attributes: ['id', 'name', 'avatar']
+                        }
+                    ],
+                })
+                resolve({
+                    status: 200,
+                    message: 'Lấy Tất Cả Lời Mời Thành Công',
+                    data
+                })
+            } catch (error) {
+                reject({
+                    status: 400,
+                    message: `Lỗi Lấy Tất Cả Lời Mời ${error}`
+                })
+            }
+        })
+    }
+
     update({id, name, description}){
         return new Promise(async(resolve, reject) => {
             try {
@@ -148,7 +205,6 @@ class GroupService {
                                         where: {isDelete: false}, 
                                         attributes: ['id', 'name', 'avatar']
                                     }, 
-                           // where: {isAccept: true},
                              required: false
                         },
                         {

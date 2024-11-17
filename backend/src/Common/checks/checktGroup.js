@@ -8,15 +8,15 @@ const checkGroup = (groupId) => {
             const group = await db.Group.findOne({
                 attributes: ['id', 'name', 'description', 'image'],
                 include: [
-                    // {
-                    //     model: db.User,
-                    //     attributes: ['id', 'name', 'avatar'],
-                    //     as: 'members',
-                    //     where: {
-                    //         isDelete: false
-                    //     },
-                    //     required: false
-                    // },
+                    {
+                        model: db.User,
+                        attributes: ['id', 'name', 'avatar'],
+                        as: 'captain',
+                        where: {
+                            isDelete: false
+                        },
+                        required: false
+                    },
                     {
                         model: db.GroupUser, as: 'groupuser',
                         attributes: ['userId', 'isAccept'],

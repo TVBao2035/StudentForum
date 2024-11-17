@@ -11,3 +11,11 @@ export const getAllGroup = async() => {
 export const getDetailGroup = async (groupId) => {
     return await axios.get(`/group/${groupId}`);
 }
+
+export const getAllGroupInvitation = async (groupId) => {
+    return await axios.get(`/group/invitation/${groupId}`);
+}
+
+export const createGroupInvitation = async ({groupId, userId}) => {
+    return await axios.post(`/group/invitation`, {groupId, userId});
+}

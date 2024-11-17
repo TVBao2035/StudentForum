@@ -3,9 +3,12 @@ import Avatar from '../Avatar'
 import { Link } from 'react-router-dom'
 import './GroupItemStyle.scss';
 import { useSelector } from 'react-redux';
- const GroupItem = ({group, isJoin, image}) => {
+import { createGroupInvitation } from '../../API/GroupAPI';
+ const GroupItem = ({group, isJoin, image, fetchCreate}) => {
+    
     const user = useSelector(state => state.user);
-     console.log(isJoin);
+
+ 
   return (
       <div className='GroupItem d-flex col-xl-3 col-md-6 col-12 flex-column gap-3  p-3'>
           <div className='d-flex gap-2 '>
@@ -15,7 +18,6 @@ import { useSelector } from 'react-redux';
               <div className='d-flex gap-2 flex-column'>
                   <h5 className='m-0 group_name'>{group.name}</h5>
                   <p className='group_description'>{group.description}</p>
-                  {/* <p>{`Thành viên: ${group.Users.length}`}</p> */}
               </div>
           </div>
           <div className='col'>
@@ -29,7 +31,9 @@ import { useSelector } from 'react-redux';
                       <div className='btn btn-outline-primary btn-outline w-100'>
                           <p>Đã Gửi Yêu Cầu</p>
                       </div> :
-                        <div className='btn btn-secondary w-100'>
+                        <div 
+                        onClick={() => fetchCreate({groupId:group.id, userId: user.id })}
+                        className='btn btn-secondary w-100'>
                             <p>Tham gia</p>
                         </div>
                   )
