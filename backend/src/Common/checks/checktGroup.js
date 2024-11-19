@@ -19,13 +19,19 @@ const checkGroup = (groupId) => {
                     },
                     {
                         model: db.GroupUser, as: 'groupuser',
-                        attributes: ['userId', 'isAccept'],
+                        attributes: ['userId', 'isAccept', 'id'],
                         include: {
                             model: db.User, as: "invitation",
                             where: { isDelete: false },
-                            attributes: ['id', 'name', 'avatar']
+                            attributes: ['id', 'name', 'avatar'],
+                            required: false
                         },
-                        where: {isAccept: true},
+                        where: {
+                            [Op.and]: [
+                                {isAccept: true},
+                                {isDelete: false}
+                            ]
+                        },
                         required: false
                     },
                 ],

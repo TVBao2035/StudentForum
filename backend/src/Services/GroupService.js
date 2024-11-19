@@ -2,14 +2,103 @@ const { Op, col } = require('sequelize');
 const db = require('../Models');
 const checkGroup = require('../Common/checks/checktGroup');
 const checkUser = require('../Common/checks/checkUser');
+const { message } = require('../DTOs/GroupDTO/createGroupDTO');
 
 class GroupService {
+    updateStateInvitation(invitationId){
+        return new Promise(async (resolve, reject) => {
+            try {
+                const invitation = await db.GroupUser.findOne({
+                    where: {
+                        [Op.and]: [
+                            {id: invitationId},
+                            {isDelete: false}
+                        ]
+                    }
+                });
+
+                if(!invitation) return resolve({
+                    status: 404,
+                    message: 'Không tìm thấy lời mời vào nhóm với ID: ' + invitationId,
+                });
+
+                invitation.isAccept = true;
+                await invitation.save();
+                resolve({
+                    status: 200,
+                    message: `Cập nhật trạng thái của lời mời vào nhóm thành công`
+                })
+
+            } catch (error) {
+                reject({
+                    status: 400,
+                    message:  `Lỗi cập nhật trạng thái của lời mời vào nhóm ${error}`
+                })
+            }
+        })
+    }
+
+    deleteInvitation(invitationId){
+        return new Promise(async (resolve, reject) => {
+            try {
+                const invitation = await db.GroupUser.findOne({
+                    where: {
+                        [Op.and]: [
+                            {isDelete: false},
+                            {id: invitationId}
+                        ]
+                    }
+                })
+
+                if(!invitation) return resolve({
+                    status: 404,
+                    message: `Không tìm thấy lời mời với ID : ${invitationId}`
+                });
+
+                invitation.isDelete = true;
+                await invitation.save();
+                resolve({
+                    status: 200,
+                    message: `Xóa lời mời vào nhóm thành công`
+                })
+            } catch (error) {
+                reject({
+                    status: 400,
+                    message: `Lỗi xóa lời mời vào nhóm ${error}`
+                })
+            }
+        })
+    }
+
     createInvitation(invitation){
         return new Promise(async (resolve, reject) => {
             try {
+                const groupuser = await db.GroupUser.findOne({
+                    where: {
+                        userId: invitation.userId,
+                        groupId: invitation.groupId
+                    }
+                });
+
+                if(groupuser && groupuser?.isDelete === false){
+                    return resolve({
+                        status: 404,
+                        message: "Lời mời vào nhóm đã tồn tại"
+                    })
+                } else if(groupuser?.isDelete === true){
+                    groupuser.isDelete = false;
+                    groupuser.isAccept = false;
+                    await groupuser.save();
+                    return resolve({
+                        status: 200,
+                        message: 'Tạo lời mời tham gia nhóm thành công',
+                    })
+
+                }
+
                 const data = await db.GroupUser.create(invitation);
-                // data.isAccept = false;
-                // await data.save();
+                data.isAccept = false;
+                await data.save();
                 resolve({
                     status: 200,
                     message: 'Tạo lời mời tham gia nhóm thành công',
@@ -31,7 +120,7 @@ class GroupService {
                 if(group.status === 404) return resolve(group);
                 
                 const data = await db.GroupUser.findAll({
-                    attributes: [`createdAt`, 'groupId', ],
+                    attributes: [`createdAt`, 'groupId', 'id'],
                     where: {
                         [Op.and]:[
                             {groupId},
@@ -61,7 +150,7 @@ class GroupService {
         })
     }
 
-    update({id, name, description}){
+    update({id, name, description, image}){
         return new Promise(async(resolve, reject) => {
             try {
                 const group = await checkGroup(id);
@@ -69,6 +158,7 @@ class GroupService {
 
                 group.name = name;
                 group.description = description;
+                group.image = image;
                 await group.save();
                 resolve({
                     status: 200,
@@ -106,7 +196,12 @@ class GroupService {
     create(group){
         return new Promise(async(resolve, reject) => {
             try {
-                await db.Group.create(group);
+                const newGroup = await db.Group.create(group);
+                await db.GroupUser.create({
+                    userId: group.userId,
+                    groupId: newGroup.id,
+                    isAccept: true
+                })
                 resolve({
                     status: 200,
                     message: `Tạo Nhóm Thành Công`
@@ -199,13 +294,15 @@ class GroupService {
                     include: [
                         { 
                             model: db.GroupUser, as: 'groupuser', 
-                            attributes: ['userId', 'isAccept'],
+                            attributes: ['userId', 'isAccept', 'id'],
+                            where: {
+                                isDelete: false
+                            },
                             include: { 
                                         model: db.User, as: "invitation", 
                                         where: {isDelete: false}, 
                                         attributes: ['id', 'name', 'avatar']
-                                    }, 
-                             required: false
+                                    }
                         },
                         {
                             model: db.User, as: "captain",

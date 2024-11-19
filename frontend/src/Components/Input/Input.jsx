@@ -13,6 +13,7 @@ export default function Input(
     value
 }) {
     const [show, setShow] = useState(false);
+    
     const handleClick = (e) => {
         setMessage(pre => {
             return {

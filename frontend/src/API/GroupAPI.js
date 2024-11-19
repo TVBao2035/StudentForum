@@ -12,10 +12,30 @@ export const getDetailGroup = async (groupId) => {
     return await axios.get(`/group/${groupId}`);
 }
 
+export const createGroup = async ({name, description, image, userId}) => {
+    return await axios.post(`/group`, { name, description, image, userId })
+}
+
+export const updateGroup = async({ name, description, image, id}) => {
+    return await axios.put(`/group`, { name, description, image, id })
+}
+
+export const deleteGroup = async (groupId) => {
+    return await axios.delete(`/group/${groupId}`);
+}
+
 export const getAllGroupInvitation = async (groupId) => {
     return await axios.get(`/group/invitation/${groupId}`);
 }
 
 export const createGroupInvitation = async ({groupId, userId}) => {
     return await axios.post(`/group/invitation`, {groupId, userId});
+}
+
+export const deleteGroupInvitation = async (invitationId) => {
+    return await axios.delete(`/group/invitation/${invitationId}`);
+}
+
+export const updateStateGroupInvitation = async (invitationId) => {
+    return await axios.put(`/group/invitation/${invitationId}`);
 }

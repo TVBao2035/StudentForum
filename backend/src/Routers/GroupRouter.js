@@ -4,6 +4,8 @@ const router = express.Router();
 
 router.get(`/invitation/:id`, GroupController.getInvitation);
 router.post(`/invitation`, GroupController.createInvitation);
+router.delete(`/invitation/:id`, GroupController.deleteInvitation);
+router.put(`/invitation/:id`, GroupController.updateStateInvitation);
 
 router.get('/user/:userId', GroupController.getByUserId);
 

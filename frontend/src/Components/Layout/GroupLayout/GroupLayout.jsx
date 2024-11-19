@@ -5,6 +5,8 @@ import Footer from '../../Footer'
 import Navbar from '../../Navbar'
 import { TiGroup } from "react-icons/ti";
 import { FaCompass } from "react-icons/fa";
+import { ModalCreateGroup, ModalUpdateGroup} from '../../Modal'
+import { useSelector } from 'react-redux'
 const items = [
     {
         icon: <FaCompass/>,
@@ -20,6 +22,7 @@ const items = [
     },
 ]
 const GroupLayout = () => {
+    const modalGroup = useSelector(state => state.modal.modalGroup);
   return (
     <div>
         <div>
@@ -36,6 +39,16 @@ const GroupLayout = () => {
         <div>
             <Footer />
         </div>
+    
+        {
+            modalGroup.modalCreate.isOpen && 
+            <ModalCreateGroup />
+        }
+        {
+            modalGroup.modalUpdate.isOpen &&
+            <ModalUpdateGroup />
+        }
+   
     </div>
   )
 }

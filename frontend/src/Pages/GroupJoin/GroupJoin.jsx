@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { GroupItem } from '../../Components';
 import { getAllGroupJoin } from '../../API/GroupAPI';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
-
+import { MdOutlineGroupAdd } from "react-icons/md";
+import { openModalCreateGroup } from '../../Redux/modalGroupSlice';
 const GroupJoin = () => {
   const [listGroups, setListGroups] = useState([]);
   const user = useSelector(state => state.user);
+  const dispatch = useDispatch();
   const fetchApi = async () => {
     let res = await getAllGroupJoin(user.id);
     if(res.status === 404){
@@ -26,9 +28,18 @@ const GroupJoin = () => {
 
   useEffect(() => {
     fetchApi();
-  }, [])
+  }, [useSelector(state => state.modal.modalGroup)])
   return (
+    
     <div className='GroupJoin'>
+      <div className='d-flex justify-content-end'>
+        <button 
+        onClick={()=> dispatch(openModalCreateGroup())}
+        className='btn btn-primary d-flex align-items-center gap-2'>
+          <MdOutlineGroupAdd/>
+          <p>Tạo nhóm</p>
+        </button>
+      </div>
       <div className='container row'>
         {
           listGroups.map((group, index) => <GroupItem 

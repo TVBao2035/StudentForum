@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react'
-import { Avatar, Loading, Navbar } from '../../Components'
+import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
 import { MdEdit } from "react-icons/md";
-import { useLocation, useNavigate } from 'react-router-dom';
-import { getDetails } from '../../API/UserAPI';
-import {  setLoadingOrther } from '../../Redux/loadingSlice';
-import timeOut from '../../Helpers/timeOut';
-import { Friend_Profile, Information_Profile, Post_Profile } from './Profile_Pages';
-import './ProfileStyle.scss';
-import { getFriendsByUserId } from '../../API/FriendAPI';
 import Swal from 'sweetalert2';
+
+import { FriendListPage, PostListPage } from '../../Pages';
+import { Avatar, FriendItem, InformationUserBar, Loading } from '../../Components'
+import { getDetails } from '../../API/UserAPI';
+import { setLoadingOrther } from '../../Redux/loadingSlice';
+import timeOut from '../../Helpers/timeOut';
+import { getFriendsByUserId } from '../../API/FriendAPI';
 import { getAllPostByUserId } from '../../API/PostAPI';
+import './ProfileStyle.scss';
+
 export default function Profile() {
   
   const location = useLocation();
@@ -140,15 +142,22 @@ export default function Profile() {
             </div>
             <div className='d-flex'>
               <div className='col border-start border-top border-end p-3'>
-                <Information_Profile 
+                  <InformationUserBar
                   email={userDetails?.email}
                   phone={userDetails?.phone} 
                 />
                 <hr />
-                <Friend_Profile friends={listFriends} />
+                <FriendListPage>
+                  {
+                    listFriends.map(friend => <FriendItem 
+                                              id={friend.yourFriend.id} 
+                                              name={friend.yourFriend.name}
+                                              avatar={friend.yourFriend.avatar} />)
+                  }
+                </FriendListPage>
               </div>
               <div className='col-7 border-end border-top p-4 h-100'>
-                  <Post_Profile listPost={listPosts}/>
+                <PostListPage listPost={listPosts}/>
               </div>
             </div>
           </div>

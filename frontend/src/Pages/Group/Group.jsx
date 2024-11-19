@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { createGroupInvitation, getAllGroup } from '../../API/GroupAPI';
+import { createGroupInvitation, deleteGroupInvitation, getAllGroup } from '../../API/GroupAPI';
 
 import './GroupStyle.scss';
 import { GroupItem } from '../../Components';
@@ -22,8 +22,17 @@ export default function Group() {
   const fetchCreateInvitation = async ({ groupId, userId }) => {
     let res = await createGroupInvitation({ groupId, userId });
 
-    if (res.status !== 200) {
+    if (res?.status !== 200) {
       alert("error");
+      return;
+    }
+    fechApi();
+  }
+
+  const fetchDeleteInvitation = async (invitationId) => {
+    let res = await deleteGroupInvitation(invitationId);
+    if(res.status !== 200) {
+      alert("Error");
       return;
     }
     fechApi();
@@ -38,6 +47,7 @@ export default function Group() {
           {
             listGroups.map((group, index) => (
               <GroupItem 
+                fetchDelete={fetchDeleteInvitation}
                 fetchCreate={fetchCreateInvitation}
                 key={`${group.image} - ${index}`}
                 image={group.image}

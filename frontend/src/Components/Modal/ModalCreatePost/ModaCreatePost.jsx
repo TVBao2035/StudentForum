@@ -14,6 +14,7 @@ const ModalCreatePost = ({ show, handleClose }) => {
     const fetchCategories = async () => {
       try {
         const response = await getAllPost();
+        console.log("get categories");
         setCategories(response.data);
       } catch (error) {
         console.error('Error fetching categories', error);
@@ -24,7 +25,6 @@ const ModalCreatePost = ({ show, handleClose }) => {
       fetchCategories();
     }
   }, [show]);
-
   const handleEditorChange = (newContent) => {
     setContent(newContent);
   };

@@ -4,6 +4,28 @@ const updateGroupDTO = require("../DTOs/GroupDTO/updateGroupDTO");
 const GroupService = require("../Services/GroupService");
 
 class GroupController{
+
+    async updateStateInvitation(req, res) {
+        try {
+            const invitationId = req.params.id;
+            const data = await GroupService.updateStateInvitation(invitationId);
+            res.status(200).json(data);
+        } catch (error) {
+            console.log(error);
+            res.status(400).json(error);
+        }
+    }
+    async deleteInvitation(req, res){
+        try {
+            const invitationId = req.params.id;
+            const data = await GroupService.deleteInvitation(invitationId);
+            res.status(200).json(data);
+        } catch (error) {
+            console.log(error);
+            res.status(400).json(error);
+        }
+    }
+
     async createInvitation(req, res){
         try {
             const {value, error} = createInvitationGroupDTO.validate(req.body);
@@ -20,6 +42,7 @@ class GroupController{
             res.status(400).json(error);
         }
     }
+
     async getInvitation(req, res){
         try {
             const groupId = req.params.id;

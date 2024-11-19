@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import './App.scss';
-import { GroupDetail, Profile, Group, Home, Login, MakeFriend, Notification, Register, Setting, Message, Account, GroupJoin } from './Pages';
+import { GroupDetail, Profile, Group, Home, Login, MakeFriend, Notification, Register, Setting, Message, Account, GroupJoin, GroupInvitation } from './Pages';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { GroupLayout, MainLayout } from './Components/Layout';
@@ -41,8 +41,9 @@ function App() {
     if (!whitelist.some(item => item === location.pathname 
       && !localStorage.getItem(process.env.REACT_APP_LOGIN_LOCAL_STORAGE)))
     {
-      dispatch(setLoading(true));
       fetchApi();
+      dispatch(setLoading(true));
+
     }
   }, []);
   return (
@@ -58,7 +59,8 @@ function App() {
       <Route path='group' element={loading.isLoading ? <Loading/>: <GroupLayout />}>
         <Route path='discover' element={<Group />}/>
         <Route path='join' element={<GroupJoin/>} />
-        <Route path={`:id`} element={<GroupDetail />}/>
+        <Route path={`:id`} element={<GroupDetail />} />
+        
       </Route>
       <Route path="/login" element={<Login/>}/>
       <Route path='/account' element={<Account/>}/>

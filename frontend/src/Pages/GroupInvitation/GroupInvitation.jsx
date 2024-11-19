@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { getAllGroupInvitation } from '../../API/GroupAPI'
+import { deleteGroupInvitation, getAllGroupInvitation, updateStateGroupInvitation } from '../../API/GroupAPI'
 import { Avatar } from '../../Components';
 import { Link } from 'react-router-dom';
 import './GroupInvitation.scss';
-const GroupInvitation = ({groupId}) => {
+const GroupInvitation = ({groupId, handleAcceptInvitation, handleDeleteInvitation}) => {
 
     const [invitations, setInvitations] = useState([]);
 
@@ -14,11 +14,20 @@ const GroupInvitation = ({groupId}) => {
         }
     }
 
+    
+    const handleAccept = async (invitationId) => {
+        handleAcceptInvitation(invitationId, fetchGetInvitation);
+    }
+    
+    const handleDelete = async  (invitationId) => {
+        handleDeleteInvitation(invitationId, fetchGetInvitation);
+    }
+
     useEffect(() => {
         fetchGetInvitation(groupId);
     }, [groupId]);
 
-    console.log(invitations);
+    console.log("invitations" ,invitations);
   return (
     <div className='row GroupInvitation'>
         {
@@ -32,10 +41,14 @@ const GroupInvitation = ({groupId}) => {
                     </div>
                     <div className='d-flex gap-2'>
                         <div>
-                            <button className='btn btn-success'>Xác nhận</button>
+                            <button 
+                                onClick={() => handleAccept(invitation.id)}
+                                className='btn btn-success'>Xác nhận</button>
                         </div>
                         <div>
-                            <button className='btn btn-danger'>Hủy</button>
+                            <button 
+                                onClick={() => handleDelete(invitation.id)}
+                                className='btn btn-danger'>Hủy</button>
                         </div>
                     </div>
                 </div>
