@@ -10,12 +10,15 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+    // define association here
+    GroupUser.belongsTo(models.User, {foreignKey: "userId", as: "invitation"});
+    GroupUser.belongsTo(models.Group, { foreignKey: "groupId", as: "groupuser" });
     }
   }
   GroupUser.init({
     userId: DataTypes.INTEGER,
     groupId: DataTypes.INTEGER,
+    isAccept: DataTypes.BOOLEAN,
     isDelete: DataTypes.BOOLEAN
 
   }, {

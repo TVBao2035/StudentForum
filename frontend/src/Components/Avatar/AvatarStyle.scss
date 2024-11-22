@@ -2,7 +2,7 @@
     img{
         border-radius: 50%;
         width: 100%;
-        object-fit: contain;
+        object-fit :cover;
     }
     .small{
         width: 38px;
@@ -19,5 +19,9 @@
     .bigger{
         width: 148px;
         height: 148px;
+    }
+    .biggest{
+        width: 200px;
+        height: 200px;
     }
 }
