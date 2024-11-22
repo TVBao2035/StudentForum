@@ -12,8 +12,8 @@ export const getDetailGroup = async (groupId) => {
     return await axios.get(`/group/${groupId}`);
 }
 
-export const createGroup = async ({name, description, image, userId}) => {
-    return await axios.post(`/group`, { name, description, image, userId })
+export const createGroup = async (data) => {
+    return await axios.post(`/group`, data)
 }
 
 export const updateGroup = async({ name, description, image, id}) => {

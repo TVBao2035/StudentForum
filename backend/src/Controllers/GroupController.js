@@ -1,3 +1,4 @@
+
 const createGroupDTO = require("../DTOs/GroupDTO/createGroupDTO");
 const createInvitationGroupDTO = require("../DTOs/GroupDTO/createInvitationGroupDTO");
 const updateGroupDTO = require("../DTOs/GroupDTO/updateGroupDTO");
@@ -87,7 +88,7 @@ class GroupController{
         try {
             const {error, value} = createGroupDTO.validate(req.body);
             if(error){
-                return res.status(404).jons({
+                return res.status(404).json({
                     status: 404,
                     message: error.message
                 })

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
 import { MdEdit } from "react-icons/md";
 import Swal from 'sweetalert2';
@@ -9,9 +9,10 @@ import { Avatar, FriendItem, InformationUserBar, Loading } from '../../Component
 import { getDetails } from '../../API/UserAPI';
 import { setLoadingOrther } from '../../Redux/loadingSlice';
 import timeOut from '../../Helpers/timeOut';
-import { getFriendsByUserId } from '../../API/FriendAPI';
+import { createInvitation, deleteFriend, deleteInvitation, getFriendsByUserId } from '../../API/FriendAPI';
 import { getAllPostByUserId } from '../../API/PostAPI';
 import './ProfileStyle.scss';
+import { BsFillPersonPlusFill, BsFillPersonXFill, BsPersonCheckFill, BsPersonFillUp } from 'react-icons/bs';
 
 export default function Profile() {
   
@@ -26,6 +27,49 @@ export default function Profile() {
   const [listPosts, setListPosts] = useState([]);
 
   const id = location.pathname.split('/')[1].substring(1, location.pathname.split('/')[1].length);
+
+
+  const handleCallAPI = async (callBack, userId, friendId) => {
+    let res = await callBack(userId, friendId);
+    if(res.status !== 200){
+      Swal.fire({
+        title: "Thông Báo :v",
+        text: res.message,
+        icon: "question",
+        showCloseButton: true,
+        showCancelButton: true,
+        buttonsStyling: "blue",
+        confirmButtonColor: "#007bff",
+        cancelButtonColor: "#dc3545",
+        grow: 'row'
+      });
+      return;
+    }
+    handleGetData(getFriendsByUserId, id, setListFriends);
+    getDetailsUser(id);
+  }
+
+  const handleGetData = async (callAPI, paramId, setState ) => {
+    let res = await callAPI(paramId);
+
+    if(res.status !== 200){
+      Swal.fire({
+        title: "Thông Báo :v",
+        text: res.message,
+        icon: "question",
+        showCloseButton: true,
+        showCancelButton: true,
+        buttonsStyling: "blue",
+        confirmButtonColor: "#007bff",
+        cancelButtonColor: "#dc3545",
+        grow: 'row'
+      });
+      return;
+    }
+
+    setState(res.data);
+    return;
+  }
 
   const getDetailsUser = async (userId) => {
     let res = await getDetails(userId);
@@ -52,61 +96,16 @@ export default function Profile() {
     }
   }
 
-  const getFriends = async (id) => {
-    let res = await getFriendsByUserId(id);
-    if (res.status === 200) {
-      setListFriends(res.data);
-      return;
-    }
-    if (res.status === 404) {
-      Swal.fire({
-        title: "Thông Báo :v",
-        text: res.message,
-        icon: "question",
-        showCloseButton: true,
-        showCancelButton: true,
-        buttonsStyling: "blue",
-        confirmButtonColor: "#007bff",
-        cancelButtonColor: "#dc3545",
-        grow: 'row'
-      });
-      return;
-    }
-  }
-
-  const getPosts = async (userId) => {
-    let res = await getAllPostByUserId(userId);
-    
-    if(res.status === 200){
-      setListPosts(res.data);
-      return;
-    }
-
-    if(res.status === 404){
-      Swal.fire({
-        title: "Thông Báo :v",
-        text: res.message,
-        icon: "question",
-        showCloseButton: true,
-        showCancelButton: true,
-        buttonsStyling: "blue",
-        confirmButtonColor: "#007bff",
-        cancelButtonColor: "#dc3545",
-        grow: 'row'
-      });
-      return;
-    }
-  }
 
   useEffect(() => {
     dispatch(setLoadingOrther(true));
     getDetailsUser(id);
-    getFriends(id);
-    getPosts(id);
+    handleGetData(getFriendsByUserId, id, setListFriends);
+    handleGetData(getAllPostByUserId, id, setListPosts);
   }, [id]);
   
   useEffect(() => {
-    getPosts(id);
+    handleGetData(getAllPostByUserId, id, setListPosts);
   }, [useSelector(state => state.post.like.changeLike), useSelector(state => state.post.comment)]);
 
   return (
@@ -129,13 +128,71 @@ export default function Profile() {
                 </div>
                 <div>
                   {
-                    user?.id == id &&
-                    <div>
-                      <button className='btn btn-secondary fw-medium d-flex align-items-center gap-1'>
-                        <MdEdit />
-                        <p>Chỉnh sửa</p>
-                      </button>
-                    </div>
+                    userDetails?.isOwner ?
+                      <div>
+                        <Link to="../account" className='btn btn-outline-info fw-medium d-flex align-items-center gap-1'>
+                          <MdEdit />
+                          <p>Chỉnh sửa</p>
+                        </Link>
+                      </div>
+                    :
+                    userDetails?.isFriend ? 
+                      <div className='d-flex gap-2'>
+                        <button 
+                        className='btn btn-outline-primary fw-medium d-flex align-items-center gap-1'
+                        >
+                          <BsPersonCheckFill/>
+                          <p>Đã là bạn bè</p>
+                        </button>
+
+                        <button
+                          className='btn btn-outline-danger fw-medium d-flex align-items-center gap-1'
+                          onClick={() => handleCallAPI(deleteFriend, user.id, id)}
+                        >
+                          <BsFillPersonXFill />
+                          <p>Xóa bạn bè</p>
+                        </button>
+                      </div> 
+                    :
+                    userDetails?.isSending ?
+                      <div>
+                        <button 
+                        className='btn btn-outline-warning fw-medium d-flex align-items-center gap-1'
+                        onClick={() => handleCallAPI(deleteInvitation, user.id, id)}
+                        >
+                          <BsPersonFillUp />
+                          <p>Hủy yêu cầu</p>
+                        </button>
+                      </div>
+                    :
+                    userDetails?.isWaitAccept ?
+                      <div className='d-flex gap-2'>
+                        <button 
+                        className='btn btn-outline-success fw-medium d-flex align-items-center gap-1'
+                        onClick={() => console.log("Waiting merge git")}
+                        >
+                          <BsPersonCheckFill />
+                          <p>Chấp nhận</p>
+                        </button>
+
+                        <button
+                          className='btn btn-outline-warning fw-medium d-flex align-items-center gap-1'
+                          onClick={() => handleCallAPI(deleteInvitation, id, user.id)}
+                        >
+                          <BsFillPersonXFill />
+                          <p>Không chấp nhận</p>
+                        </button>
+                      </div>
+                    :
+                      <div>
+                        <button 
+                        className='btn btn-outline-success fw-medium d-flex align-items-center gap-1'
+                        onClick={() => handleCallAPI(createInvitation, user.id, id)}
+                        >
+                          <BsFillPersonPlusFill />
+                          <p>Thêm bạn bè</p>
+                        </button>
+                      </div>
                   }
                 </div>
               </div>

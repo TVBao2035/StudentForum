@@ -13,7 +13,6 @@ import { setDataMain } from './Redux/userSlice';
 
 
 
-
 function App() {
   const whitelist = ['/login', '/register'];
   const loading = useSelector(state => state.loading);
@@ -54,6 +53,7 @@ function App() {
         <Route path='/notification' element={<Notification />} />
         <Route path='/setting' element={<Setting />} />
         <Route path={`/:id`} element={<Profile/>}/>
+        <Route path='/account' element={<Account/>}/>
         <Route path='/message' element={<Message/>} />
       </Route>
       <Route path='group' element={loading.isLoading ? <Loading/>: <GroupLayout />}>
@@ -63,7 +63,6 @@ function App() {
         
       </Route>
       <Route path="/login" element={<Login/>}/>
-      <Route path='/account' element={<Account/>}/>
       <Route path="/register" element={<Register/>}/>
     </Routes>
 

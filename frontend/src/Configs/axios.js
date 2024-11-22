@@ -6,16 +6,18 @@ const instance = axios.create({
 });
 
 instance.defaults.withCredentials = true;
+
 // Alter defaults after instance has been created
 // instance.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 // Add a request interceptor
-// instance.interceptors.request.use(function (config) {
-//     // Do something before request is sent
-//     return config;
-// }, function (error) {
-//     // Do something with request error
-//     return Promise.reject(error);
-// });
+instance.interceptors.request.use(function (config) {
+    // Do something before request is sent
+  
+    return config;
+}, function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+});
 
 // Add a response interceptor
 instance.interceptors.response.use(function (response) {

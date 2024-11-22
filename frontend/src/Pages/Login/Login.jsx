@@ -33,6 +33,7 @@ export default function Login() {
   }
 
   const handleSubmit = async () => {
+    console.log(infor);
     let checkNotError = Object.values(message).every(e => e.length === 0);
     if (checkNotError) {
       let res = await signIn(infor);

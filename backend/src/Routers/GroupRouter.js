@@ -2,6 +2,7 @@ const express = require('express');
 const GroupController = require('../Controllers/GroupController');
 const router = express.Router();
 
+
 router.get(`/invitation/:id`, GroupController.getInvitation);
 router.post(`/invitation`, GroupController.createInvitation);
 router.delete(`/invitation/:id`, GroupController.deleteInvitation);

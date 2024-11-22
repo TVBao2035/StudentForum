@@ -12,7 +12,7 @@ const GroupDetail = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-  const groupId = location.pathname.split("/")[2].at(2);
+  const groupId = location.pathname.split("/")[2].split("@")[1];
   const user = useSelector(state => state.user);
   const [inforGroup, setInforGroup] = useState();
   const [groupPosts, setGroupPosts] = useState([]);
