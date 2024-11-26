@@ -4,6 +4,7 @@ const FriendService = require("../Services/FriendService");
 
 class FriendController{
 
+    
     async deleteInvitation(req, res){
         try {
             const { userId, friendId } = req.query;

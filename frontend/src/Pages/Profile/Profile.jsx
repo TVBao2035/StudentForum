@@ -9,7 +9,7 @@ import { Avatar, FriendItem, InformationUserBar, Loading } from '../../Component
 import { getDetails } from '../../API/UserAPI';
 import { setLoadingOrther } from '../../Redux/loadingSlice';
 import timeOut from '../../Helpers/timeOut';
-import { createInvitation, deleteFriend, deleteInvitation, getFriendsByUserId } from '../../API/FriendAPI';
+import { acceptFriendInvitation, createInvitation, deleteFriend, deleteInvitation, getFriendsByUserId } from '../../API/FriendAPI';
 import { getAllPostByUserId } from '../../API/PostAPI';
 import './ProfileStyle.scss';
 import { BsFillPersonPlusFill, BsFillPersonXFill, BsPersonCheckFill, BsPersonFillUp } from 'react-icons/bs';
@@ -168,8 +168,8 @@ export default function Profile() {
                     userDetails?.isWaitAccept ?
                       <div className='d-flex gap-2'>
                         <button 
-                        className='btn btn-outline-success fw-medium d-flex align-items-center gap-1'
-                        onClick={() => console.log("Waiting merge git")}
+                          className='btn btn-outline-success fw-medium d-flex align-items-center gap-1'
+                          onClick={() => handleCallAPI(acceptFriendInvitation, user.id, id)}
                         >
                           <BsPersonCheckFill />
                           <p>Chấp nhận</p>

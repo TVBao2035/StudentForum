@@ -8,6 +8,9 @@ import Avatar from '../Avatar';
 import { ModalCreatePost } from '../Modal';
 
 import { useDispatch, useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
+import { logOut } from '../../API/UserAPI';
+import { initialState, setDataMain } from '../../Redux/userSlice';
 
 export default function Header() {
   const [showPostModal, setShowPostModal] = useState(false);
@@ -16,7 +19,7 @@ export default function Header() {
 
   const user = useSelector((state) => state.user);
   //console.log(user);
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = user.token;
 
