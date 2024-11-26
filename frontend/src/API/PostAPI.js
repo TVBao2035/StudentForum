@@ -7,3 +7,7 @@ export  const getAllPost = async() => {
 export const getAllPostByUserId = async (userId) => {
     return await axios.get(`/post/user/${userId}`);
 }
+
+export const getAllPostByGroupId = async (groupId) => {
+    return await axios.get(`post/group/${groupId}`);
+}

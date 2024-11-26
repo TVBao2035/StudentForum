@@ -1,17 +1,15 @@
 import React, { useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import './App.scss';
-import { Profile, Group, Home, Login, MakeFriend, Notification, Register, Setting, Message } from './Pages';
+import { GroupDetail, Profile, Group, Home, Login, MakeFriend, Notification, Register, Setting, Message, Account, GroupJoin, GroupInvitation } from './Pages';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { MainLayout } from './Components/Layout';
+import { GroupLayout, MainLayout } from './Components/Layout';
 import { refresh } from './API/UserAPI';
 import timeOut from './Helpers/timeOut';
 import { setLoading } from './Redux/loadingSlice';
-import { Account, Loading } from './Components';
+import { Loading } from './Components';
 import { setDataMain } from './Redux/userSlice';
-import Swal from 'sweetalert2';
-
 
 
 
@@ -42,23 +40,29 @@ function App() {
     if (!whitelist.some(item => item === location.pathname 
       && !localStorage.getItem(process.env.REACT_APP_LOGIN_LOCAL_STORAGE)))
     {
-      dispatch(setLoading(true));
       fetchApi();
+      dispatch(setLoading(true));
+
     }
   }, []);
   return (
     <Routes>
       <Route path='' element={loading.isLoading ? <Loading/> :<MainLayout/>}>
         <Route path='' element={<Home/>}/>
-        <Route path='makeFriend' element={<MakeFriend />} />
-        <Route path='group' element={<Group />} />
-        <Route path='notification' element={<Notification />} />
-        <Route path='setting' element={<Setting />} />
+        <Route path='/makeFriend' element={<MakeFriend />} />
+        <Route path='/notification' element={<Notification />} />
+        <Route path='/setting' element={<Setting />} />
         <Route path={`/:id`} element={<Profile/>}/>
-        <Route path='message' element={<Message/>} />
+        <Route path='/account' element={<Account/>}/>
+        <Route path='/message' element={<Message/>} />
+      </Route>
+      <Route path='group' element={loading.isLoading ? <Loading/>: <GroupLayout />}>
+        <Route path='discover' element={<Group />}/>
+        <Route path='join' element={<GroupJoin/>} />
+        <Route path={`:id`} element={<GroupDetail />} />
+        
       </Route>
       <Route path="/login" element={<Login/>}/>
-      <Route path='/account' element={<Account/>}/>
       <Route path="/register" element={<Register/>}/>
     </Routes>
 

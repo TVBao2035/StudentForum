@@ -8,7 +8,6 @@ const router = require('./src/Routers/index.js');
 connectDataBase();
 
 
-
 app.use(cors({
     credentials: true,
     origin: 'http://localhost:3000'

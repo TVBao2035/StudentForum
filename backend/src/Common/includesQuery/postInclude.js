@@ -18,13 +18,18 @@ const postInclude = [
         },
         attributes: ['id', 'name', 'avatar']
     },
+
     {
-        model: db.Group,
+        model: db.Like,
         where: {
-            isDelete: false,
+            isDelete: false
         },
-        attributes: ['id', 'name', 'description']
+        required: false,
+        attributes: {
+            exclude: ['createdAt', 'updatedAt']
+        },
     }
+   
 ]
 
 module.exports = postInclude;

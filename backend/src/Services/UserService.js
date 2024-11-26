@@ -19,6 +19,7 @@ class UserService{
                     where: { isDelete: false },
                     include: {
                         model: db.Group,
+                        as: "members",
                         where: {
                             [Op.and]: [
                                 {isDelete: false},
@@ -67,7 +68,8 @@ class UserService{
         })
     }
 
-    getDetails(userId){
+    getDetails(userId, userReq){
+        
         return new Promise(async(resolve, reject) => {
             try {
                 const user = await db.User.findOne({
@@ -85,10 +87,49 @@ class UserService{
                     })
                 }
 
+                let isOwner = user.id === userReq.id;
+                let isFriend = false;
+                let isSending = false;
+                let isWaitAccept = false;
+                if(!isOwner)
+                {
+                    const friends = await db.Friend.findAll({
+                        where: {
+                            [Op.and]: [
+                                {userId: userReq.id}, 
+                                { isDelete: false },
+                            ]
+                        }
+                    });
+
+                    isFriend = friends.some(friend => friend.friendId === user.id && friend.isAccept === true);
+                   
+                    if(!isFriend){
+                        isSending = friends.some(friend => friend.friendId === user.id && friend.isAccept === false);
+                        const invitations = await db.Friend.findAll({
+                            where: {
+                                [Op.and]: [
+                                    { userId: user.id },
+                                    { isDelete: false },
+                                    { isAccept: false }
+                                ]
+                            }
+                        })
+
+                        isWaitAccept = invitations.some(invitation => invitation.friendId === userReq.id);
+                    }
+                }
+
                 resolve({
                     status: 200,
                     message: `Lấy Chi Tiết Người Dùng Thành Công!!`,
-                    data: user
+                    data: {
+                        ...user.dataValues,
+                        isOwner,
+                        isFriend,
+                        isSending,
+                        isWaitAccept
+                    }
                 })
 
             } catch (error) {

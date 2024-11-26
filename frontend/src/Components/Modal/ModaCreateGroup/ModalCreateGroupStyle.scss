@@ -1,0 +1,11 @@
+@import '../../../Scss/colors';
+.ModalCreateGroup{
+    background-color: #33333363;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .modal_container{
+        width: 500px;
+        background-color: white;
+    }
+}
