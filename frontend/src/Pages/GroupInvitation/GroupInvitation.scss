@@ -1,0 +1,8 @@
+.GroupInvitation{
+    .invitation_group_name{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100px;
+    }
+}

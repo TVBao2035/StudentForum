@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
-import Avatar from '../Avatar';
+import Avatar from '../../Components/Avatar';
 import { setAll } from "../../Redux/userSlice";
 import axios from "axios";
 import { getDetails } from "../../API/UserAPI";

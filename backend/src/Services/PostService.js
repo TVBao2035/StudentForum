@@ -193,34 +193,7 @@ class PostService {
                     order: [
                         ['createdAt', "DESC"],
                     ],
-                    include: [
-                        {
-                            model: db.Categorys,
-                            where: {
-                                isDelete: false
-                            },
-                            attributes: ['name']
-                        },
-                        {
-                            model: db.User,
-                            where: {
-                                isDelete: false,
-                            },
-                            attributes: {
-                                exclude: ['password', 'isAdmin', 'isDelete', 'createdAt', 'updatedAt']
-                            },
-                        },
-                        {
-                            model: db.Like,
-                            where: {
-                                isDelete: false
-                            },
-                            required: false,
-                            attributes: {
-                                exclude: ['createdAt', 'updatedAt']
-                            },
-                        }
-                    ],
+                    include: postInclude
 
                 })
 

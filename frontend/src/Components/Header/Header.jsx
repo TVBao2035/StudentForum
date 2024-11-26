@@ -6,20 +6,20 @@ import logoIcon from '../../resources/img/logo.png';
 import './HeaderStyle.scss';
 import Avatar from '../Avatar';
 import { ModalCreatePost } from '../Modal';
-import Swal from 'sweetalert2';
+
 import { useDispatch, useSelector } from 'react-redux';
-import { initialState, setDataMain } from '../../Redux/userSlice';
+import Swal from 'sweetalert2';
 import { logOut } from '../../API/UserAPI';
+import { initialState, setDataMain } from '../../Redux/userSlice';
 
 export default function Header() {
   const [showPostModal, setShowPostModal] = useState(false);
   const handleShow = () => setShowPostModal(true);
   const handleClose = () => setShowPostModal(false);
 
-  const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   //console.log(user);
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = user.token;
 

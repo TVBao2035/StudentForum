@@ -13,6 +13,7 @@ export default function Input(
     value
 }) {
     const [show, setShow] = useState(false);
+    
     const handleClick = (e) => {
         setMessage(pre => {
             return {
@@ -57,7 +58,7 @@ export default function Input(
 
 
   return (
-      <div className='Input mb-2 user-select-none'>
+      <div className='Input mb-2 user-select-none w-100'>
           <div className='d-flex  justify-content-center align-items-center gap-1'>
             <label 
               className='col-2' 
@@ -66,8 +67,9 @@ export default function Input(
             <div className='d-flex col justify-content-center align-items-center position-relative'>
                 <input
                     name={name}
+               
                     type={(type === "password" && show ) ? "text" : type}
-                    value={value}
+                    value={value ? value : "" }
                     className=' form-control'
                     onChange={(e) => handleChange(e)}
                     onBlur={(e) => handleBlur(e)}

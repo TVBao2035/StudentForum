@@ -6,7 +6,6 @@ class CategoryController{
 
     async update(req, res){
         try {
-            console.log(req.body);
             const {value, error} = updateCategoryDTO.validate(req.body);
             if(error){
                 return res.status(404).json({

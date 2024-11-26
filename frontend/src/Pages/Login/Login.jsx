@@ -10,9 +10,6 @@ import { setDataMain } from '../../Redux/userSlice';
 
 export default function Login() {
   const initInfor = {
-    // email: "mingzi0321@gmail.com",
-    // password: "Mingziabc@123"
-
     email: "bao@gmail.com",
     password: "12345"
 
@@ -36,6 +33,7 @@ export default function Login() {
   }
 
   const handleSubmit = async () => {
+    console.log(infor);
     let checkNotError = Object.values(message).every(e => e.length === 0);
     if (checkNotError) {
       let res = await signIn(infor);

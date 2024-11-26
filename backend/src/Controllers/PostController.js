@@ -47,6 +47,7 @@ class PostController{
 
     async create(req, res){
         try {
+       
             const {error, value} = createPostDTO.validate(req.body);
             if(error){
                 return res.status(404).json({
@@ -55,7 +56,6 @@ class PostController{
                     data: error.details[0].path[0]
                 })
             }
-
             const data = await PostService.create(value);
             res.status(200).json(data);
         } catch (error) {

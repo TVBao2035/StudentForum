@@ -4,8 +4,12 @@ const router = express.Router();
 
 router.get('/user/:userId', FriendController.getFriendsByUserId);
 router.get('/invite/:friendId', FriendController.getFriendInvitation);
+
+router.delete('/invite', FriendController.deleteInvitation);
+router.delete(`/`, FriendController.deleteFriend);
+
 router.post('/accept', FriendController.acceptFriendInvitation);
 
-router.delete('/invite/:id', FriendController.deleteFriendInvitation);
+//router.delete('/invite/:id', FriendController.deleteFriendInvitation);
 router.post('/invite', FriendController.createFriendInvitation);
 module.exports = router;
