@@ -1,0 +1,47 @@
+.MakeFriend {  
+  .friend-invitation-card {    
+    background-color: #fff;    
+    border: 2px solid #00aaff;    
+    border-radius: 12px;    
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);    
+    padding: 10px;    
+    max-width: 400px;    
+    display: flex;    
+    align-items: center;    
+    
+    .name {      
+      font-size: 1rem;      
+      font-weight: 600;      
+      margin-bottom: 4px;    
+    }    
+    
+    .time {      
+      font-size: 0.85rem;      
+      color: #888;    
+    }    
+    
+    .btn-accept,    
+    .btn-cancel {      
+      font-size: 0.9rem;      
+      border-radius: 8px;      
+      padding: 5px 10px;      
+      width: 100%;    
+    }    
+    
+    .btn-accept {      
+      background-color: #007bff;      
+      color: #fff;      
+      &:hover {        
+        background-color: #0056b3;      
+      }    
+    }    
+    
+    .btn-cancel {      
+      background-color: #6c757d;      
+      color: #fff;      
+      &:hover {        
+        background-color: #5a6268;      
+      }    
+    }  
+  }
+}
