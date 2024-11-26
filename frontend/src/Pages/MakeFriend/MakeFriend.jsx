@@ -1,16 +1,13 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Row, Col, Button, Card, Tab, Tabs, Alert } from 'react-bootstrap';
-import { getFriendsByUserId, getFriendInvitation, acceptFriendInvitation, deleteFriendInvitation, deleteInvitation } from '../../API/FriendAPI';
+import { getFriendsByUserId, getFriendInvitation, acceptFriendInvitation, deleteInvitation } from '../../API/FriendAPI';
 import { useSelector } from 'react-redux'; 
 import { Avatar } from '../../Components';
-import './MakeFriendStyle.scss';
-//import moment from 'moment';
-// import { formatDistanceToNow } from "date-fns";
-// import { vi } from "date-fns/locale";
 import { Link } from 'react-router-dom';
 import timeFormat from '../../Helpers/timeFormat';
+import './MakeFriendStyle.scss';
 
-// Component cho mỗi lời mời kết bạn
+
 function FriendInvitation({ invitation, onAccept, onCancel }) {
 
   return (
@@ -54,7 +51,6 @@ export default function MakeFriend() {
    
     try {
       const response = await getFriendInvitation(userId);
-      //console.log(response.data);
       if (response.data) {
         setInvitations(response.data);
       } else {
@@ -72,7 +68,6 @@ export default function MakeFriend() {
     setLoading(true);
     try {
       const response = await getFriendsByUserId(userId);
-      //console.log(response.data);
       if (response.data) {
         setFriends(response.data);
       } else {
