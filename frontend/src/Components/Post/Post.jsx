@@ -66,7 +66,8 @@ export default function Post(
                 </Link>
             </header>
             <main className='my-2'>
-                <div className='block_content'>{content}</div>
+                {/* <div className='block_content'>{content}</div> */}
+                <div className='block_content' dangerouslySetInnerHTML={{ __html: content }}></div>
                 <div className='block_category'>#{category?.name}</div>
                 {
                     image && 
