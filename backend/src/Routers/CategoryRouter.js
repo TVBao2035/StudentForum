@@ -1,7 +1,6 @@
 const express = require('express');
-const CategoryController = require('../Controllers/CategoryController');
-
 const router = express.Router();
+const CategoryController = require('../Controllers/CategoryController');
 
 router.put(`/`, CategoryController.update);
 router.delete(`/:id`, CategoryController.delete);

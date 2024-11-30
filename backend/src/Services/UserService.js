@@ -5,6 +5,7 @@ const hashPassword = require("../Helpers/hashPassword");
 const accessToken = require("../Helpers/accessToken");
 const checkUser = require("../Common/checks/checkUser");
 const checkGroup = require("../Common/checks/checktGroup");
+const createHistory = require("../Common/create/createHistory");
 
 class UserService{
     
@@ -28,7 +29,6 @@ class UserService{
                         }
                     }
                 });
-
                 resolve({
                     status: 200,
                     message: `Lấy tất cả thành viên nhóm thành công`,
@@ -293,6 +293,9 @@ class UserService{
                         data: "password"
                     })
                 }
+                let currentDate = new Date();
+                let time = `${currentDate.getHours()}:${currentDate.getMinutes()} ${currentDate.getDate()}/${currentDate.getMonth()}/${currentDate.getFullYear()}`;
+                createHistory({ userId: user.id, title: "Đăng nhập", content: `Bạn đã đăng nhập vào tài khoản ${user.email} lúc ${time}` })
                 resolve({
                     status: 200,
                     message: `Đăng Nhập Thành Công!!`,

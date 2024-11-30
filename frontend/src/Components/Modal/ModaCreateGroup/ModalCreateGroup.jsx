@@ -48,7 +48,6 @@ const ModalCreateGroup = () => {
         setData({...data, image: URL.createObjectURL(e.target.files[0])})
     }
 
-
     const handleSubmit = async () => {
     
        console.log(formData.get('file'));

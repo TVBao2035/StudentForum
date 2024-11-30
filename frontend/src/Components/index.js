@@ -10,6 +10,6 @@ export {default as GroupItem} from './GroupItem';
 export {default as SendMessage} from './SendMessage';
 export { default as InformationUserBar } from './InformationUserBar';
 export {default as FriendItem} from './FriendItem';
-
+export {default as HistoryItem} from './HistoryItem';
 
 

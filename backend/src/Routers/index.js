@@ -5,7 +5,10 @@ const CommentRouter = require('./CommentRouter.js');
 const FriendRouter = require('./FriendRouter.js');
 const CategoryRouter = require('./CategoryRouter.js');
 const GroupRouter = require('./GroupRouter.js');
+const HistoryRouter = require('./HistoryRouter.js');
+
 const router = (app) => {
+    app.use('/history', HistoryRouter);
     app.use('/like', LikeRouter);
     app.use('/comment', CommentRouter);
     app.use('/post', PostRouter);
