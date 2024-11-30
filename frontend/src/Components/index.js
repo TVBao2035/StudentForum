@@ -11,4 +11,10 @@ export {default as SendMessage} from './SendMessage';
 
 export {default as Account} from './Account';
 
+export {default as UsersTable} from './UsersTable';
+
+export {default as PostsGrid} from './PostsGrid';
+
+export {default as CategoryManager} from './CategoryManager';
+
 

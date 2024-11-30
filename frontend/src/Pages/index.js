@@ -7,3 +7,4 @@ export {default as Register} from './Register';
 export {default as Setting} from './Setting';
 export {default as Profile} from './Profile';
 export { default as Message } from './Message';
+export { default as AdminDashboard } from './AdminDashboard';
