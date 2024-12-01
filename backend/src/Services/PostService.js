@@ -5,6 +5,8 @@ const checkCategory = require("../Common/checks/checkCategory");
 const checkGroup = require("../Common/checks/checktGroup");
 const checkUser = require("../Common/checks/checkUser");
 const postInclude = require("../Common/includesQuery/postInclude");
+const createHistory = require("../Common/create/createHistory");
+const getTimeNow = require("../Helpers/getTimeNow");
 
 
 class PostService {
@@ -53,6 +55,11 @@ class PostService {
 
                 post.isDelete = true;
                 await post.save();
+                createHistory({
+                    userId: post.userId,
+                    title: `Xóa bài đăng`,
+                    content: `Bạn đã xóa bài đăng của mình lúc ${getTimeNow()}`
+                })
                 resolve({
                     status: 200,
                     message: `Xóa Bài Đăng Thành Công!!`
@@ -86,6 +93,11 @@ class PostService {
                 post.categoryId = categoryId;
                 post.image = image;
                 await post.save();
+                createHistory({
+                    userId: post.userId,
+                    title: `Cập nhật bài đăng`,
+                    content: `Bạn đã cập nhật bài đăng của mình lúc ${getTimeNow()}`
+                })
                 resolve({
                     status: 200,
                     message: `Cập Nhật Bài Đăng Thành Công!!!`
@@ -128,7 +140,11 @@ class PostService {
                     content,
                     image
                 })
-
+                createHistory({
+                    userId,
+                    title: `Tạo mới bài đăng`,
+                    content: `Bạn đã tạo mới bài đăng lúc ${getTimeNow()}`
+                })
                 resolve({
                     status: 200,
                     message: `Tạo Bài Đăng Thành Công!!`,
@@ -185,7 +201,10 @@ class PostService {
             try {
                 const data = await db.Post.findAll({
                     where: {
-                        isDelete: false
+                        [Op.and]: [
+                            {isDelete: false},
+                            {groupId: null}
+                        ]
                     },
                     attributes: {
                         exclude: ['updatedAt', 'isDelete']

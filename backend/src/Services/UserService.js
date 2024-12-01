@@ -6,6 +6,7 @@ const accessToken = require("../Helpers/accessToken");
 const checkUser = require("../Common/checks/checkUser");
 const checkGroup = require("../Common/checks/checktGroup");
 const createHistory = require("../Common/create/createHistory");
+const getTimeNow = require("../Helpers/getTimeNow");
 
 class UserService{
     
@@ -170,7 +171,12 @@ class UserService{
                     })
                 }
                 data.password = hashPassword(data.password);
-                await db.User.create(data);
+                const newUser = await db.User.create(data);
+                createHistory({
+                    userId: newUser.id,
+                    title: `Tài khoản mới`,
+                    content: `Bạn đã đăng ký tài khoản thành công tên tài khoản là ${newUser.email} được tạo lúc ${getTimeNow()} `
+                })
                 resolve({
                     status: 200,
                     message: `Tạo Người Thành Công!!`
@@ -198,6 +204,11 @@ class UserService{
                 user.name = data.name;
                 user.avatar = data.avatar;
                 await user.save();
+                createHistory({
+                    userId,
+                    title: `Cập nhật thông tin tài khoản`,
+                    content: `Bạn đã cập nhật thông tin tài khoản lúc ${getTimeNow()}`
+                })
                 resolve({
                     status: 200,
                     message: `Cập Nhật Người Dùng Thành Công!`
@@ -293,9 +304,8 @@ class UserService{
                         data: "password"
                     })
                 }
-                let currentDate = new Date();
-                let time = `${currentDate.getHours()}:${currentDate.getMinutes()} ${currentDate.getDate()}/${currentDate.getMonth()}/${currentDate.getFullYear()}`;
-                createHistory({ userId: user.id, title: "Đăng nhập", content: `Bạn đã đăng nhập vào tài khoản ${user.email} lúc ${time}` })
+               
+                createHistory({ userId: user.id, title: "Đăng nhập", content: `Bạn đã đăng nhập vào tài khoản ${user.email} lúc ${getTimeNow()}` })
                 resolve({
                     status: 200,
                     message: `Đăng Nhập Thành Công!!`,
@@ -345,10 +355,14 @@ class UserService{
                     })
                 }
                 password = hashPassword(password);
-                await db.User.create({
+                const newUser = await db.User.create({
                     name, email, phone, password, isAdmin: false
                 })
-
+                createHistory({
+                    userId: newUser.id,
+                    title: `Tài khoản mới`,
+                    content: `Bạn đã đăng ký tài khoản thành công tên tài khoản là ${newUser.email} được tạo lúc ${getTimeNow()} `
+                })
                 resolve({
                     status: 200,
                     message: `Tạo Người Dùng Thành Công!`
