@@ -9,7 +9,7 @@ import { Avatar, FriendItem, InformationUserBar, Loading } from '../../Component
 import { getDetails } from '../../API/UserAPI';
 import { setLoadingOrther } from '../../Redux/loadingSlice';
 import timeOut from '../../Helpers/timeOut';
-import { acceptFriendInvitation, createInvitation, deleteFriend, deleteInvitation, getFriendsByUserId } from '../../API/FriendAPI';
+import { acceptFriendInvitation, createInvitation, deleteFriend, cancelFriendInvitation, deleteInvitation, getFriendsByUserId } from '../../API/FriendAPI';
 import { getAllPostByUserId } from '../../API/PostAPI';
 import './ProfileStyle.scss';
 import { BsFillPersonPlusFill, BsFillPersonXFill, BsPersonCheckFill, BsPersonFillUp } from 'react-icons/bs';
@@ -158,7 +158,7 @@ export default function Profile() {
                       <div>
                         <button 
                         className='btn btn-outline-warning fw-medium d-flex align-items-center gap-1'
-                        onClick={() => handleCallAPI(deleteInvitation, user.id, id)}
+                        onClick={() => handleCallAPI(cancelFriendInvitation, user.id, id)}
                         >
                           <BsPersonFillUp />
                           <p>Hủy yêu cầu</p>

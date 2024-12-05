@@ -10,6 +10,6 @@ router.delete(`/`, FriendController.deleteFriend);
 
 router.post('/accept', FriendController.acceptFriendInvitation);
 
-//router.delete('/invite/:id', FriendController.deleteFriendInvitation);
+router.delete('/invite/cancel', FriendController.cancelFriendInvitation);
 router.post('/invite', FriendController.createFriendInvitation);
 module.exports = router;

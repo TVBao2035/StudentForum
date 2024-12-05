@@ -198,7 +198,7 @@ const GroupDetail = () => {
                   id={member.invitation.id}
                   onClick={inforGroup?.captain.id !== member.invitation.id
                     && inforGroup?.captain.id === user?.id ?
-                    () => handleDeleteMember(user.id) : () => { }}
+                    () => handleDeleteMember(member.invitation.id) : () => { }}
                 />)
               }
             </FriendListPage>
