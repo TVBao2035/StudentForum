@@ -12,8 +12,6 @@ export { default as InformationUserBar } from './InformationUserBar';
 export {default as FriendItem} from './FriendItem';
 export {default as HistoryItem} from './HistoryItem';
 
-export { default as Account } from "./Account";
-
 
 export { default as UsersTable } from "./UsersTable";
 

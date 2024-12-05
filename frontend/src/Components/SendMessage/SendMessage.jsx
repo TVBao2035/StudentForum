@@ -56,18 +56,18 @@ const SendMessage = ({...style}) => {
     <div className={`SendMessage ${Object.keys(style).find(key => style[key]) }`}>
         {
             (comment.commentId !== 0 && comment.commentId !== null) &&
-            <div className={`ask_comment  p-2`}>
+              <div className={`ask_comment p-2 rounded-3`}>
                 <p>{askComment?.content}</p>
                 <IoMdClose onClick={handleCancleAsk}/>
             </div>
         }
-        <div className='d-flex px-3 gap-3'>
+        <div className='d-flex px-2 gap-3'>
             <input 
                 className={`form-control`}
                 value={textComment}
                 onChange={(e) => handleChange(e)}
             />
-            <div className=' text-center'>
+            <div className='d-flex  justify-content-center align-items-center'>
                 <button onClick={handleSendComment} className='btn btn-primary'>
                     <IoSend/>
                 </button>

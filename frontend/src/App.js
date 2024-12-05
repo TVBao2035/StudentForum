@@ -10,7 +10,7 @@ import { refresh } from './API/UserAPI';
 import timeOut from './Helpers/timeOut';
 import { setLoading } from './Redux/loadingSlice';
 
-import { Account, Loading, UsersTable } from './Components';
+import {  Loading, UsersTable } from './Components';
 
 import { setDataMain } from './Redux/userSlice';
 

@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import timeFormat from '../../Helpers/timeFormat';
 import { useDispatch, useSelector } from 'react-redux';
 import { createLike, deleteLike } from '../../API/LikeAPI';
-import ContaierComment from '../Comment/ContaierComment';
+import ContaierComment from '../Comment/ContainerComment';
 import { FaChevronUp } from "react-icons/fa";
 import { changeLike, resetComment, setComment } from '../../Redux/postSlice';
 import SendMessage from '../SendMessage';
@@ -88,7 +88,7 @@ export default function Post(
                         <p>{like?.length}</p>
                     </div>
                 </div>
-                <div onClick={handleOpenComment} className="col text-center btn_active p-1">
+                <div onClick={handleOpenComment} className="col d-flex justify-content-center align-items-center btn_active p-1">
                     <FaRegComment/>
                 </div>
             </footer>

@@ -1,5 +1,6 @@
 import React from "react";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
+import Avatar from "../Avatar";
 
 export default function UsersTable({ users = [], onEdit, onDelete }) {
   return(
@@ -18,10 +19,11 @@ export default function UsersTable({ users = [], onEdit, onDelete }) {
           <tr key={user.id} className="hover:bg-gray-50 transition duration-150">
             <td className="px-6 py-4 whitespace-nowrap">
               <div className="flex items-center">
-                <img
-                  className="h-12 w-12 rounded-full ring-2 ring-indigo-500 p-1"
-                  src={user.avatar}
-                  alt={user.name}
+                <Avatar
+                 normal
+                 className="rounded-full ring-2 ring-indigo p-1"
+                  
+                  link={user.avatar}
                 />
                 <div className="ml-4">
                   <div className="text-sm font-semibold text-gray-900">{user.name}</div>
