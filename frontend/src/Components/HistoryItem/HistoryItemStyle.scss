@@ -1,0 +1,30 @@
+@import '../../Scss/colors';
+.HistoryItem{
+  .container{
+    border-radius: 4px;
+    padding: 12px 20px;
+    .text-time{
+        font-size: 13px;
+    }
+    .icon-warning{
+        color: $warning;
+    }
+    .icon-check{
+        color: $success;
+    }
+  }
+  .container:hover{
+    opacity: 0.7;
+  }
+
+  .isRead{
+    .text-new{
+        color: $danger;
+        font-style: italic;
+    }
+    .text-title{
+        color: $primary;
+    }
+    background-color: #74c6fd53;
+  }
+}

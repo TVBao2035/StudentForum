@@ -1,12 +1,12 @@
 import React from 'react'
-import { Post } from '../../../../Components'
-import './Post_Profile_Style.scss';
-export default function Post_Profile({listPost}) {
+import { Post } from '../../Components'
+import './PostListPageStyle.scss';
+export default function PostListPage({ listPost }) {
   return (
-    <div className='Post_Profile'>
+    <div className='PostListPage'>
       {
         listPost?.map(post => (
-          <Post 
+          <Post
             key={`post-${post?.id}`}
             big
             id={post?.id}

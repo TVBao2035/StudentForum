@@ -1,8 +1,7 @@
-
 import { SiGmail } from "react-icons/si";
 import { BsFillTelephoneFill } from "react-icons/bs";
-import { useSelector } from "react-redux";
-export default function Information_Profile({email, phone}) {
+
+export default function InformationUserBar({email, phone}) {
   return (
     <div className='Informaiton_Profile_Page '>
       <div>

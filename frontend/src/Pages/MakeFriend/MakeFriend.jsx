@@ -1,17 +1,15 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Row, Col, Button, Card, Tab, Tabs, Alert } from 'react-bootstrap';
-import { getFriendsByUserId, getFriendInvitation, acceptFriendInvitation, deleteFriendInvitation } from '../../API/FriendAPI';
+import { getFriendsByUserId, getFriendInvitation, acceptFriendInvitation, deleteInvitation } from '../../API/FriendAPI';
 import { useSelector } from 'react-redux'; 
 import { Avatar } from '../../Components';
-import './MakeFriendStyle.scss';
-//import moment from 'moment';
-// import { formatDistanceToNow } from "date-fns";
-// import { vi } from "date-fns/locale";
 import { Link } from 'react-router-dom';
 import timeFormat from '../../Helpers/timeFormat';
+import './MakeFriendStyle.scss';
 
-// Component cho mỗi lời mời kết bạn
+
 function FriendInvitation({ invitation, onAccept, onCancel }) {
+
   return (
     <Card className="friend-invitation-card p-3 d-flex justify-content-between">
       <Row className="align-items-center w-100 ">
@@ -32,7 +30,7 @@ function FriendInvitation({ invitation, onAccept, onCancel }) {
           <Button variant="primary" className="btn-accept mb-1" onClick={() => onAccept(invitation.id, invitation.user.id)}>
             Chấp Nhận
           </Button>
-          <Button variant="secondary" className="btn-cancel" onClick={() => onCancel(invitation.id)}>
+          <Button variant="secondary" className="btn-cancel" onClick={() => onCancel(invitation.id,invitation.user.id)}>
             Hủy
           </Button>
         </Col>
@@ -50,9 +48,9 @@ export default function MakeFriend() {
 
   const fetchInvitations = useCallback(async () => {
     setLoading(true);
+   
     try {
       const response = await getFriendInvitation(userId);
-      //console.log(response.data);
       if (response.data) {
         setInvitations(response.data);
       } else {
@@ -70,7 +68,6 @@ export default function MakeFriend() {
     setLoading(true);
     try {
       const response = await getFriendsByUserId(userId);
-      //console.log(response.data);
       if (response.data) {
         setFriends(response.data);
       } else {
@@ -98,7 +95,7 @@ export default function MakeFriend() {
       //console.log( {invitationId, friendId });
       //const res = await acceptFriendInvitation(invitationId, userId, friendId);
       //console.log(res.data);
-      await acceptFriendInvitation(invitationId, userId, friendId);
+      await acceptFriendInvitation( userId, friendId, invitationId);
       setInvitations(invitations.filter((invite) => invite.id !== invitationId));
     } catch (error) {
       console.error('Error accepting friend request:', error);
@@ -106,13 +103,13 @@ export default function MakeFriend() {
     }
   };
 
-  const handleCancel = async (invitationId) => {
+  const handleCancel = async (invitationId, friendId) => {
     try
     {
       //console.log( {invitationId} );
       //const response = await deleteFriendInvitation(invitationId);
       //console.log(response.data);
-      await deleteFriendInvitation(invitationId);
+      await deleteInvitation(friendId, userId);
       setInvitations(invitations.filter((invite) => invite.id !== invitationId));
     } catch (error) {
       console.error("Error canceling invitation:", error);

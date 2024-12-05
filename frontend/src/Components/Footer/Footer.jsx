@@ -7,27 +7,27 @@ export default function Footer() {
     <div className='Footer position-fixed bottom-0 w-100'>
       <nav className='d-flex container justify-content-center fs-4 '>
         <li>
-          <NavLink to={''}>
+          <NavLink to={'../'}>
             <IoHomeSharp/>
           </NavLink>
         </li>
         <li>
-          <NavLink to={'makeFriend'} >
+          <NavLink to={'../makeFriend'} >
             <IoPersonAdd />
           </NavLink>
         </li>
         <li>
-          <NavLink to={'group'} >
+          <NavLink to={'../group/discover'} >
             <IoPeople />
           </NavLink>
         </li>
         <li>
-          <NavLink to={'notification'}>
+          <NavLink to={'../notification'}>
             <IoNotifications />
           </NavLink>
         </li>
         <li>
-          <NavLink to={'setting'}>
+          <NavLink to={'../setting'}>
             <IoSettingsSharp/>
           </NavLink>
         </li>

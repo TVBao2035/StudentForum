@@ -21,6 +21,7 @@ const ModalCreatePost = ({ show, handleClose }) => {
     const fetchCategories = async () => {
       try {
         const response = await getAll();
+
         setCategories(response.data);
       } catch (error) {
         console.error('Error fetching categories', error);
@@ -31,7 +32,6 @@ const ModalCreatePost = ({ show, handleClose }) => {
       fetchCategories();
     }
   }, [show]);
-
   const handleEditorChange = (newContent) => {
     setContent(newContent);
   };
@@ -117,13 +117,9 @@ const ModalCreatePost = ({ show, handleClose }) => {
           apiKey='c71zurgnk0wg3iv3upi49j8zotrzy0chhq2evkxb69yca39g'
           value={content}
           init={{
-            plugins: [
-              // Core editing features
-              //'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
-              // Your account includes a free trial of TinyMCE premium features
-              // Try the most popular premium features until Oct 28, 2024:
-              //'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'ai', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown',
-            ],
+            plugins: ['table powerpaste',
+              'lists media',
+              'paste'],
             toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
             tinycomments_mode: 'embedded',
             tinycomments_author: 'Author name',

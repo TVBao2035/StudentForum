@@ -1,0 +1,13 @@
+@import '../../Scss/colors';
+.FriendItem{
+    text-decoration: none;
+    color: $no-active;
+    .text_name {
+        p {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 500px;
+        }
+    }
+}

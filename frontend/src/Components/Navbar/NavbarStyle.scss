@@ -17,11 +17,17 @@
     .item:hover{
         background-color: #94929229;
         // border-color: $active;
+        // .icon{
+        //     background-color: $active;
+        // }
+    }
+    .active{
+        color: $active !important;
         .icon{
-            background-color: $active;
+            background-color: $active !important;
+
         }
     }
-
     .horizontal{
         display: flex !important;
         flex-direction: row;
@@ -36,6 +42,9 @@
         .item:hover{
             border-color: white;
             background-color: white;
+            .icon{
+                background-color: $active;
+            }
         }
         .active {
             border-color: white;

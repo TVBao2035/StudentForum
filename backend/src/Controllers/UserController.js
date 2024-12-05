@@ -86,8 +86,8 @@ class UserController{
     async getDetails(req, res){
         try {
             const userId = req.params.id;
-            console.log(userId);
-            const data = await UserService.getDetails(userId);
+            const userReq = req.user.decode;
+            const data = await UserService.getDetails(userId, userReq);
             res.status(200).json(data);
         } catch (error) {
             console.log(error);
@@ -107,6 +107,7 @@ class UserController{
 
     async signIn(req, res){
         try {
+   
             const {error, value} = signInDTO.validate(req.body);
             if(error){
                 return res.status(404).json({
