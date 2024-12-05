@@ -1,14 +1,17 @@
 import React, { useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import './App.scss';
-import { GroupDetail, Profile, Group, Home, Login, MakeFriend, Notification, Register, Setting, Message, Account, GroupJoin, GroupInvitation } from './Pages';
+
+import { GroupDetail, Profile, Group, Home, Login, MakeFriend, Notification, Register, Setting, Message, Account, GroupJoin, GroupInvitation, AdminDashboard } from './Pages';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { GroupLayout, MainLayout } from './Components/Layout';
 import { refresh } from './API/UserAPI';
 import timeOut from './Helpers/timeOut';
 import { setLoading } from './Redux/loadingSlice';
-import { Loading } from './Components';
+
+import { Account, Loading, UsersTable } from './Components';
+
 import { setDataMain } from './Redux/userSlice';
 
 
@@ -64,6 +67,7 @@ function App() {
       </Route>
       <Route path="/login" element={<Login/>}/>
       <Route path="/register" element={<Register/>}/>
+      <Route path="/admin" element={<AdminDashboard/>}/>
     </Routes>
 
   );

@@ -12,4 +12,21 @@ export { default as InformationUserBar } from './InformationUserBar';
 export {default as FriendItem} from './FriendItem';
 export {default as HistoryItem} from './HistoryItem';
 
+export { default as Account } from "./Account";
 
+
+export { default as UsersTable } from "./UsersTable";
+
+export { default as PostsGrid } from "./PostsGrid";
+
+export { default as CategoryManager } from "./CategoryManager";
+
+export { default as UsersTab } from "./UsersTab";
+
+export { default as PostsTab } from "./PostsTab";
+
+export { default as CategoriesTab } from "./CategoriesTab";
+
+export { default as GroupManager } from "./GroupManager";
+
+export { default as GroupTab } from "./GroupTab";
