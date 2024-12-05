@@ -2,7 +2,6 @@ const timeFormat = (time)=>{
     let startTime = new Date(time);
     let current = new Date();
 
-
     let date = new Date(time);
     let day = date.getDate().toString();
     let month = (date.getMonth() + 1).toString();
