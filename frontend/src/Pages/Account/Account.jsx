@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import Avatar from '../../Components/Avatar';
-import { setAll } from "../../Redux/userSlice";
-import axios from "axios";
-import { getDetails } from "../../API/UserAPI";
+import { getDetails, updateUser } from "../../API/UserAPI";
+import apiUploadImage from "../../Hooks/apiUploadImage";
+import { useNavigate } from "react-router-dom";
+import { setDataMain } from "../../Redux/userSlice";
+import { Input, Loading } from "../../Components";
 
+var formData = new FormData();
 export default function Account() {
     const user = useSelector((state) => state.user);
-    
-
+    const navigator = useNavigate();
+    const dispatch = useDispatch();
+    const [checkUpLoadImage, setCheckUpLoadImage] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [typeSelect, setTypeSelect] = useState(0);
     const [userData, setUserData] = useState({
         name: user.name,
-        userName: '',
         email: user.email,
         phone: user.phone,
         //address: '',
@@ -28,7 +33,6 @@ export default function Account() {
         if(res.status === 200){
             setUserData({
                 name: res.data.name,
-                userName: '',
                 email: res.data.email,
                 phone: res.data.phone,
                 //address: '',
@@ -48,23 +52,6 @@ export default function Account() {
     const handleInputChange = (event) => {
         const { name, value } = event.target; 
 
-        if (name === 'userName') {
-            if (!value) {
-                setErrors((prevErrors) => ({ ...prevErrors, name: 'Họ tên không được để trống!' }));
-            } else {
-                const vietnameseCharacterRegex =
-                    /^[a-zA-ZàáãạảăắằẳẵặâấầẩẫậèéẹẻẽêềếểễệđìíĩỉịòóõọỏôốồổỗộơớờởỡợùúũụủưứừửữựỳỵỷỹýÀÁÃẠẢĂẮẰẲẴẶÂẤẦẨẪẬÈÉẸẺẼÊỀẾỂỄỆĐÌÍĨỈỊÒÓÕỌỎÔỐỒỔỖỘƠỚỜỞỠỢÙÚŨỤỦƯỨỪỬỮỰỲỴỶỸÝ\s]+$/;
-
-                if (!vietnameseCharacterRegex.test(value)) {
-                    setErrors((prevErrors) => ({
-                        ...prevErrors,
-                        name: 'Họ tên không được chứa số và ký tự đặc biệt!',
-                    }));
-                } else {
-                    setErrors((prevErrors) => ({ ...prevErrors, name: undefined }));
-                }
-            }
-        }
 
         if (name === 'email') {
             if (!value) {
@@ -125,31 +112,33 @@ export default function Account() {
                 }));
                 return;
             }
-
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setAvatarPreview(reader.result);
-                setUserData({
-                    ...userData,
-                    avatar: file,
-                });
-                setErrors((prevErrors) => ({
-                    ...prevErrors,
-                    avatar: undefined,
-                }));
-            };
-            reader.readAsDataURL(file);
+            formData = new FormData();
+            formData.append("file", event.target.files[0]);
+            formData.append("upload_preset", process.env.REACT_APP_UPDATE_ACCESS_NAME);
+            formData.append("asset_folder", "StudentForum");
+            const imageUrl = URL.createObjectURL(file);
+            setAvatarPreview(imageUrl);
+            setCheckUpLoadImage(!checkUpLoadImage);
+            setUserData({
+                ...userData,
+                avatar: imageUrl,
+            });
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                avatar: undefined,
+            }));
+   
         }
     };
 
+
+
     const handleSubmit = async (event) => {
         event.preventDefault();
-
+        setIsLoading(true);
         const newErrors = { ...errors };
 
-        if (!userData.userName) {
-            newErrors.userName = 'Họ tên không được để trống!';
-        }
+       
 
         if (!userData.email) {
             newErrors.email = 'Email không được để trống!';
@@ -164,27 +153,34 @@ export default function Account() {
         if (Object.values(newErrors).some((error) => error)) {
             return;
         }
-
-        const formDataUpdate = new FormData();
-        formDataUpdate.append('name', userData.name);
-        formDataUpdate.append('userName', userData.userName || '');
-        formDataUpdate.append('email', userData.email);
-        formDataUpdate.append('phone', userData.phone);
-        //formDataUpdate.append('address', userData.address || '');
-        if (userData.avatar) {
-            formDataUpdate.append('avatar', userData.avatar);
+        if(Number(typeSelect) === 1){
+            try {
+                let res = await apiUploadImage(formData);
+                userData.avatar = res.data.url;
+            } catch (error) {
+                alert("Lỗi upload ảnh");
+                return;
+            }
         }
-
         try {
-            const response = await axios.put(``, formDataUpdate, {
-                headers: {
-                    //Authorization: `Bearer ${token}`,
-                },
-            });
+            const response = await updateUser({
+                id: user.id,
+                name: userData.name,
+                phone: userData.phone,
+                email: userData.email,
+                avatar: userData.avatar
+            })
 
             if (response.status === 200) {
-                localStorage.setItem('usertoken', response.data.token);
-
+                navigator('/');
+                setIsLoading(false);
+                dispatch(setDataMain({
+                    id: user.id,
+                    name: userData.name,
+                    phone: userData.phone,
+                    email: userData.email,
+                    avatar: userData.avatar
+                }))
                 Swal.fire({
                     title: 'Cập nhật thông tin tài khoản thành công!',
                     icon: 'success',
@@ -196,43 +192,27 @@ export default function Account() {
                 });
             } 
         } catch (error) {
-            console.error('Lỗi: ', error);
-
-            if (axios.isAxiosError(error)) {
-                if (error.response && error.response.status === 409) {
-                    const apiErrors = error.response.data.messages;
-                    const newApiErrors = {};
-
-                    apiErrors.forEach((errMessage) => {
-                        if (errMessage.includes('PhoneNumber')) {
-                            newApiErrors.phone = 'Số điện thoại đã tồn tại!';
-                        } else if (errMessage.includes('Email')) {
-                            newApiErrors.email = 'Email đã tồn tại'
-                        }
-                    });
-
-                    setErrors(newApiErrors);
-                }
-            } else {
-                Swal.fire({
-                    title: 'Cập nhật thông tin tài khoản thất bại! Vui lòng thử lại!',
-                    icon: 'error',
-                    toast: true,
-                    position: 'top-end',
-                    timerProgressBar: true,
-                    showConfirmButton: false,
-                    timer: 3000,
-                });
-            }
+            Swal.fire({
+                title: 'Cập nhật thông tin tài khoản thất bại! Vui lòng thử lại!',
+                icon: 'error',
+                toast: true,
+                position: 'top-end',
+                timerProgressBar: true,
+                showConfirmButton: false,
+                timer: 3000,
+            });
         }
 
     };
 
-    console.log(userData);
+
+    if(isLoading){
+        return <Loading/>
+    }
     return (
         <div className="container-fluid py-5">
             <div className="container py-5">
-                <form onSubmit={handleSubmit} encType="multipart/form-data">
+                <form onSubmit={handleSubmit}>
                     <div className="row">
                         <div className="col-md-12 col-lg-8 col-xl-8 offset-lg-2 offset-xl-2">
                             <div className="border border-1 rounded p-5">
@@ -240,23 +220,45 @@ export default function Account() {
                                     <div className="col-md-12 col-lg-4 col-xl-4">
                                         <div className="text-center">
                                             <div className="row">
-                                                <div className="col-12">
-                                                <Avatar link={avatarPreview} size="bigger" />
+                                                <div className="col-12 d-flex justify-content-center">
+                                                <Avatar link={userData.avatar} biggest />
                                                     {errors.avatar && (
                                                         <div className="text-danger">{errors.avatar}</div>
                                                     )}
                                                 </div>
-                                                <div className="col-12">
-                                                    <input
-                                                        type="file"
-                                                        name="avatar"
-                                                        id="avatar"
-                                                        className="d-none"
-                                                        onChange={handleAvatarChange}
-                                                    />
-                                                    <label htmlFor="avatar" className="btn btn-secondary my-4">
-                                                        Chọn ảnh
-                                                    </label>
+                                                <div className="col-12 mt-2">
+                                                    <div className='d-flex gap-2 mb-3'>
+                                                        <select className='col border-1 px-2 py-1' onChange={e => setTypeSelect(e.target.value)} value={typeSelect}>
+                                                            <option value="0">Link</option>
+                                                            <option value="1">File</option>
+                                                        </select>
+                                                    </div>
+                                                    {
+                                                        Number(typeSelect) === 0 ?
+                                                            <div className="d-flex gap-2 align-items-center">
+                                                                <label htmlFor="">Enter:</label>
+                                                                <input
+                                                                    type="text"
+                                                                    name="avatar"
+                                                                    id="avatar"
+                                                                    style={{width: "100%"}}
+                                                                    className="border-1 px-2 py-1"
+                                                                    onChange={handleInputChange}
+                                                                />
+                                                            </div>
+                                                        :
+                                                        <div>
+                                                            <input
+                                                                type="file"
+                                                                name="avatar"
+                                                                id="avatar"
+                                                                className="d-none"
+                                                                onChange={handleAvatarChange}
+                                                            />
+                                                            <label htmlFor="avatar" className="btn btn-primary">Chọn ảnh</label>
+                                                        </div>
+                                                    }
+                                                    
                                                 </div>
                                             </div>
                                         </div>
@@ -266,25 +268,13 @@ export default function Account() {
                                             <label className="form-label mb-3">Tên đăng nhập</label>
                                             <input
                                                 type="text"
+                                                name="name"
                                                 className="form-control"
                                                 value={userData.name}
-                                                readOnly
-                                            />
-                                        </div>
-                                        <div className="form-item">
-                                            <label htmlFor="userName" className="form-label my-3">
-                                                Họ tên
-                                            </label>
-                                            <input
-                                                type="userName"
-                                                name="userName"
-                                                id="userName"
-                                                className="form-control"
-                                                value={userData.userName}
                                                 onChange={handleInputChange}
                                             />
-                                            {errors.userName && <div className="text-danger">{errors.userName}</div>}
                                         </div>
+                                       
                                         <div className="form-item">
                                             <label htmlFor="email" className="form-label my-3">
                                                 Email
