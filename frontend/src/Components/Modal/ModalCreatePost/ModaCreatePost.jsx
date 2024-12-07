@@ -4,6 +4,10 @@ import { Editor } from '@tinymce/tinymce-react';
 import { getAll } from '../../../API/CategoryAPI';
 import { createPost } from '../../../API/PostAPI';
 import { useSelector } from 'react-redux';
+import apiUploadImage from '../../../Hooks/apiUploadImage';
+
+
+var formData = new FormData();
 
 const ModalCreatePost = ({ show, handleClose }) => {
   const user = useSelector(state => state.user);
@@ -41,6 +45,10 @@ const ModalCreatePost = ({ show, handleClose }) => {
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setImagePreview(imageUrl);
+      formData = new FormData();
+      formData.append("file", e.target.files[0]);
+      formData.append("upload_preset", process.env.REACT_APP_UPDATE_ACCESS_NAME);
+      formData.append("asset_folder", "StudentForum");
       //setImages(imageUrl);
     }
   };
@@ -68,26 +76,22 @@ const ModalCreatePost = ({ show, handleClose }) => {
       setError("Please enter content!")
       return;
     }
-
-    
+    const postData = {
+      userId: user?.id,
+      groupId: groupId,
+      categoryId: selectedCategory,
+      content: content,
+      image: imagePreview,
+    };
     try {
       
-      //const cleanContent = content.replace(/^<p>(.*)<\/p>$/, '$1');
-      // const formData = new FormData();
-      // formData.append("userId", userId);
-      // formData.append("groupId", null);
-      // formData.append("content", content);
-      // formData.append("categoryId", selectedCategory);
-      // if (images)
-      //   formData.append("image", images);
-      const postData = {
-        userId: user?.id,
-        groupId: groupId,
-        categoryId: selectedCategory,
-        content: content,
-        image: imagePreview,
-      };
-
+      let res = await apiUploadImage(formData);
+      postData.image = res.data.url;
+    } catch (error) {
+      alert("Lỗi upload ảnh");
+      return;
+    }
+    try {
       const response = await createPost(postData);
       if (response.status === 200) {
         setSuccessMessage('Post created successfully!');
