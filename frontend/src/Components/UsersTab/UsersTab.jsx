@@ -88,7 +88,7 @@ export default function UsersTab() {
   };
 
   const handleSaveEditUser = async () => {
-    if (!userData.email || !userData.phone || !userData.avatar) {
+    if (!userData.email || !userData.phone) {
       Swal.fire("Error", "All fields must be filled", "error");
       return;
     }
