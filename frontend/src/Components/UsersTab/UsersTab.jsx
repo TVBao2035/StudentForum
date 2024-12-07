@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import Modal from "react-modal";
 import UsersTable from "../UsersTable";
-import { FiPlus, FiSearch } from "react-icons/fi";
+import { FiPlus, FiSearch, FiX } from "react-icons/fi";
 import {
   getAllUser,
   createUser,
@@ -176,9 +176,22 @@ export default function UsersTab() {
         </div>
 
         {isAdding && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-              <h3 className="text-lg font-bold mb-4">Add New User</h3>
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+            style={{ zIndex: 1050 }}
+          >
+            <div className="bg-white p-6 rounded-2xl shadow-2xl w-[40rem] relative">
+              <button
+                onClick={() => setIsAdding(false)}
+                className="absolute top-4 right-4 flex items-center justify-center w-10 h-10 bg-red-500 hover:bg-red-600 rounded-full shadow-md transition-transform transform hover:scale-110 focus:outline-none"
+              >
+                <FiX className="text-white" size={20} />
+              </button>
+
+              <h3 className="text-xl font-bold mb-4 text-center text-gray-800 border-b pb-3">
+                Add New User
+              </h3>
+
               <input
                 type="text"
                 placeholder="Name"
@@ -186,7 +199,7 @@ export default function UsersTab() {
                 onChange={(e) =>
                   setNewUser({ ...newUser, name: e.target.value })
                 }
-                className="w-full p-2 border rounded mb-2"
+                className="w-full p-2 border rounded-lg mb-3 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
               />
               <input
                 type="email"
@@ -195,7 +208,7 @@ export default function UsersTab() {
                 onChange={(e) =>
                   setNewUser({ ...newUser, email: e.target.value })
                 }
-                className="w-full p-2 border rounded mb-2"
+                className="w-full p-2 border rounded-lg mb-3 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
               />
               <input
                 type="text"
@@ -204,16 +217,7 @@ export default function UsersTab() {
                 onChange={(e) =>
                   setNewUser({ ...newUser, phone: e.target.value })
                 }
-                className="w-full p-2 border rounded mb-2"
-              />
-              <input
-                type="text"
-                placeholder="Avatar URL"
-                value={newUser.avatar}
-                onChange={(e) =>
-                  setNewUser({ ...newUser, avatar: e.target.value })
-                }
-                className="w-full p-2 border rounded mb-2"
+                className="w-full p-2 border rounded-lg mb-3 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
               />
               <input
                 type="password"
@@ -222,19 +226,59 @@ export default function UsersTab() {
                 onChange={(e) =>
                   setNewUser({ ...newUser, password: e.target.value })
                 }
-                className="w-full p-2 border rounded mb-4"
+                className="w-full p-2 border rounded-lg mb-4 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
               />
-              <div className="flex justify-end">
+
+              <div className="mb-4">
+                <label className="block font-semibold mb-2 text-gray-700">
+                  User Avatar:
+                </label>
+                <div className="flex flex-col items-center">
+                  {newUser.avatar ? (
+                    <img
+                      src={newUser.avatar}
+                      alt="User Avatar"
+                      className="w-24 h-24 rounded-full object-cover shadow-lg mb-3"
+                    />
+                  ) : (
+                    <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center mb-3 shadow-inner">
+                      <span className="text-gray-400">No Image</span>
+                    </div>
+                  )}
+                  <label
+                    htmlFor="avatarInput"
+                    className="bg-yellow-500 hover:bg-yellow-600 transition text-white px-4 py-2 rounded-full cursor-pointer"
+                  >
+                    Change
+                  </label>
+                  <input
+                    id="avatarInput"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                          setNewUser({ ...newUser, avatar: reader.result });
+                        };
+                        reader.readAsDataURL(e.target.files[0]);
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-center space-x-4 pt-4 border-t">
                 <button
                   onClick={() => setIsAdding(false)}
-                  className="bg-gray-300 px-4 py-2 rounded mr-2"
+                  className="bg-gray-200 hover:bg-gray-300 transition px-5 py-2 rounded-full text-gray-700 font-semibold"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleAddUser}
-                  className="bg-indigo-600 text-white px-4 py-2 rounded"
-                  disabled={loading}
+                  className="bg-indigo-600 hover:bg-indigo-700 transition text-white px-5 py-2 rounded-full font-semibold"
                 >
                   Add
                 </button>
@@ -257,11 +301,17 @@ export default function UsersTab() {
           className="fixed inset-0 flex items-center justify-center z-50"
           overlayClassName="fixed inset-0 bg-black bg-opacity-50"
         >
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md mx-4">
-            <div className="px-6 py-4 border-b">
-              <h2 className="text-lg font-semibold text-gray-800">Edit User</h2>
-            </div>
-            <div className="px-6 py-4 space-y-4">
+          <div className="bg-white rounded-2xl shadow-lg w-[32rem] p-6 relative">
+            <button
+              onClick={closeModal}
+              className="absolute top-4 right-4 flex items-center justify-center w-10 h-10 bg-red-500 hover:bg-red-600 rounded-full shadow-md transition-transform transform hover:scale-110 focus:outline-none"
+            >
+              <FiX className="text-white" size={20} />
+            </button>
+            <h2 className="text-2xl font-semibold text-gray-800 text-center mb-4 border-b pb-4">
+              Edit User
+            </h2>
+            <div className="space-y-4">
               <input
                 type="text"
                 placeholder="Name"
@@ -269,7 +319,7 @@ export default function UsersTab() {
                 onChange={(e) =>
                   setUserData({ ...userData, name: e.target.value })
                 }
-                className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
               />
               <input
                 type="email"
@@ -278,7 +328,7 @@ export default function UsersTab() {
                 onChange={(e) =>
                   setUserData({ ...userData, email: e.target.value })
                 }
-                className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
               />
               <input
                 type="text"
@@ -287,28 +337,58 @@ export default function UsersTab() {
                 onChange={(e) =>
                   setUserData({ ...userData, phone: e.target.value })
                 }
-                className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
               />
-              <input
-                type="text"
-                placeholder="Avatar URL"
-                value={userData.avatar}
-                onChange={(e) =>
-                  setUserData({ ...userData, avatar: e.target.value })
-                }
-                className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-              />
+              <div>
+                <label className="block font-semibold mb-2 text-gray-700">
+                  Avatar:
+                </label>
+                <div className="flex flex-col items-center">
+                  {userData.avatar ? (
+                    <img
+                      src={userData.avatar}
+                      alt="User Avatar"
+                      className="w-24 h-24 rounded-full object-cover shadow-lg mb-3"
+                    />
+                  ) : (
+                    <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center mb-3 shadow-inner">
+                      <span className="text-gray-400">No Avatar</span>
+                    </div>
+                  )}
+                  <label
+                    htmlFor="avatarInput"
+                    className="bg-yellow-500 hover:bg-yellow-600 transition text-white px-5 py-2 rounded-full cursor-pointer"
+                  >
+                    Change
+                  </label>
+                  <input
+                    id="avatarInput"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                          setUserData({ ...userData, avatar: reader.result });
+                        };
+                        reader.readAsDataURL(e.target.files[0]);
+                      }
+                    }}
+                  />
+                </div>
+              </div>
             </div>
-            <div className="px-6 py-4 border-t flex justify-end space-x-4">
+            <div className="flex justify-center space-x-4 pt-6 border-t mt-6">
               <button
                 onClick={closeModal}
-                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition"
+                className="px-6 py-2 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveEditUser}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition"
+                className="px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition"
               >
                 Update
               </button>

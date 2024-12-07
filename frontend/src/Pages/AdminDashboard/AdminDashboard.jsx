@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { IoArrowBack } from "react-icons/io5";
 import UsersTab from "../../Components/UsersTab/UsersTab";
 import PostsTab from "../../Components/PostsTab/PostsTab";
 import CategoriesTab from "../../Components/CategoriesTab/CategoriesTab";
@@ -44,6 +46,14 @@ export default function AdminDashboard() {
         >
           Groups
         </button>
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2.5 px-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 active:translate-y-0 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+          aria-label="Navigate back to home page"
+        >
+          <IoArrowBack className="text-xl" />
+          <span>Back to Home</span>
+        </Link>
       </div>
 
       <div className="p-4">

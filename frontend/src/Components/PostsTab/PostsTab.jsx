@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import Modal from "react-modal";
 import { Editor } from "@tinymce/tinymce-react";
 import PostsGrid from "../PostsGrid";
-import { FiPlus, FiSearch } from "react-icons/fi";
+import { FiPlus, FiSearch, FiX } from "react-icons/fi";
 import {
   getAllUser,
   getAllPost,
@@ -206,7 +206,13 @@ export default function PostsTab() {
         </div>
         {isAdding && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white p-6 rounded-2xl shadow-xl w-[36rem] max-h-[90vh] overflow-auto">
+            <div className="relative bg-white p-6 rounded-2xl shadow-xl w-[36rem] max-h-[90vh] overflow-auto">
+              <button
+                onClick={() => setIsAdding(false)}
+                className="absolute top-4 right-4 flex items-center justify-center w-10 h-10 bg-red-500 hover:bg-red-600 rounded-full shadow-md transition-transform transform hover:scale-110 focus:outline-none"
+              >
+                <FiX className="text-white" size={20} />
+              </button>
               <h3 className="text-xl font-bold mb-4 text-center text-gray-800 border-b pb-4">
                 Add New Post
               </h3>
@@ -345,7 +351,13 @@ export default function PostsTab() {
           className="fixed inset-0 flex items-center justify-center z-50"
           overlayClassName="fixed inset-0 bg-black bg-opacity-50"
         >
-          <div className="bg-white p-6 rounded-2xl shadow-2xl w-[40rem]">
+          <div className="relative bg-white p-6 rounded-2xl shadow-2xl w-[40rem]">
+            <button
+              onClick={closeModal}
+              className="absolute top-4 right-4 flex items-center justify-center w-10 h-10 bg-red-500 hover:bg-red-600 rounded-full shadow-md transition-transform transform hover:scale-110 focus:outline-none"
+            >
+              <FiX className="text-white" size={20} />
+            </button>
             <h3 className="text-xl font-bold mb-6 text-center text-gray-800 border-b pb-4">
               Edit Post
             </h3>
@@ -388,7 +400,7 @@ export default function PostsTab() {
                 {postData.image ? (
                   <img
                     src={postData.image}
-                    alt="Post Thumbnail"
+                    alt=""
                     className="w-28 h-28 rounded-full object-cover shadow-lg mb-3"
                   />
                 ) : (
