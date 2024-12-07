@@ -4,6 +4,7 @@ import Modal from "react-modal";
 import GroupManager from "../GroupManager";
 import { FiPlus, FiSearch } from "react-icons/fi";
 import {
+  getAllUser,
   getAllGroup,
   createGroup,
   updateGroup,
@@ -18,13 +19,30 @@ export default function GroupTab() {
   const [newGroup, setNewGroup] = useState({
     name: "",
     description: "",
+    image: "",
+    userId: "",
   });
   const [isGroupModalOpen, setIsGroupModalOpen] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [groupData, setGroupData] = useState({
     name: "",
     description: "",
+    image: "",
   });
+
+  const [users, setUsers] = useState([]);
+
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const respone = await getAllUser();
+      setUsers(respone.data);
+    } catch (err) {
+      setError("Failed to load users.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchGroups = async () => {
     setLoading(true);
@@ -39,11 +57,12 @@ export default function GroupTab() {
   };
 
   useEffect(() => {
+    fetchUsers();
     fetchGroups();
   }, []);
 
   const handleAddGroup = async () => {
-    if (!newGroup.name) {
+    if (!newGroup.name || !newGroup.userId) {
       Swal.fire("Error", "All fields are required!", "error");
       return;
     }
@@ -58,6 +77,8 @@ export default function GroupTab() {
         setNewGroup({
           name: "",
           description: "",
+          image: "",
+          userId: "",
         });
       }
     } catch (err) {
@@ -72,6 +93,7 @@ export default function GroupTab() {
     setGroupData({
       name: groupToEdit.name,
       description: groupToEdit.description,
+      image: groupToEdit.image,
     });
 
     setIsGroupModalOpen(true);
@@ -88,6 +110,7 @@ export default function GroupTab() {
         groupId: selectedGroup.id,
         name: groupData.name,
         description: groupData.description,
+        image: groupData.image,
       });
       if (respone.status === 200) {
         Swal.fire({
@@ -170,9 +193,14 @@ export default function GroupTab() {
         </div>
 
         {isAdding && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-              <h3 className="text-lg font-bold mb-4">Add New Group</h3>
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+            style={{ zIndex: 1050 }}
+          >
+            <div className="bg-white p-8 rounded-2xl shadow-2xl w-[32rem]">
+              <h3 className="text-xl font-bold mb-6 text-center text-gray-800 border-b pb-4">
+                Add New Group
+              </h3>
 
               <input
                 type="text"
@@ -181,7 +209,7 @@ export default function GroupTab() {
                 onChange={(e) =>
                   setNewGroup({ ...newGroup, name: e.target.value })
                 }
-                className="w-full p-2 border rounded mb-2"
+                className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
               />
 
               <input
@@ -191,19 +219,78 @@ export default function GroupTab() {
                 onChange={(e) =>
                   setNewGroup({ ...newGroup, description: e.target.value })
                 }
-                className="w-full p-2 border rounded mb-2"
+                className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
               />
 
-              <div className="flex justify-end">
+              <div className="mb-6">
+                <label className="block font-semibold mb-2 text-gray-700">
+                  Group Image:
+                </label>
+                <div className="flex flex-col items-center">
+                  {newGroup.image ? (
+                    <img
+                      src={newGroup.image}
+                      alt="Group Thumbnail"
+                      className="w-28 h-28 rounded-full object-cover shadow-lg mb-3"
+                    />
+                  ) : (
+                    <div className="w-28 h-28 rounded-full bg-gray-100 flex items-center justify-center mb-3 shadow-inner">
+                      <span className="text-gray-400">No Image</span>
+                    </div>
+                  )}
+                  <label
+                    htmlFor="groupImageInput"
+                    className="bg-yellow-500 hover:bg-yellow-600 transition text-white px-5 py-2 rounded-full cursor-pointer"
+                  >
+                    Change
+                  </label>
+                  <input
+                    id="groupImageInput"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                          setNewGroup({ ...newGroup, image: reader.result });
+                        };
+                        reader.readAsDataURL(e.target.files[0]);
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+
+              {users.length === 0 ? (
+                <p>No users available to select</p>
+              ) : (
+                <select
+                  value={newGroup.userId}
+                  onChange={(e) =>
+                    setNewGroup({ ...newGroup, userId: e.target.value })
+                  }
+                  className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                >
+                  <option value="">Select a user</option>
+                  {users.map((user) => (
+                    <option key={user.id} value={user.id}>
+                      {user.name}
+                    </option>
+                  ))}
+                </select>
+              )}
+
+              <div className="flex justify-center space-x-6 pt-4 border-t">
                 <button
                   onClick={() => setIsAdding(false)}
-                  className="bg-gray-300 px-4 py-2 rounded mr-2"
+                  className="bg-gray-200 hover:bg-gray-300 transition px-6 py-2 rounded-full text-gray-700 font-semibold"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleAddGroup}
-                  className="bg-indigo-600 text-white px-4 py-2 rounded"
+                  className="bg-indigo-600 hover:bg-indigo-700 transition text-white px-6 py-2 rounded-full font-semibold"
                 >
                   Add
                 </button>
@@ -226,45 +313,80 @@ export default function GroupTab() {
           className="fixed inset-0 flex items-center justify-center z-50"
           overlayClassName="fixed inset-0 bg-black bg-opacity-50"
         >
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md mx-4">
-            <div className="px-6 py-4 border-b">
-              <h2 className="text-lg font-semibold text-gray-800">
-                Edit Group
-              </h2>
+          <div className="bg-white p-8 rounded-2xl shadow-2xl w-[32rem]">
+            <h3 className="text-xl font-bold mb-6 text-center text-gray-800 border-b pb-4">
+              Edit Group
+            </h3>
+
+            <input
+              type="text"
+              placeholder="Group Name"
+              value={groupData.name}
+              onChange={(e) =>
+                setGroupData({ ...groupData, name: e.target.value })
+              }
+              className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            />
+
+            <input
+              placeholder="Description"
+              value={groupData.description}
+              onChange={(e) =>
+                setGroupData({ ...groupData, description: e.target.value })
+              }
+              className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            ></input>
+
+            <div className="mb-6">
+              <label className="block font-semibold mb-2 text-gray-700">
+                Group Image:
+              </label>
+              <div className="flex flex-col items-center">
+                {groupData.image ? (
+                  <img
+                    src={groupData.image}
+                    alt="Group Thumbnail"
+                    className="w-28 h-28 rounded-full object-cover shadow-lg mb-3"
+                  />
+                ) : (
+                  <div className="w-28 h-28 rounded-full bg-gray-100 flex items-center justify-center mb-3 shadow-inner">
+                    <span className="text-gray-400">No Image</span>
+                  </div>
+                )}
+                <label
+                  htmlFor="groupImageInput"
+                  className="bg-yellow-500 hover:bg-yellow-600 transition text-white px-5 py-2 rounded-full cursor-pointer"
+                >
+                  Change
+                </label>
+                <input
+                  id="groupImageInput"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) {
+                      const reader = new FileReader();
+                      reader.onload = () => {
+                        setGroupData({ ...groupData, image: reader.result });
+                      };
+                      reader.readAsDataURL(e.target.files[0]);
+                    }
+                  }}
+                />
+              </div>
             </div>
 
-            <div className="px-6 py-4 space-y-4">
-              <input
-                type="text"
-                placeholder="Group Name"
-                value={groupData.name}
-                onChange={(e) =>
-                  setGroupData({ ...groupData, name: e.target.value })
-                }
-                className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-              />
-
-              <textarea
-                placeholder="Description"
-                value={groupData.description}
-                onChange={(e) =>
-                  setGroupData({ ...groupData, description: e.target.value })
-                }
-                className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                rows="4"
-              ></textarea>
-            </div>
-
-            <div className="px-6 py-4 border-t flex justify-end space-x-4">
+            <div className="flex justify-center space-x-6 pt-4 border-t">
               <button
                 onClick={closeModal}
-                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition"
+                className="bg-gray-200 hover:bg-gray-300 transition px-6 py-2 rounded-full text-gray-700 font-semibold"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveEditGroup}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition"
+                className="bg-indigo-600 hover:bg-indigo-700 transition text-white px-6 py-2 rounded-full font-semibold"
               >
                 Update
               </button>

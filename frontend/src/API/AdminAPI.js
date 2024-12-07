@@ -69,12 +69,12 @@ export const getAllGroup = async () => {
   return await axios.get(`/group`);
 };
 
-export const createGroup = async ({ name, description }) => {
-  return await axios.post(`/group`, { name, description });
+export const createGroup = async ({ name, description, image, userId }) => {
+  return await axios.post(`/group`, { name, description, image, userId });
 };
 
-export const updateGroup = async ({ groupId, name, description }) => {
-  return await axios.put(`/group/`, { id: groupId, name, description });
+export const updateGroup = async ({ groupId, name, description, image }) => {
+  return await axios.put(`/group/`, { id: groupId, name, description, image });
 };
 
 export const deleteGroup = async (groupId) => {

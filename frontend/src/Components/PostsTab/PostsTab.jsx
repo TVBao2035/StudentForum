@@ -206,8 +206,10 @@ export default function PostsTab() {
         </div>
         {isAdding && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-              <h3 className="text-lg font-bold mb-4">Add New Post</h3>
+            <div className="bg-white p-6 rounded-2xl shadow-xl w-[36rem] max-h-[90vh] overflow-auto">
+              <h3 className="text-xl font-bold mb-4 text-center text-gray-800 border-b pb-4">
+                Add New Post
+              </h3>
 
               <select
                 value={newPost.userId}
@@ -217,7 +219,7 @@ export default function PostsTab() {
                     userId: parseInt(e.target.value, 10),
                   })
                 }
-                className="w-full p-2 border rounded mb-2"
+                className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
               >
                 <option value="">Select User</option>
                 {users.map((user) => (
@@ -235,7 +237,7 @@ export default function PostsTab() {
                     categoryId: parseInt(e.target.value, 10),
                   })
                 }
-                className="w-full p-2 border rounded mb-2"
+                className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
               >
                 <option value="">Select Category</option>
                 {categories.map((category) => (
@@ -257,7 +259,7 @@ export default function PostsTab() {
                       : null,
                   })
                 }
-                className="w-full p-2 border rounded mb-2"
+                className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
               />
 
               <textarea
@@ -266,30 +268,60 @@ export default function PostsTab() {
                 onChange={(e) =>
                   setNewPost({ ...newPost, content: e.target.value })
                 }
-                className="w-full p-2 border rounded mb-4"
-                rows="4"
-              />
+                className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                rows="3"
+              ></textarea>
 
-              <input
-                type="text"
-                placeholder="Image URL"
-                value={newPost.image || ""}
-                onChange={(e) =>
-                  setNewPost({ ...newPost, image: e.target.value })
-                }
-                className="w-full p-2 border rounded mb-2"
-              />
+              <div className="mb-4">
+                <label className="block font-semibold mb-2 text-gray-700">
+                  Post Image:
+                </label>
+                <div className="flex flex-col items-center">
+                  {newPost.image ? (
+                    <img
+                      src={newPost.image}
+                      alt="Post Thumbnail"
+                      className="w-28 h-28 rounded-full object-cover shadow-lg mb-3"
+                    />
+                  ) : (
+                    <div className="w-28 h-28 rounded-full bg-gray-100 flex items-center justify-center mb-3 shadow-inner">
+                      <span className="text-gray-400">No Image</span>
+                    </div>
+                  )}
+                  <label
+                    htmlFor="postImageInput"
+                    className="bg-yellow-500 hover:bg-yellow-600 transition text-white px-5 py-2 rounded-full cursor-pointer"
+                  >
+                    Change
+                  </label>
+                  <input
+                    id="postImageInput"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                          setNewPost({ ...newPost, image: reader.result });
+                        };
+                        reader.readAsDataURL(e.target.files[0]);
+                      }
+                    }}
+                  />
+                </div>
+              </div>
 
-              <div className="flex justify-end">
+              <div className="flex justify-center space-x-6 pt-4 border-t">
                 <button
                   onClick={() => setIsAdding(false)}
-                  className="bg-gray-300 px-4 py-2 rounded mr-2"
+                  className="bg-gray-200 hover:bg-gray-300 transition px-6 py-2 rounded-full text-gray-700 font-semibold"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleAddPost}
-                  className="bg-indigo-600 text-white px-4 py-2 rounded"
+                  className="bg-indigo-600 hover:bg-indigo-700 transition text-white px-6 py-2 rounded-full font-semibold"
                 >
                   Add
                 </button>
@@ -304,7 +336,7 @@ export default function PostsTab() {
           onEdit={handleEditPost}
           onDelete={handleDeletePost}
         />
-        import {Editor} from "@tinymce/tinymce-react";
+
         <Modal
           isOpen={isPostModalOpen}
           onRequestClose={closeModal}
@@ -313,69 +345,97 @@ export default function PostsTab() {
           className="fixed inset-0 flex items-center justify-center z-50"
           overlayClassName="fixed inset-0 bg-black bg-opacity-50"
         >
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md mx-4">
-            <div className="px-6 py-4 border-b">
-              <h2 className="text-lg font-semibold text-gray-800">Edit Post</h2>
+          <div className="bg-white p-6 rounded-2xl shadow-2xl w-[40rem]">
+            <h3 className="text-xl font-bold mb-6 text-center text-gray-800 border-b pb-4">
+              Edit Post
+            </h3>
+
+            <select
+              value={postData.categoryId}
+              onChange={(e) =>
+                setPostData({ ...postData, categoryId: e.target.value })
+              }
+              className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            >
+              <option value="">Select Category</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+
+            <Editor
+              apiKey="c71zurgnk0wg3iv3upi49j8zotrzy0chhq2evkxb69yca39g"
+              value={postData.content}
+              onEditorChange={(content) =>
+                setPostData({ ...postData, content })
+              }
+              init={{
+                height: 180,
+                menubar: false,
+                plugins: [],
+                toolbar:
+                  "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
+              }}
+            />
+
+            <div className="mb-6">
+              <label className="block font-semibold mb-2 text-gray-700">
+                Post Image:
+              </label>
+              <div className="flex flex-col items-center">
+                {postData.image ? (
+                  <img
+                    src={postData.image}
+                    alt="Post Thumbnail"
+                    className="w-28 h-28 rounded-full object-cover shadow-lg mb-3"
+                  />
+                ) : (
+                  <div className="w-28 h-28 rounded-full bg-gray-100 flex items-center justify-center mb-3 shadow-inner">
+                    <span className="text-gray-400">No Image</span>
+                  </div>
+                )}
+                <label
+                  htmlFor="postImageInput"
+                  className="bg-yellow-500 hover:bg-yellow-600 transition text-white px-5 py-2 rounded-full cursor-pointer"
+                >
+                  Change
+                </label>
+                <input
+                  id="postImageInput"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) {
+                      const reader = new FileReader();
+                      reader.onload = () => {
+                        setPostData({ ...postData, image: reader.result });
+                      };
+                      reader.readAsDataURL(e.target.files[0]);
+                    }
+                  }}
+                />
+              </div>
             </div>
-            <div className="px-6 py-4 space-y-4">
-              <select
-                value={postData.categoryId}
-                onChange={(e) =>
-                  setPostData({ ...postData, categoryId: e.target.value })
-                }
-                className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-              >
-                <option value="">Select Category</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
 
-              <Editor
-                apiKey="c71zurgnk0wg3iv3upi49j8zotrzy0chhq2evkxb69yca39g"
-                value={postData.content}
-                onEditorChange={(content) =>
-                  setPostData({ ...postData, content })
-                }
-                init={{
-                  height: 300,
-                  menubar: false,
-                  plugins: [],
-                  toolbar:
-                    "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
-                }}
-              />
-
-              <input
-                type="text"
-                placeholder="Image URL"
-                value={postData.image}
-                onChange={(e) =>
-                  setPostData({ ...postData, image: e.target.value })
-                }
-                className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-              />
-            </div>
-
-            <div className="px-6 py-4 border-t flex justify-end space-x-4">
+            <div className="flex justify-center space-x-6 pt-4 border-t">
               <button
                 onClick={closeModal}
-                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition"
+                className="bg-gray-200 hover:bg-gray-300 transition px-6 py-2 rounded-full text-gray-700 font-semibold"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveEditPost}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition"
+                className="bg-indigo-600 hover:bg-indigo-700 transition text-white px-6 py-2 rounded-full font-semibold"
               >
                 Update
               </button>
             </div>
           </div>
         </Modal>
-        ;
       </div>
     </div>
   );
