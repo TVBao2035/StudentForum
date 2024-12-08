@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import Modal from "react-modal";
+import { useSelector } from "react-redux";
 import { Editor } from "@tinymce/tinymce-react";
 import PostsGrid from "../PostsGrid";
 import { FiPlus, FiSearch, FiX } from "react-icons/fi";
@@ -14,11 +15,12 @@ import {
 } from "../../API/AdminAPI";
 
 export default function PostsTab() {
+  const userId = useSelector((state) => state.user.id);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
   const [newPost, setNewPost] = useState({
-    userId: "",
+    userId: userId || null,
     groupId: null,
     categoryId: "",
     content: "",
@@ -80,7 +82,12 @@ export default function PostsTab() {
   }, []);
 
   const handleAddPost = async () => {
-    if (!newPost.userId || !newPost.categoryId || !newPost.content) {
+    if (!userId) {
+      Swal.fire("Error", "UserId not found. Please login again!", "error");
+      return;
+    }
+
+    if (!newPost.categoryId || !newPost.content) {
       Swal.fire("Error", "Please fill in all required fields.", "error");
       return;
     }
@@ -93,7 +100,7 @@ export default function PostsTab() {
         //setPosts((prev) => [...prev, response.data]);
         setIsAdding(false);
         setNewPost({
-          userId: "",
+          userId: userId,
           groupId: null,
           categoryId: "",
           content: "",
@@ -197,7 +204,10 @@ export default function PostsTab() {
               <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             </div>
             <button
-              onClick={() => setIsAdding(true)}
+              onClick={() => {
+                setIsAdding(true);
+                setNewPost((prev) => ({ ...prev, userId }));
+              }}
               className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-2 rounded-lg hover:opacity-90 transition duration-300 shadow-md flex items-center"
             >
               <FiPlus className="mr-2" /> Add New
@@ -217,7 +227,7 @@ export default function PostsTab() {
                 Add New Post
               </h3>
 
-              <select
+              {/* <select
                 value={newPost.userId}
                 onChange={(e) =>
                   setNewPost({
@@ -233,7 +243,7 @@ export default function PostsTab() {
                     {user.name}
                   </option>
                 ))}
-              </select>
+              </select> */}
 
               <select
                 value={newPost.categoryId}

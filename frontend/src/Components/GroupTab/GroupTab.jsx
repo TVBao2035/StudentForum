@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import Modal from "react-modal";
+import { useSelector } from "react-redux";
 import GroupManager from "../GroupManager";
 import { FiPlus, FiSearch, FiX } from "react-icons/fi";
 import {
@@ -12,6 +13,7 @@ import {
 } from "../../API/AdminAPI";
 
 export default function GroupTab() {
+  const userId = useSelector((state) => state.user.id);
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -20,7 +22,7 @@ export default function GroupTab() {
     name: "",
     description: "",
     image: "",
-    userId: "",
+    userId: userId || null,
   });
   const [isGroupModalOpen, setIsGroupModalOpen] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState(null);
@@ -62,6 +64,11 @@ export default function GroupTab() {
   }, []);
 
   const handleAddGroup = async () => {
+    if (!userId) {
+      Swal.fire("Error", "UserId not found. Please login again!", "error");
+      return;
+    }
+
     if (!newGroup.name || !newGroup.userId) {
       Swal.fire("Error", "All fields are required!", "error");
       return;
@@ -78,7 +85,7 @@ export default function GroupTab() {
           name: "",
           description: "",
           image: "",
-          userId: "",
+          userId: userId,
         });
       }
     } catch (err) {
@@ -184,7 +191,10 @@ export default function GroupTab() {
               <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             </div>
             <button
-              onClick={() => setIsAdding(true)}
+              onClick={() => {
+                setIsAdding(true);
+                setNewGroup((prev) => ({ ...prev, userId }));
+              }}
               className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-2 rounded-lg hover:opacity-90 transition duration-300 shadow-md flex items-center"
             >
               <FiPlus className="mr-2" /> Add New
@@ -268,7 +278,7 @@ export default function GroupTab() {
                 </div>
               </div>
 
-              {users.length === 0 ? (
+              {/* {users.length === 0 ? (
                 <p>No users available to select</p>
               ) : (
                 <select
@@ -285,7 +295,7 @@ export default function GroupTab() {
                     </option>
                   ))}
                 </select>
-              )}
+              )} */}
 
               <div className="flex justify-center space-x-6 pt-4 border-t">
                 <button
