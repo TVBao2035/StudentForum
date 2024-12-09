@@ -48,7 +48,8 @@ class LikeService {
                         commentId
                     });
                 }
-                const userOfPost = await checkUser(post.id);
+    
+                const userOfPost = await checkUser(postId);
                 if(userOfPost?.status === 404) resolve(userOfPost)
                 createHistory({
                     userId,
@@ -98,7 +99,7 @@ class LikeService {
                     if (comment.status === 404) {
                         return resolve(comment);
                     }
-
+                    userIdOfPost = comment.userId;
                     like = await db.Like.findOne({
                         where: {
                             [Op.and]: [
@@ -119,15 +120,15 @@ class LikeService {
                 like.isDelete = true;
                 await like.save();
 
-
-                const userOfPost = await checkUser(userIdOfPost);
-                if (userOfPost?.status === 404) return resolve(userOfPost);
-                console.log({userIdOfPost, userId});
-                createHistory({
-                    userId,
-                    title: `Bỏ tương tác bài đăng`,
-                    content: `Bạn đã bỏ thích bài đăng của  ${Number(userIdOfPost) === Number(userId) ? "mình " : `${userOfPost.name}`} lúc ${getTimeNow()}`,
-                })
+                if(userIdOfPost){
+                    const userOfPost = await checkUser(userIdOfPost);
+                    if (userOfPost?.status === 404) return resolve(userOfPost);
+                    createHistory({
+                        userId,
+                        title: `Bỏ tương tác bài đăng`,
+                        content: `Bạn đã bỏ thích bài đăng của  ${Number(userIdOfPost) === Number(userId) ? "mình " : `${userOfPost.name}`} lúc ${getTimeNow()}`,
+                    })
+                }
 
                 return resolve({
                     status: 200,

@@ -40,7 +40,7 @@ const ModalCreateGroup = () => {
     }
 
 
-    const handleUpload = async (e) => {
+    const handleUpload =  (e) => {
         formData = new FormData();
         formData.append("file", e.target.files[0]);
         formData.append("upload_preset", process.env.REACT_APP_UPDATE_ACCESS_NAME);

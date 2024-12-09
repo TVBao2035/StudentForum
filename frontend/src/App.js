@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import './App.scss';
-import { GroupDetail, Profile, Group, Home, Login, MakeFriend, Notification, Register, Setting, Message, Account, GroupJoin, GroupInvitation } from './Pages';
+import { GroupDetail, Profile, Group, Home, Login, MakeFriend, Notification, Register, Setting, Message, Account, GroupJoin, GroupInvitation, PostEdit } from './Pages';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { GroupLayout, MainLayout } from './Components/Layout';
@@ -53,6 +53,7 @@ function App() {
         <Route path='/notification' element={<Notification />} />
         <Route path='/setting' element={<Setting />} />
         <Route path={`/:id`} element={<Profile/>}/>
+        <Route path={`post/edit`} element={<PostEdit/>} />
         <Route path='/account' element={<Account/>}/>
         <Route path='/message' element={<Message/>} />
       </Route>

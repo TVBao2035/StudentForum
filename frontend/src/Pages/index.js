@@ -13,3 +13,4 @@ export {default as GroupJoin} from './GroupJoin';
 export {default as GroupInvitation} from './GroupInvitation';
 export { default as FriendListPage } from './FriendListPage';
 export { default as PostListPage } from './PostListPage';
+export {default as PostEdit} from './PostEdit';

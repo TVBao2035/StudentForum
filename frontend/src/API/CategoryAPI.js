@@ -1,5 +1,5 @@
 import axios  from "../Configs/axios";
 
-export const getAll = async () => {
+export const getAllCategories = async () => {
     return await axios.get(`/category`);
 }

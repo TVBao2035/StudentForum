@@ -7,7 +7,8 @@ const  ContaierComment = ({postId, ...style}) => {
 
   const [comments, setComments] = useState([]);
 
-  const fetchApi = async () => {
+  const fetchApi = async (postId) => {
+    
     let res = await getAllCommentByPostId(postId);
     if(res.status === 200){
       setComments(res.data);
@@ -17,11 +18,16 @@ const  ContaierComment = ({postId, ...style}) => {
   }
 
   const commentRedux = useSelector(state => state.post.comment);
-  console.log(commentRedux);
-  useEffect(() => {
-    fetchApi();
-  }, [useSelector(state => state.post.like.changeLike), useSelector(state => state.post.comment)]);
 
+  useEffect(() => {
+    if(postId)
+    fetchApi(postId);
+  }, [useSelector(state => state.post.like.changeLike), commentRedux]);
+
+  useEffect(() => {
+    if(postId)
+    fetchApi(postId);
+  }, [postId])
   let level = 5;
   const renderComments = (comment, level) => {
     level--;
@@ -43,7 +49,7 @@ const  ContaierComment = ({postId, ...style}) => {
   return (
     <div className={`ContainerComment ${Object.keys(style).find(key => style[key]) }`}>
       {
-        comments.map(comment => renderComments(comment, level))
+        comments?.map(comment => renderComments(comment, level))
       }
     </div>
   )
