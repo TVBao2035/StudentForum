@@ -62,7 +62,7 @@ export default function GroupTab() {
     fetchUsers();
     fetchGroups();
   }, []);
-
+  {/* EDIT UPLOAD IMAGE */ }
   const handleAddGroup = async () => {
     if (!userId) {
       Swal.fire("Error", "UserId not found. Please login again!", "error");
@@ -105,7 +105,7 @@ export default function GroupTab() {
 
     setIsGroupModalOpen(true);
   };
-
+  {/* EDIT UPLOAD IMAGE */ }
   const handleSaveEditGroup = async () => {
     if (!groupData.name) {
       Swal.fire("Error", "All fields must be filled", "error");
@@ -260,6 +260,7 @@ export default function GroupTab() {
                   >
                     Change
                   </label>
+                  {/* EDIT UPLOAD IMAGE */}
                   <input
                     id="groupImageInput"
                     type="file"
@@ -381,6 +382,7 @@ export default function GroupTab() {
                 >
                   Change
                 </label>
+                {/* EDIT UPLOAD IMAGE */}
                 <input
                   id="groupImageInput"
                   type="file"

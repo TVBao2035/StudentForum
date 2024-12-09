@@ -80,7 +80,7 @@ export default function PostsTab() {
     fetchPosts();
     fetchCategories();
   }, []);
-
+  {/* EDIT UPLOAD IMAGE */ }
   const handleAddPost = async () => {
     if (!userId) {
       Swal.fire("Error", "UserId not found. Please login again!", "error");
@@ -126,7 +126,7 @@ export default function PostsTab() {
 
     setIsPostModalOpen(true);
   };
-
+  {/* EDIT UPLOAD IMAGE */ }
   const handleSaveEditPost = async () => {
     try {
       const respone = await updatePost({ postData, postId: selectedPost.id });
@@ -310,6 +310,7 @@ export default function PostsTab() {
                   >
                     Change
                   </label>
+                  {/* EDIT UPLOAD IMAGE */}
                   <input
                     id="postImageInput"
                     type="file"
@@ -424,6 +425,7 @@ export default function PostsTab() {
                 >
                   Change
                 </label>
+                {/* EDIT UPLOAD IMAGE */}
                 <input
                   id="postImageInput"
                   type="file"

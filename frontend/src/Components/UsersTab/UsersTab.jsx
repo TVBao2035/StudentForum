@@ -86,7 +86,7 @@ export default function UsersTab() {
 
     setIsUserModalOpen(true);
   };
-
+  {/* EDIT UPLOAD IMAGE */ }
   const handleSaveEditUser = async () => {
     if (!userData.email || !userData.phone) {
       Swal.fire("Error", "All fields must be filled", "error");
@@ -251,6 +251,7 @@ export default function UsersTab() {
                   >
                     Change
                   </label>
+                 {/* EDIT UPLOAD IMAGE */}
                   <input
                     id="avatarInput"
                     type="file"
@@ -361,6 +362,7 @@ export default function UsersTab() {
                   >
                     Change
                   </label>
+                  {/* EDIT UPLOAD IMAGE */}
                   <input
                     id="avatarInput"
                     type="file"
