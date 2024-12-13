@@ -164,7 +164,7 @@ class PostService {
             try {
                 const post = await db.Post.findOne({
                     attributes: {
-                        exclude: ['isDelete', 'groupId', 'userId', 'categoryId']
+                        exclude: ['isDelete', 'groupId', 'userId']
                     },
                     include: postInclude,
                     where: {

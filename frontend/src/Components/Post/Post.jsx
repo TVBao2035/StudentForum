@@ -61,9 +61,12 @@ export default function Post(
                         <p className='block_time text-secondary'>{timeFormat(createdAt)}</p>
                     </div>
                 </div>
-                <Link className='d-flex align-items-center justify-content-center block_edit' to={`/post/edit?postId=${id}`}>
-                    <BsThreeDotsVertical/>
-                </Link>
+                {
+                    user.id == userId &&
+                    <Link className='d-flex align-items-center justify-content-center block_edit' to={`/post/edit?postId=${id}`}>
+                        <BsThreeDotsVertical/>
+                    </Link>
+                }
             </header>
             <main className='my-2'>
                 {/* <div className='block_content'>{content}</div> */}

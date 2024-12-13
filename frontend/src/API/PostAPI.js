@@ -16,3 +16,13 @@ export const getAllPostByGroupId = async (groupId) => {
     return await axios.get(`post/group/${groupId}`);
 
 }
+
+export const updatePost = async (postId, content, categoryId, image) => {
+    return await axios.put(`post/${postId}`, {
+        content, categoryId, image
+    });
+}
+
+export const deletePost = async (postId) => {
+    return await axios.delete(`post/${postId}`);
+}
