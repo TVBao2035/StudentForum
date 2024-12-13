@@ -9,12 +9,16 @@ import {
   updateUser,
   deleteUser,
 } from "../../API/AdminAPI";
+import apiUploadImage from "../../Hooks/apiUploadImage";
 
+
+var formData = new FormData();
 export default function UsersTab() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [isChangeImage, setIsChangeImage] = useState(false);
   const [newUser, setNewUser] = useState({
     name: "",
     email: "",
@@ -47,18 +51,42 @@ export default function UsersTab() {
     fetchUsers();
   }, []);
 
+
+  const handleUpload = async (event, setData) => {
+    formData = new FormData();
+    formData.append("file", event.target.files[0]);
+    formData.append("upload_preset", process.env.REACT_APP_UPDATE_ACCESS_NAME);
+    formData.append("asset_folder", "StudentForum");
+    setIsChangeImage(true);
+    setData((pre) => {
+      return {
+        ...pre,
+        avatar: URL.createObjectURL(event.target.files[0])
+      }
+    })
+  }
+
   const handleAddUser = async () => {
     if (!newUser.email || !newUser.phone || !newUser.password) {
       Swal.fire("Error", "All fields are required!", "error");
       return;
     }
+    if(isChangeImage){
+        try {
+          let res = await apiUploadImage(formData);
+          newUser.avatar = res.data.url;
+        } catch (error) {
+          alert("Lỗi upload ảnh");
+          return;
+        }
+    }
 
     try {
+   
       const respone = await createUser(newUser);
       if (respone.status === 200) {
         Swal.fire("Success", "User added successfully!", "success");
         await fetchUsers();
-        //setUsers((prev) => [...prev, respone.data]);
         setIsAdding(false);
         setNewUser({
           name: "",
@@ -68,6 +96,7 @@ export default function UsersTab() {
           password: "",
         });
       }
+      setIsChangeImage(false);
     } catch (err) {
       Swal.fire("Error", "Failed to add user!", "error");
     }
@@ -92,7 +121,17 @@ export default function UsersTab() {
       Swal.fire("Error", "All fields must be filled", "error");
       return;
     }
-
+    if(isChangeImage){
+      try {
+        let res = await apiUploadImage(formData);
+        userData.avatar = res.data.url;
+        setIsChangeImage(false);
+      } catch (error) {
+        alert("Lỗi upload ảnh");
+        return;
+      }
+    }
+  
     try {
       const respone = await updateUser({ userData, userId: selectedUser.id });
       if (respone.status === 200) {
@@ -113,6 +152,7 @@ export default function UsersTab() {
         );
         setIsUserModalOpen(false);
         setSelectedUser(null);
+        setIsAdding(false);
       } else {
         Swal.fire({
           title: "Cập nhật thất bại! Vui lòng thử lại!",
@@ -125,14 +165,30 @@ export default function UsersTab() {
         });
         setIsUserModalOpen(false);
       }
+      setIsChangeImage(false);
     } catch (error) {
       setError("Failed to update user!");
     }
   };
 
   const closeModal = () => {
+    console.log(userData);
     setIsUserModalOpen(false);
+    setIsAdding(false)
     setSelectedUser(null);
+    setUserData({
+      name: "",
+      email: "",
+      phone: "",
+      avatar: "",
+    });
+    setNewUser({
+      name: "",
+      email: "",
+      phone: "",
+      avatar: "",
+      password: "",
+    })
   };
 
   const handleDeleteUser = async (userId) => {
@@ -182,7 +238,7 @@ export default function UsersTab() {
           >
             <div className="bg-white p-6 rounded-2xl shadow-2xl w-[40rem] relative">
               <button
-                onClick={() => setIsAdding(false)}
+                onClick={closeModal}
                 className="absolute top-4 right-4 flex items-center justify-center w-10 h-10 bg-red-500 hover:bg-red-600 rounded-full shadow-md transition-transform transform hover:scale-110 focus:outline-none"
               >
                 <FiX className="text-white" size={20} />
@@ -257,22 +313,14 @@ export default function UsersTab() {
                     type="file"
                     accept="image/*"
                     className="hidden"
-                    onChange={(e) => {
-                      if (e.target.files && e.target.files[0]) {
-                        const reader = new FileReader();
-                        reader.onload = () => {
-                          setNewUser({ ...newUser, avatar: reader.result });
-                        };
-                        reader.readAsDataURL(e.target.files[0]);
-                      }
-                    }}
+                    onChange={(e) => handleUpload(e, setNewUser)}
                   />
                 </div>
               </div>
 
               <div className="flex justify-center space-x-4 pt-4 border-t">
                 <button
-                  onClick={() => setIsAdding(false)}
+                  onClick={closeModal}
                   className="bg-gray-200 hover:bg-gray-300 transition px-5 py-2 rounded-full text-gray-700 font-semibold"
                 >
                   Cancel
@@ -368,15 +416,7 @@ export default function UsersTab() {
                     type="file"
                     accept="image/*"
                     className="hidden"
-                    onChange={(e) => {
-                      if (e.target.files && e.target.files[0]) {
-                        const reader = new FileReader();
-                        reader.onload = () => {
-                          setUserData({ ...userData, avatar: reader.result });
-                        };
-                        reader.readAsDataURL(e.target.files[0]);
-                      }
-                    }}
+                    onChange={(e) => handleUpload(e, setUserData)}
                   />
                 </div>
               </div>

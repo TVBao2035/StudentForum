@@ -11,6 +11,9 @@ import {
   updateGroup,
   deleteGroup,
 } from "../../API/AdminAPI";
+import apiUploadImage from "../../Hooks/apiUploadImage";
+
+var formData = new FormData();
 
 export default function GroupTab() {
   const userId = useSelector((state) => state.user.id);
@@ -18,6 +21,7 @@ export default function GroupTab() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [isChangeImage, setIsChangeImage] = useState(false);
   const [newGroup, setNewGroup] = useState({
     name: "",
     description: "",
@@ -74,7 +78,19 @@ export default function GroupTab() {
       return;
     }
 
+    if (isChangeImage) {
+      try {
+        let res = await apiUploadImage(formData);
+        newGroup.image = res.data.url;
+        setIsChangeImage(false);
+      } catch (error) {
+        alert("Lỗi upload ảnh");
+        return;
+      }
+    }
+
     try {
+
       const respone = await createGroup(newGroup);
       if (respone.status === 200) {
         Swal.fire("Success", "Group added successfully!", "success");
@@ -93,6 +109,19 @@ export default function GroupTab() {
     }
   };
 
+  const handleUpload = async (event, setData) => {
+    formData = new FormData();
+    formData.append("file", event.target.files[0]);
+    formData.append("upload_preset", process.env.REACT_APP_UPDATE_ACCESS_NAME);
+    formData.append("asset_folder", "StudentForum");
+    setIsChangeImage(true);
+    setData((pre) => {
+      return {
+        ...pre,
+        image: URL.createObjectURL(event.target.files[0])
+      }
+    })
+  }
   const handleEditGroup = (groupId) => {
     const groupToEdit = groups.find((group) => group.id === groupId);
     setSelectedGroup(groupToEdit);
@@ -111,8 +140,19 @@ export default function GroupTab() {
       Swal.fire("Error", "All fields must be filled", "error");
       return;
     }
+    if (isChangeImage) {
+      try {
+        let res = await apiUploadImage(formData);
+        groupData.image = res.data.url;
+        setIsChangeImage(false);
+      } catch (error) {
+        alert("Lỗi upload ảnh");
+        return;
+      }
+    }
 
     try {
+
       const respone = await updateGroup({
         groupId: selectedGroup.id,
         name: groupData.name,
@@ -157,6 +197,18 @@ export default function GroupTab() {
   const closeModal = () => {
     setIsGroupModalOpen(false);
     setSelectedGroup(null);
+    setIsAdding(false);
+    setGroupData({
+      name: "",
+      description: "",
+      image: "",
+    });
+    setNewGroup({
+      name: "",
+      description: "",
+      image: "",
+      userId: userId || null,
+    });
   };
 
   const handleDeleteGroup = async (groupId) => {
@@ -185,8 +237,8 @@ export default function GroupTab() {
                 type="text"
                 placeholder="Search..."
                 className="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
-                //value={searchQuery}
-                //onChange={(e) => setSearchQuery(e.target.value)}
+              //value={searchQuery}
+              //onChange={(e) => setSearchQuery(e.target.value)}
               />
               <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             </div>
@@ -209,7 +261,7 @@ export default function GroupTab() {
           >
             <div className="bg-white p-6 rounded-2xl shadow-2xl w-[40rem] relative">
               <button
-                onClick={() => setIsAdding(false)}
+                onClick={closeModal}
                 className="absolute top-4 right-4 flex items-center justify-center w-10 h-10 bg-red-500 hover:bg-red-600 rounded-full shadow-md transition-transform transform hover:scale-110 focus:outline-none"
               >
                 <FiX className="text-white" size={20} />
@@ -266,41 +318,14 @@ export default function GroupTab() {
                     type="file"
                     accept="image/*"
                     className="hidden"
-                    onChange={(e) => {
-                      if (e.target.files && e.target.files[0]) {
-                        const reader = new FileReader();
-                        reader.onload = () => {
-                          setNewGroup({ ...newGroup, image: reader.result });
-                        };
-                        reader.readAsDataURL(e.target.files[0]);
-                      }
-                    }}
+                    onChange={(e) => handleUpload(e, setNewGroup)}
                   />
                 </div>
               </div>
 
-              {/* {users.length === 0 ? (
-                <p>No users available to select</p>
-              ) : (
-                <select
-                  value={newGroup.userId}
-                  onChange={(e) =>
-                    setNewGroup({ ...newGroup, userId: e.target.value })
-                  }
-                  className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                >
-                  <option value="">Select a user</option>
-                  {users.map((user) => (
-                    <option key={user.id} value={user.id}>
-                      {user.name}
-                    </option>
-                  ))}
-                </select>
-              )} */}
-
               <div className="flex justify-center space-x-6 pt-4 border-t">
                 <button
-                  onClick={() => setIsAdding(false)}
+                  onClick={closeModal}
                   className="bg-gray-200 hover:bg-gray-300 transition px-6 py-2 rounded-full text-gray-700 font-semibold"
                 >
                   Cancel
@@ -388,15 +413,7 @@ export default function GroupTab() {
                   type="file"
                   accept="image/*"
                   className="hidden"
-                  onChange={(e) => {
-                    if (e.target.files && e.target.files[0]) {
-                      const reader = new FileReader();
-                      reader.onload = () => {
-                        setGroupData({ ...groupData, image: reader.result });
-                      };
-                      reader.readAsDataURL(e.target.files[0]);
-                    }
-                  }}
+                  onChange={(e) => handleUpload(e, setGroupData)}
                 />
               </div>
             </div>

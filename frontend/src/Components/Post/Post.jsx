@@ -1,17 +1,18 @@
-import React, { Fragment, useState } from 'react'
-import Avatar from '../Avatar'
+import './PostStyle.scss';
+import Avatar from '../Avatar';
+import { Fragment, useState } from 'react';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { AiOutlineLike } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa6";
-import './PostStyle.scss';
+import { FaChevronUp } from "react-icons/fa";
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import timeFormat from '../../Helpers/timeFormat';
-import { useDispatch, useSelector } from 'react-redux';
-import { createLike, deleteLike } from '../../API/LikeAPI';
 import ContaierComment from '../Comment/ContainerComment';
-import { FaChevronUp } from "react-icons/fa";
 import { changeLike, resetComment, setComment } from '../../Redux/postSlice';
 import SendMessage from '../SendMessage';
+import { createLike, deleteLike } from '../../API/LikeAPI';
+
 export default function Post(
     { id, userId, name, createdAt, content, avatar, image, category, like,...style}
 ) {
@@ -43,6 +44,7 @@ export default function Post(
         }
         setIsOpenComment(!isOpenComment);
     }
+    
   return (
     <div className='Post d-flex flex-column align-items-center'>
         <div className={` overflow-hidden block_main border p-2 pb-0 rounded-3 ${Object.keys(style)}`}>

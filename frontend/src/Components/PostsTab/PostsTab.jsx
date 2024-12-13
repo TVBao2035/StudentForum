@@ -13,12 +13,19 @@ import {
   deletePost,
   getAllCategory,
 } from "../../API/AdminAPI";
+import apiUploadImage from "../../Hooks/apiUploadImage";
+
+
+
+var formData = new FormData();
+
 
 export default function PostsTab() {
   const userId = useSelector((state) => state.user.id);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [isChangeImage, setIsChangeImage] = useState(false);
   const [newPost, setNewPost] = useState({
     userId: userId || null,
     groupId: null,
@@ -80,6 +87,20 @@ export default function PostsTab() {
     fetchPosts();
     fetchCategories();
   }, []);
+
+  const handleUpload = async (event, setData) => {
+    formData = new FormData();
+    formData.append("file", event.target.files[0]);
+    formData.append("upload_preset", process.env.REACT_APP_UPDATE_ACCESS_NAME);
+    formData.append("asset_folder", "StudentForum");
+    setIsChangeImage(true);
+    setData((pre) => {
+      return {
+        ...pre,
+        image: URL.createObjectURL(event.target.files[0])
+      }
+    })
+  }
   {/* EDIT UPLOAD IMAGE */ }
   const handleAddPost = async () => {
     if (!userId) {
@@ -91,8 +112,17 @@ export default function PostsTab() {
       Swal.fire("Error", "Please fill in all required fields.", "error");
       return;
     }
+    try {
+      let res = await apiUploadImage(formData);
+      newPost.image = res.data.url;
+      setIsChangeImage(false);
+    } catch (error) {
+      alert("Lỗi upload ảnh");
+      return;
+    }
 
     try {
+
       const response = await createPost(newPost);
       if (response.status === 200) {
         Swal.fire("Success", "Post added successfully!", "success");
@@ -109,6 +139,7 @@ export default function PostsTab() {
       } else {
         Swal.fire("Error", "Failed to add post. Please try again.", "error");
       }
+      setIsChangeImage(false);
     } catch (err) {
       Swal.fire("Error", "Failed to add post.", "error");
     }
@@ -126,8 +157,18 @@ export default function PostsTab() {
 
     setIsPostModalOpen(true);
   };
-  {/* EDIT UPLOAD IMAGE */ }
+
   const handleSaveEditPost = async () => {
+    if(isChangeImage){
+      try {
+        let res = await apiUploadImage(formData);
+        postData.image = res.data.url;
+      } catch (error) {
+        alert("Lỗi upload ảnh");
+        return;
+      }
+    }
+
     try {
       const respone = await updatePost({ postData, postId: selectedPost.id });
       if (respone.status === 200) {
@@ -142,13 +183,9 @@ export default function PostsTab() {
         });
 
         await fetchPosts();
-        // setPosts((prevPosts) =>
-        //   prevPosts.map((post) =>
-        //     post.id === selectedPost.id ? { ...post, ...postData } : post
-        //   )
-        // );
         setIsPostModalOpen(false);
         setSelectedPost(null);
+        setIsChangeImage(false);
       } else {
         Swal.fire({
           title: "Cập nhật bài viết thất bại! Vui lòng thử lại!",
@@ -159,7 +196,6 @@ export default function PostsTab() {
           showConfirmButton: false,
           timer: 3000,
         });
-
         setIsPostModalOpen(false);
       }
     } catch (err) {
@@ -170,6 +206,14 @@ export default function PostsTab() {
   const closeModal = () => {
     setIsPostModalOpen(false);
     setSelectedPost(null);
+    setIsChangeImage(false);
+    setNewPost({
+      userId: userId,
+      groupId: null,
+      categoryId: "",
+      content: "",
+      image: "",
+    });
   };
 
   const handleDeletePost = async (postId) => {
@@ -198,8 +242,8 @@ export default function PostsTab() {
                 type="text"
                 placeholder="Search..."
                 className="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
-                //value={searchQuery}
-                //onChange={(e) => setSearchQuery(e.target.value)}
+              //value={searchQuery}
+              //onChange={(e) => setSearchQuery(e.target.value)}
               />
               <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             </div>
@@ -226,25 +270,6 @@ export default function PostsTab() {
               <h3 className="text-xl font-bold mb-4 text-center text-gray-800 border-b pb-4">
                 Add New Post
               </h3>
-
-              {/* <select
-                value={newPost.userId}
-                onChange={(e) =>
-                  setNewPost({
-                    ...newPost,
-                    userId: parseInt(e.target.value, 10),
-                  })
-                }
-                className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-              >
-                <option value="">Select User</option>
-                {users.map((user) => (
-                  <option key={user.id} value={user.id}>
-                    {user.name}
-                  </option>
-                ))}
-              </select> */}
-
               <select
                 value={newPost.categoryId}
                 onChange={(e) =>
@@ -316,15 +341,7 @@ export default function PostsTab() {
                     type="file"
                     accept="image/*"
                     className="hidden"
-                    onChange={(e) => {
-                      if (e.target.files && e.target.files[0]) {
-                        const reader = new FileReader();
-                        reader.onload = () => {
-                          setNewPost({ ...newPost, image: reader.result });
-                        };
-                        reader.readAsDataURL(e.target.files[0]);
-                      }
-                    }}
+                    onChange={(e) => handleUpload(e, setNewPost)}
                   />
                 </div>
               </div>
@@ -431,15 +448,7 @@ export default function PostsTab() {
                   type="file"
                   accept="image/*"
                   className="hidden"
-                  onChange={(e) => {
-                    if (e.target.files && e.target.files[0]) {
-                      const reader = new FileReader();
-                      reader.onload = () => {
-                        setPostData({ ...postData, image: reader.result });
-                      };
-                      reader.readAsDataURL(e.target.files[0]);
-                    }
-                  }}
+                  onChange={(e) => handleUpload(e, setPostData)}
                 />
               </div>
             </div>
