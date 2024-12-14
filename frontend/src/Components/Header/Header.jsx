@@ -88,5 +88,5 @@ export default function Header() {
 
       <ModalCreatePost show={showPostModal} handleClose={handleClose} />
     </header>
-  );
-};
+  )
+}

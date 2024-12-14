@@ -35,14 +35,14 @@ const Comment = ({children, userName, userId, message, avatar, likes, commentId,
   return (
     <div className={`Comment mt-1 ps-3 ${showMore && 'border-start'}`} >
       <div className='d-flex gap-2'>
-        <Link to={`/@${userId}`}>
+        <Link to={`/@${userId}`} className='d-flex justify-content-center align-items-center'>
           <Avatar normal link={avatar} />
         </Link>
         <div>
           <div>
-            <p className='fw-medium'>{userName}</p>
+            <p className='fw-medium fs-6'>{userName}</p>
           </div>
-          <div>
+          <div className='fs-6'>
             <p>{message}</p>
           </div>
           <div className='d-flex gap-4'>
@@ -55,11 +55,11 @@ const Comment = ({children, userName, userId, message, avatar, likes, commentId,
             </div>
             {
               !disableCommentButton && 
-              <div onClick={handleOpenComment}><GoComment /></div>
+              <div className='d-flex align-items-center' onClick={handleOpenComment}><GoComment /></div>
             }
             {
               children ? 
-              <div onClick={()=>setShowMore(!showMore)}>
+              <div className='fs-6' onClick={()=>setShowMore(!showMore)}>
                 {
                   showMore ? (
                     <div className='d-flex align-items-center gap-1'>

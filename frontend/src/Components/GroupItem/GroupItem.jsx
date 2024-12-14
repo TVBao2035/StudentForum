@@ -16,7 +16,7 @@ import { useSelector } from 'react-redux';
                   <Avatar big link={image} />
               </div>
               <div className='d-flex gap-2 flex-column'>
-                  <h5 className='m-0 group_name'>{group.name}</h5>
+                  <h5 className='m-0 group_name fs-5 fw-medium'>{group.name}</h5>
                   <p className='group_description'>{group.description}</p>
               </div>
           </div>

@@ -106,7 +106,7 @@ export default function Setting() {
               <MdOutlineKeyboardArrowRight />
             </div>
           </Link>
-          <hr />
+          <hr className='my-2' />
         <Navbar listItems={listItems} />
       </div>
     </div>

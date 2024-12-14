@@ -11,5 +11,4 @@ const getTimeNow = () => {
     let time = `${hour}:${minute} ${day}/${month}/${currentDate.getFullYear()}`;
     return time;
 }
-
 module.exports = getTimeNow;
