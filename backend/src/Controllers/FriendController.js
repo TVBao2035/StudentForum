@@ -96,6 +96,23 @@ class FriendController{
         }
     }
 
+    async cancelFriendInvitation(req, res){
+        try {
+            const { userId, friendId } = req.query;
+            if (!userId || !friendId) {
+                return res.status(404).json({
+                    status: 404,
+                    message: `Dữ liệu không hợp lệ`
+                })
+            }
+            const data = await FriendService.cancelFriendInvitation({ userId, friendId })
+            res.status(200).json(data);
+        } catch (error) {
+            console.log(error);
+            res.status(400).json(error);
+        }
+    }
+
 }
 
 module.exports = new FriendController;

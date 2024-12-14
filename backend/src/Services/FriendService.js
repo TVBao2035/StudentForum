@@ -2,7 +2,8 @@ const { Op } = require("sequelize")
 const db = require("../Models");
 const checkUser = require("../Common/checks/checkUser");
 const checkInvitation = require("../Common/checks/checkInvitation");
-const { message } = require("../DTOs/UserDTO/createUserDTO");
+const createHistory = require('../Common/create/createHistory');
+const getTimeNow = require("../Helpers/getTimeNow");
 
 class FriendService{
     deleteInvitation(userId, friendId){
@@ -33,9 +34,19 @@ class FriendService{
                         message: `Lời mời không tồn tại`
                     })
                 
-                    invitation.isDelete = true;
-                    await invitation.save();
-
+                invitation.isDelete = true;
+                await invitation.save();
+               
+                await createHistory({
+                    userId: invitation.friendId,
+                    title: `Không chấp nhận yêu cầu kết bạn `,
+                    content: `Bạn không chấp nhận yêu câu kết bạn với ${user.name} lúc ${getTimeNow()}`
+                });
+                await createHistory({
+                    userId: invitation.userId,
+                    title: `Yêu cầu kết bạn bị trừ chối`,
+                    content: `${friend.name} đã hủy yêu câu kết bạn lúc ${getTimeNow()}`
+                })
                     resolve({
                         status: 200,
                         message: `Xóa lời mời thành công`
@@ -98,7 +109,16 @@ class FriendService{
 
                 await userInvitation.save();
                 await friendInvitation.save();
-
+                await createHistory({
+                    userId: userInvitation.userId,
+                    title: `Xóa kết bạn `,
+                    content: ` Bạn xóa kết bạn với ${friend.name} lúc ${getTimeNow()}`
+                });
+                await createHistory({
+                    userId: userInvitation.friendId,
+                    title: `Xóa kết bạn`,
+                    content: `${user.name} đã xóa kết bạn với bạn lúc ${getTimeNow()}`
+                })
                 resolve({
                     status: 200,
                     message: `Xóa bạn thành công`
@@ -221,6 +241,17 @@ class FriendService{
                         message: `Lời Mời Kết Bạn Đã Tồn Tại`
                     }) 
                 }
+
+                await createHistory({
+                    userId: invitation.userId,
+                    title: `Bạn đã gửi yêu cầu kết bạn `,
+                    content: `Bạn đã gửi yêu câu kết bạn ${friend.name} lúc ${getTimeNow()}`
+                });
+                await createHistory({
+                    userId: invitation.friendId,
+                    title: `Lời mời kết bạn`,
+                    content: `${user.name} đã gửi yêu câu kết bạn tới bạn lúc ${getTimeNow()}`
+                })
                 // if invitation has deleted then update isDelete = false and isAccept = false;
                 if(invitation && invitation.isDelete){
                     invitation.isDelete = false;
@@ -235,6 +266,7 @@ class FriendService{
                 await db.Friend.create({
                     friendId, userId
                 });
+              
                 resolve({
                     status: 200,
                     message: `Tạo Lời Mời Kết Bạn Thành Công`
@@ -309,6 +341,16 @@ class FriendService{
                         message: `Lời Mời Kết Bạn Đã Tồn Tại`
                     })
                 }
+                await createHistory({
+                    userId: user.id,
+                    title: `Chấp nhận yêu cầu kết bạn `,
+                    content: ` Bạn đã chấp nhận yêu câu kết bạn với ${friend.name} lúc ${getTimeNow()}`
+                });
+                await createHistory({
+                    userId: friend.id,
+                    title: `Yêu cầu kết bạn được chấp nhận`,
+                    content: `${user.name} đã chấp nhận yêu câu kết bạn với bạn lúc ${getTimeNow()}`
+                })
                 // check again !!!!!!!!!
                 if (isInvitationExisting && isInvitationExisting.isDelete === false && isInvitationExisting.isAccept === false) {
                     isInvitationExisting.isAccept = true;
@@ -354,14 +396,45 @@ class FriendService{
         })
     }
 
-    deleteFriendInvitation(id){
+    cancelFriendInvitation({userId, friendId}){
         return new Promise(async(resolve, reject) => {
             try {
-                const invitation = await checkInvitation(id);
-                if(invitation.status === 404) return resolve(invitation);
+                const user = await checkUser(userId);
+                if (user?.status === 404) {
+                    return resolve(user);
+                }
 
+                const friend = await checkUser(friendId);
+                if (friend?.status === 404) {
+                    return resolve(user);
+                }
+
+                const invitation = await db.Friend.findOne({
+                    where: {
+                        [Op.and]: [
+                            { userId },
+                            { friendId },
+                            { isDelete: false }
+                        ]
+                    }
+                })
+                if (!invitation)
+                    return resolve({
+                        status: 404,
+                        message: `Lời mời không tồn tại`
+                    })
                 invitation.isDelete = true;
                 await invitation.save();
+                await createHistory({
+                    userId: invitation.userId,
+                    title: `Thu hồi yêu cầu kết bạn `,
+                    content: ` Bạn đã thu hồi yêu câu kết bạn với ${friend.name} lúc ${getTimeNow()}`
+                });
+                await createHistory({
+                    userId: invitation.friendId,
+                    title: `Thu hồi yêu cầu kết bạn`,
+                    content: `${user.name} đã thu hồi yêu câu kết bạn với bạn lúc ${getTimeNow()}`
+                })
                 resolve({
                     status: 200,
                     message: `Xóa Lời Mời Thành Công`

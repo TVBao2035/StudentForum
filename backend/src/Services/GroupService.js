@@ -1,9 +1,9 @@
-const { Op, col } = require('sequelize');
+const { Op } = require('sequelize');
 const db = require('../Models');
 const checkGroup = require('../Common/checks/checktGroup');
 const checkUser = require('../Common/checks/checkUser');
-const { message } = require('../DTOs/GroupDTO/createGroupDTO');
-
+const getTimeNow = require('../Helpers/getTimeNow');
+const createHistory = require('../Common/create/createHistory');
 class GroupService {
     updateStateInvitation(invitationId){
         return new Promise(async (resolve, reject) => {
@@ -16,7 +16,11 @@ class GroupService {
                         ]
                     }
                 });
-
+                const group = await db.Group.findOne({
+                    where: {
+                        id: invitation.groupId
+                    }
+                })
                 if(!invitation) return resolve({
                     status: 404,
                     message: 'Không tìm thấy lời mời vào nhóm với ID: ' + invitationId,
@@ -24,6 +28,11 @@ class GroupService {
 
                 invitation.isAccept = true;
                 await invitation.save();
+                await createHistory({
+                    userId: invitation.userId,
+                    title: `Yêu cầu tham gia nhóm được chấp nhận `,
+                    content: `Bạn đã là thành viên của nhóm ${group.name} lúc ${getTimeNow()}`
+                });
                 resolve({
                     status: 200,
                     message: `Cập nhật trạng thái của lời mời vào nhóm thành công`
@@ -49,7 +58,11 @@ class GroupService {
                         ]
                     }
                 })
-
+                const group = await db.Group.findOne({
+                    where: {
+                        id: invitation.groupId
+                    }
+                })
                 if(!invitation) return resolve({
                     status: 404,
                     message: `Không tìm thấy lời mời với ID : ${invitationId}`
@@ -57,6 +70,11 @@ class GroupService {
 
                 invitation.isDelete = true;
                 await invitation.save();
+                await createHistory({
+                    userId: invitation.userId,
+                    title: `Huỷ yêu cầu tham gia nhóm `,
+                    content: `Bạn hủy gửi yêu cầu tham nhóm ${group.name} lúc ${getTimeNow()}`
+                });
                 resolve({
                     status: 200,
                     message: `Xóa lời mời vào nhóm thành công`
@@ -79,7 +97,11 @@ class GroupService {
                         groupId: invitation.groupId
                     }
                 });
-
+                const group = await db.Group.findOne({
+                    where: {
+                        id: groupuser.groupId
+                    }
+                })
                 if(groupuser && groupuser?.isDelete === false){
                     return resolve({
                         status: 404,
@@ -89,6 +111,11 @@ class GroupService {
                     groupuser.isDelete = false;
                     groupuser.isAccept = false;
                     await groupuser.save();
+                    await createHistory({
+                        userId: invitation.userId,
+                        title: `Gửi yêu cầu tham gia nhóm `,
+                        content: `Bạn đã gửi yêu cầu tham nhóm ${group.name} lúc ${getTimeNow()}`
+                    });
                     return resolve({
                         status: 200,
                         message: 'Tạo lời mời tham gia nhóm thành công',
@@ -97,8 +124,14 @@ class GroupService {
                 }
 
                 const data = await db.GroupUser.create(invitation);
+          
                 data.isAccept = false;
                 await data.save();
+                await createHistory({
+                    userId: invitation.userId,
+                    title: `Gửi yêu cầu tham gia nhóm `,
+                    content: `Bạn đã gửi yêu cầu tham nhóm ${group.name} lúc ${getTimeNow()}`
+                });
                 resolve({
                     status: 200,
                     message: 'Tạo lời mời tham gia nhóm thành công',
@@ -164,6 +197,11 @@ class GroupService {
                     status: 200,
                     message: `Cập nhật nhóm thành công`
                 })
+                await createHistory({
+                    userId: group.userId,
+                    title: `Chỉnh sửa thông tin nhóm `,
+                    content: `Bạn đã chỉnh sửa thông tin nhóm ${group.name} lúc ${getTimeNow()}`
+                });
             } catch (error) {
                 reject({
                     status: 400,
@@ -180,6 +218,11 @@ class GroupService {
                 if(group.status === 404) return resolve(group);
                 group.isDelete = true;
                 await group.save();
+                await createHistory({
+                    userId: group.userId,
+                    title: `Xóa nhóm `,
+                    content: `Bạn đã xóa nhóm ${group.name} lúc ${getTimeNow()}`
+                });
                 resolve({
                     status: 200,
                     message: `Xoá Nhóm Thành Công`
@@ -202,6 +245,11 @@ class GroupService {
                     groupId: newGroup.id,
                     isAccept: true
                 })
+                await createHistory({
+                    userId: group.userId,
+                    title: `Tạo nhóm thành công`,
+                    content: `Bạn đã tạo nhóm ${group.name} thành công lúc ${getTimeNow()}`
+                });
                 resolve({
                     status: 200,
                     message: `Tạo Nhóm Thành Công`

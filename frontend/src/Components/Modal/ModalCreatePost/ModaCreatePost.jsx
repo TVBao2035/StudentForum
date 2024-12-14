@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import { Editor } from '@tinymce/tinymce-react';
-import { getAll } from '../../../API/CategoryAPI';
+import {  getAllCategories } from '../../../API/CategoryAPI';
 import { createPost } from '../../../API/PostAPI';
 import { useSelector } from 'react-redux';
 import apiUploadImage from '../../../Hooks/apiUploadImage';
@@ -24,7 +24,7 @@ const ModalCreatePost = ({ show, handleClose }) => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await getAll();
+        const response = await getAllCategories();
 
         setCategories(response.data);
       } catch (error) {

@@ -17,6 +17,7 @@ const GroupDetail = () => {
   const [inforGroup, setInforGroup] = useState();
   const [groupPosts, setGroupPosts] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
+  
   const getGroup = async (groupId) => {
     let res = await getDetailGroup(groupId);
     setInforGroup(res.data);
@@ -198,7 +199,7 @@ const GroupDetail = () => {
                   id={member.invitation.id}
                   onClick={inforGroup?.captain.id !== member.invitation.id
                     && inforGroup?.captain.id === user?.id ?
-                    () => handleDeleteMember(user.id) : () => { }}
+                    () => handleDeleteMember(member.invitation.id) : () => { }}
                 />)
               }
             </FriendListPage>

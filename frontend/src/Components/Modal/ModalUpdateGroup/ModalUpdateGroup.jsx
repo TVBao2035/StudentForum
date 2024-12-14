@@ -7,6 +7,7 @@ import { closeModalUpdateGroup } from '../../../Redux/modalGroupSlice';
 import { updateGroup } from '../../../API/GroupAPI';
 import Avatar from '../../Avatar';
 import apiUploadImage from '../../../Hooks/apiUploadImage';
+import swalApp from '../../../Helpers/swalApp';
 
 
 const initMessageList = {
@@ -64,7 +65,7 @@ const ModalUpdateGroup = () => {
         let res = await apiUploadImage(formData);
         data.image = res.data.url;
       } catch (error) {
-        alert("Lỗi upload ảnh");
+        swalApp('error',"Lỗi upload ảnh");
         return;
       }
     }
@@ -72,7 +73,7 @@ const ModalUpdateGroup = () => {
 
     let res = await updateGroup(data);
     if(res.status !== 200){
-      alert("Error");
+      swalApp('error', res.message);
       return;
     }
 
