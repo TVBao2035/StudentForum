@@ -7,12 +7,13 @@ import timeFormat from "../../Helpers/timeFormat";
 import { getAllCategories } from "../../API/CategoryAPI";
 import { AiOutlineLike } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa6";
-import ContaierComment from "../../Components/Comment/ContaierComment";
+
 import { getAllCommentByPostId } from "../../API/CommentAPI";
 import { MdEdit, MdOutlineExitToApp, MdDeleteForever } from "react-icons/md";
 
 import swalApp from "../../Helpers/swalApp";
 import apiUploadImage from "../../Hooks/apiUploadImage";
+import ContaierComment from "../../Components/Comment/ContainerComment";
 
 var formData = new FormData();
 var count = 0;
