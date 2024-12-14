@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer, useRef } from "react";
 import Swal from "sweetalert2";
 import Modal from "react-modal";
 import { useSelector } from "react-redux";
@@ -12,6 +12,7 @@ import {
   deleteGroup,
 } from "../../API/AdminAPI";
 import apiUploadImage from "../../Hooks/apiUploadImage";
+import { useDebounce } from "../../Hooks";
 
 var formData = new FormData();
 
@@ -36,6 +37,9 @@ export default function GroupTab() {
     image: "",
   });
 
+  const [search, setSearch] = useState("");
+  const debounceValue = useDebounce(search, 800);
+  const inputRef = useRef(null);
   const [users, setUsers] = useState([]);
 
   const fetchUsers = async () => {
@@ -50,10 +54,10 @@ export default function GroupTab() {
     }
   };
 
-  const fetchGroups = async () => {
+  const fetchGroups = async (search="") => {
     setLoading(true);
     try {
-      const respone = await getAllGroup();
+      const respone = await getAllGroup(search);
       setGroups(respone.data);
     } catch (err) {
       setError("Failed to load groups.");
@@ -66,7 +70,19 @@ export default function GroupTab() {
     fetchUsers();
     fetchGroups();
   }, []);
-  {/* EDIT UPLOAD IMAGE */ }
+  
+  useEffect(()=>{
+    if(debounceValue.trim().length === 0){
+      fetchGroups();
+      return;
+    }
+
+    fetchGroups(debounceValue);
+  }, [debounceValue]);
+
+  useEffect(()=>{
+    inputRef.current?.focus();
+  }, [groups])
   const handleAddGroup = async () => {
     if (!userId) {
       Swal.fire("Error", "UserId not found. Please login again!", "error");
@@ -237,8 +253,9 @@ export default function GroupTab() {
                 type="text"
                 placeholder="Search..."
                 className="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
-              //value={searchQuery}
-              //onChange={(e) => setSearchQuery(e.target.value)}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                ref={inputRef}
               />
               <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             </div>

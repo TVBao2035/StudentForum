@@ -125,7 +125,8 @@ class GroupController{
 
     async getAll(req, res){
         try {
-            const data = await GroupService.getAll();
+            const search = req.query.search;
+            const data = await GroupService.getAll(search);
             res.status(200).json(data);
         } catch (error) {
             console.log(error);

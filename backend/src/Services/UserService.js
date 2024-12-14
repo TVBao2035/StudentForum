@@ -44,12 +44,32 @@ class UserService{
         })
     }
 
-    getAll(){
+    getAll(search){
         return new Promise(async (resolve, reject) => {
             try {
+                var searchName = {}
+                if(search.trim().length !== 0){
+                    searchName = {
+                        [Op.or]:[
+                            {
+                                name: {[Op.like]:`%${search.trim()}%`}
+                            },
+                            {
+                                email: { [Op.like]: `%${search.trim()}%` }
+                            },
+                            {
+                                phone: { [Op.like]: `%${search.trim()}%` }
+                            }
+                        ]
+                      
+                    }
+                }
                 const data = await db.User.findAll({
                     where: {
-                        isDelete: false
+                        [Op.and]:[
+                            {isDelete: false},
+                            searchName
+                        ]
                     },
                     attributes: {
                         exclude: ['password', 'isDelete']

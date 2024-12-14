@@ -14,8 +14,8 @@ export const signUp = async ({ name, email, phone, password }) => {
     return await axios.post('/signUp', { name, email, phone, password });
 }
 
-export const getAll = async () => {
-    return await axios.get('');
+export const getAll = async (search="") => {
+    return await axios.get(`?search=${search}`);
 }
 
 export const getDetails = async (userId) => {

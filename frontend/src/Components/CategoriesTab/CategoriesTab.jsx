@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Swal from "sweetalert2";
 import Modal from "react-modal";
 import CategoryManager from "../CategoryManager";
@@ -9,6 +9,7 @@ import {
   updateCategory,
   deleteCategory,
 } from "../../API/AdminAPI";
+import { useDebounce } from "../../Hooks";
 
 export default function CategoriesTab() {
   const [categories, setCategories] = useState([]);
@@ -19,6 +20,11 @@ export default function CategoriesTab() {
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [categoryName, setCategoryName] = useState("");
+  const inputRef = useRef(null);
+  const [search, setSearch] = useState("");
+
+  const debounceValue = useDebounce(search, 800);
+
 
   const availableColors = [
     "bg-blue-500",
@@ -27,10 +33,10 @@ export default function CategoriesTab() {
     "bg-red-500",
   ];
 
-  const fetchCategories = async () => {
+  const fetchCategories = async (search="") => {
     setLoading(true);
     try {
-      const response = await getAllCategory();
+      const response = await getAllCategory(search);
       if (Array.isArray(response.data)) {
         const updatedCategories = response.data
           .filter((category) => category && category.id)
@@ -62,6 +68,17 @@ export default function CategoriesTab() {
     fetchCategories();
   }, []);
 
+  useEffect(()=>{
+    if(debounceValue.trim().length === 0){
+      fetchCategories();
+      return;
+    }
+    fetchCategories(debounceValue);
+  }, [debounceValue]);
+
+  useEffect(()=>{
+    inputRef.current?.focus();
+  }, [categories])
   const handleAddCategory = async () => {
     if (!newCategory.name.trim()) {
       Swal.fire("Error", "Category name cannot be empty.", "error");
@@ -162,9 +179,10 @@ export default function CategoriesTab() {
               <input
                 type="text"
                 placeholder="Search..."
+                ref={inputRef}
                 className="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
-                //value={searchQuery}
-                //onChange={(e) => setSearchQuery(e.target.value)}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
               />
               <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             </div>

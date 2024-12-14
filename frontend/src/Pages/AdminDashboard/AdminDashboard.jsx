@@ -15,35 +15,31 @@ export default function AdminDashboard() {
         <div className="flex space-x-4 p-4 bg-white shadow-sm">
           <button
             onClick={() => setActiveTab("users")}
-            className={`px-4 py-2 rounded ${
-              activeTab === "users" ? "bg-indigo-600 text-white" : "bg-gray-200"
-            }`}
+            className={`px-4 py-2 rounded ${activeTab === "users" ? "bg-indigo-600 text-white" : "bg-gray-200"
+              }`}
           >
             Users
           </button>
           <button
             onClick={() => setActiveTab("posts")}
-            className={`px-4 py-2 rounded ${
-              activeTab === "posts" ? "bg-indigo-600 text-white" : "bg-gray-200"
-            }`}
+            className={`px-4 py-2 rounded ${activeTab === "posts" ? "bg-indigo-600 text-white" : "bg-gray-200"
+              }`}
           >
             Posts
           </button>
           <button
             onClick={() => setActiveTab("categories")}
-            className={`px-4 py-2 rounded ${
-              activeTab === "categories"
-                ? "bg-indigo-600 text-white"
-                : "bg-gray-200"
-            }`}
+            className={`px-4 py-2 rounded ${activeTab === "categories"
+              ? "bg-indigo-600 text-white"
+              : "bg-gray-200"
+              }`}
           >
             Categories
           </button>
           <button
             onClick={() => setActiveTab("groups")}
-            className={`px-4 py-2 rounded ${
-              activeTab === "groups" ? "bg-indigo-600 text-white" : "bg-gray-200"
-            }`}
+            className={`px-4 py-2 rounded ${activeTab === "groups" ? "bg-indigo-600 text-white" : "bg-gray-200"
+              }`}
           >
             Groups
           </button>

@@ -196,14 +196,21 @@ class PostService {
         })
     }
 
-    getAll() {
+    getAll(search) {
         return new Promise(async (resolve, reject) => {
             try {
+                var searchUser = {}
+                if (search.trim().length !== 0) {
+                    searchUser = {
+                        name: { [Op.like]: `%${search.trim()}%` }
+                    }
+                }
                 const data = await db.Post.findAll({
                     where: {
                         [Op.and]: [
                             {isDelete: false},
-                            {groupId: null}
+                            {groupId: null},
+                            
                         ]
                     },
                     attributes: {
@@ -212,7 +219,18 @@ class PostService {
                     order: [
                         ['createdAt', "DESC"],
                     ],
-                    include: postInclude
+                    include: [
+                        ...postInclude,
+                        {
+                            model: db.User,
+                            where: {
+                                [Op.and]:[
+                                    {isDelete: false},
+                                    searchUser
+                                ]
+                            }
+                        }
+                    ]
 
                 })
 

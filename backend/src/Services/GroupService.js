@@ -334,9 +334,15 @@ class GroupService {
         })
     }
 
-    getAll() {
+    getAll(search) {
         return new Promise(async (resolve, reject) => {
             try {
+                var searchName = {};
+                if(search.trim().length !== 0){
+                    searchName = {
+                        name:{ [Op.like]: `%${search.trim()}%`}
+                    }
+                }
                 const data = await db.Group.findAll({
                     attributes: ['id', 'name', 'description', "image"],
                     include: [
@@ -344,7 +350,7 @@ class GroupService {
                             model: db.GroupUser, as: 'groupuser', 
                             attributes: ['userId', 'isAccept', 'id'],
                             where: {
-                                isDelete: false
+                                isDelete: false 
                             },
                             include: { 
                                         model: db.User, as: "invitation", 
@@ -359,7 +365,10 @@ class GroupService {
                       
                     ],
                     where: {
-                        isDelete: false
+                        [Op.and]: [
+                            { isDelete: false },
+                            searchName
+                        ]
 
                     }
                 });

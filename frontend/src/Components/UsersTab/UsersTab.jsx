@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import Swal from "sweetalert2";
 import Modal from "react-modal";
 import UsersTable from "../UsersTable";
@@ -10,11 +10,15 @@ import {
   deleteUser,
 } from "../../API/AdminAPI";
 import apiUploadImage from "../../Hooks/apiUploadImage";
+import { useDebounce } from "../../Hooks";
+import Input from "../Input";
 
 
 var formData = new FormData();
 export default function UsersTab() {
+  const inputRef = useRef(null);
   const [users, setUsers] = useState([]);
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
@@ -35,10 +39,13 @@ export default function UsersTab() {
     avatar: "",
   });
 
-  const fetchUsers = async () => {
+  const debounceValue = useDebounce(search, 800);
+
+  const fetchUsers = async (search) => {
     setLoading(true);
+ 
     try {
-      const respone = await getAllUser();
+      const respone = await getAllUser(search);
       setUsers(respone.data);
     } catch (err) {
       setError("Failed to load users.");
@@ -51,7 +58,20 @@ export default function UsersTab() {
     fetchUsers();
   }, []);
 
+  useEffect(() => {
+    if(debounceValue.trim().length === 0) {
+      fetchUsers();
+      return;
+    }
 
+    fetchUsers(debounceValue);
+
+  }, [debounceValue]);
+
+
+  useEffect(()=>{
+    inputRef.current?.focus();
+  },[users])
   const handleUpload = async (event, setData) => {
     formData = new FormData();
     formData.append("file", event.target.files[0]);
@@ -65,6 +85,13 @@ export default function UsersTab() {
       }
     })
   }
+
+
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+   
+  }
+
 
   const handleAddUser = async () => {
     if (!newUser.email || !newUser.phone || !newUser.password) {
@@ -170,7 +197,7 @@ export default function UsersTab() {
       setError("Failed to update user!");
     }
   };
-
+ 
   const closeModal = () => {
     console.log(userData);
     setIsUserModalOpen(false);
@@ -216,6 +243,9 @@ export default function UsersTab() {
               <input
                 type="text"
                 placeholder="Search..."
+                onChange={handleSearch}
+                ref={inputRef}
+                value={search}
                 className="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
                 //value={searchQuery}
                 //onChange={(e) => setSearchQuery(e.target.value)}

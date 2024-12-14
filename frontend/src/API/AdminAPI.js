@@ -1,8 +1,8 @@
 import axios from "../Configs/axios.js";
 
 //User
-export const getAllUser = () => {
-  return axios.get("");
+export const getAllUser = (search="") => {
+  return axios.get(`?search=${search}`);
 };
 
 export const createUser = async ({ name, email, phone, avatar, password }) => {
@@ -18,8 +18,8 @@ export const deleteUser = async (userId) => {
 };
 
 //Post
-export const getAllPost = async () => {
-  return await axios.get(`/post`);
+export const getAllPost = async (search="") => {
+  return await axios.get(`/post?search=${search}`);
 };
 
 export const createPost = async ({
@@ -47,8 +47,8 @@ export const deletePost = async (postId) => {
 };
 
 //Category
-export const getAllCategory = async () => {
-  return await axios.get(`/category`);
+export const getAllCategory = async (search="") => {
+  return await axios.get(`/category?search=${search}`);
 };
 
 export const createCategory = async ({ name }) => {
@@ -65,8 +65,8 @@ export const deleteCategory = async (categoryId) => {
 
 //Group
 
-export const getAllGroup = async () => {
-  return await axios.get(`/group`);
+export const getAllGroup = async (search="") => {
+  return await axios.get(`/group?search=${search}`);
 };
 
 export const createGroup = async ({ name, description, image, userId }) => {

@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 export default function Notification() {
   const user = useSelector(state => state.user);
   const [listHistories, setListHistories] = useState([]);
-
+  const [loading, setLoading] = useState(false);
   const getHistory = async (userId) => {
     let res = await getAllHistoryByUserId(userId);
     if(res.status !== 200){
@@ -25,8 +25,13 @@ export default function Notification() {
     getHistory(user.id);
   }
   useEffect(() => {
-    getHistory(user.id);
-  }, [user.id])
+    if(user.id){
+      getHistory(user.id);
+    }
+    setLoading(true);
+  }, [user.id]);
+
+  if(!user || !loading) return "Loading........";
   return (
     <div className='Notification px-5 mx-5'>
       <div className='container px-5 mx-5'>

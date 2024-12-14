@@ -1,7 +1,7 @@
 import axios from '../Configs/axios';
 
-export  const getAllPost = async() => {
-    return await axios.get(`/post`);
+export  const getAllPost = async(search="") => {
+    return await axios.get(`/post?search=${search}`);
 }
 export const getAllPostByUserId = async (userId) => {
     return await axios.get(`/post/user/${userId}`);

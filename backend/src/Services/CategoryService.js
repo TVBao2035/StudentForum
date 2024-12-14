@@ -84,13 +84,22 @@ class CategoryService{
         })
     }
 
-    getAll(){
+    getAll(search){
         return new Promise(async(resolve, reject) => {
             try {
+                var searchName = {}
+                if (search.trim().length !== 0) {
+                    searchName = {
+                        name: { [Op.like]: `%${search.trim()}%` }
+                    }
+                }
                 const data = await db.Categorys.findAll({
                     attributes: ['id', 'name'],
                     where: {
-                        isDelete: false
+                        [Op.and]:[
+                            {isDelete:false},
+                            searchName
+                        ]
                     }
                 });
 
