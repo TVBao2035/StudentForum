@@ -33,7 +33,7 @@ export default function Login() {
   }
 
   const handleSubmit = async () => {
-    console.log(infor);
+
     let checkNotError = Object.values(message).every(e => e.length === 0);
     if (checkNotError) {
       let res = await signIn(infor);
@@ -72,7 +72,7 @@ export default function Login() {
     }
   }
   useEffect(()=> {
-    localStorage.clear(process.env.REACT_APP_LOGIN_LOCAL_STORAGE);
+    localStorage.removeItem(process.env.REACT_APP_LOGIN_LOCAL_STORAGE);
   }, []);
   
   return (

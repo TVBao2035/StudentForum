@@ -69,7 +69,7 @@ export default function Header() {
         </div>
 
         <div className="right-section d-flex align-items-center">
-          <span className="user-greeting d-none d-md-block me-3">Xin chào <strong>{user.name}</strong></span>
+          <span className="user-greeting d-none d-md-block me-3 text-dark">Xin chào <strong>{user.name}</strong></span>
 
           <div className="nav-link me-3" onClick={handleShow} style={{ cursor: 'pointer' }}>
             <IoCreate className="icon-size" size={24} />

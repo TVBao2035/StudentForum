@@ -7,6 +7,7 @@ import apiUploadImage from "../../Hooks/apiUploadImage";
 import { useNavigate } from "react-router-dom";
 import { setDataMain } from "../../Redux/userSlice";
 import { Input, Loading } from "../../Components";
+import handleColorApp from "../../Helpers/handleColorApp";
 
 var formData = new FormData();
 export default function Account() {
@@ -228,7 +229,7 @@ export default function Account() {
                                                 </div>
                                                 <div className="col-12 mt-2">
                                                     <div className='d-flex gap-2 mb-3'>
-                                                        <select className='col border-1 px-2 py-1' onChange={e => setTypeSelect(e.target.value)} value={typeSelect}>
+                                                        <select className='form-control col text-dark border-1 px-2 py-1' onChange={e => setTypeSelect(e.target.value)} value={typeSelect}>
                                                             <option value="0">Link</option>
                                                             <option value="1">File</option>
                                                         </select>
@@ -242,7 +243,7 @@ export default function Account() {
                                                                     name="avatar"
                                                                     id="avatar"
                                                                     style={{width: "100%"}}
-                                                                    className="border-1 px-2 py-1"
+                                                                    className="border-1 px-2 py-1 form-control"
                                                                     onChange={handleInputChange}
                                                                 />
                                                             </div>

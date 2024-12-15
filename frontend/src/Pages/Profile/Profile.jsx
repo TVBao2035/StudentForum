@@ -136,7 +136,7 @@ export default function Profile() {
                         </Link>
                       </div>
                     :
-                    userDetails?.isFriend ? 
+                        userDetails?.isOwner &&  userDetails?.isFriend ? 
                       <div className='d-flex gap-2'>
                         <button 
                         className='btn btn-outline-primary fw-medium d-flex align-items-center gap-1'

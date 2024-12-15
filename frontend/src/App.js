@@ -13,6 +13,7 @@ import { setLoading } from './Redux/loadingSlice';
 import {  Loading, UsersTable } from './Components';
 
 import { setDataMain } from './Redux/userSlice';
+import handleColorApp from './Helpers/handleColorApp';
 
 
 
@@ -45,7 +46,7 @@ function App() {
     {
       fetchApi();
       dispatch(setLoading(true));
-
+      handleColorApp();
     }
   }, []);
   return (

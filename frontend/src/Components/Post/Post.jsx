@@ -1,6 +1,6 @@
 import './PostStyle.scss';
 import Avatar from '../Avatar';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { AiOutlineLike } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa6";
@@ -12,6 +12,7 @@ import ContaierComment from '../Comment/ContainerComment';
 import { changeLike, resetComment, setComment } from '../../Redux/postSlice';
 import SendMessage from '../SendMessage';
 import { createLike, deleteLike } from '../../API/LikeAPI';
+import handleColorApp from '../../Helpers/handleColorApp';
 
 export default function Post(
     { id, userId, name, createdAt, content, avatar, image, category, like,...style}
@@ -44,7 +45,6 @@ export default function Post(
         }
         setIsOpenComment(!isOpenComment);
     }
-    
   return (
     <div className='Post d-flex flex-column align-items-center'>
         <div className={` overflow-hidden block_main border p-2 pb-0 rounded-3 ${Object.keys(style)}`}>
@@ -58,9 +58,9 @@ export default function Post(
                     <div>
                         <Link 
                             to={`/@${userId}`} 
-                            className='fw-medium text-decoration-none text-dark'
+                            className='fw-medium text-decoration-none'
                         >{name}</Link>
-                        <p className='block_time text-secondary'>{timeFormat(createdAt)}</p>
+                        <p className='block_time'>{timeFormat(createdAt)}</p>
                     </div>
                 </div>
                 {

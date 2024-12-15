@@ -114,8 +114,8 @@ const GroupDetail = () => {
   ])
   return (
     <div className='GroupDetail'>
-      <header className='d-flex gap-2 align-items-center justify-content-between'>
-          <div className='d-flex  gap-2 align-items-center'>
+      <header className='d-flex gap-2 align-items-center '>
+          <div className='d-flex col gap-2 align-items-center'>
             <div>
               <Avatar bigger link={inforGroup?.image} />
             </div>
@@ -148,20 +148,22 @@ const GroupDetail = () => {
           </div>
           {
             inforGroup?.captain.id === user?.id &&
-            <select onChange={(e)=> handleSelect(e)}>
-              <option value={0}>
-                <p>Cài đặt</p>
-              </option>
-              <option value={1}>
-                  <p>Chỉnh sửa thông tin</p>
-              </option>
-              <option value={2}>
-                  <p>Xoá nhóm</p>
-              </option>
-            </select>
+            <div className='col-3'>
+              <select className='form-control text-dark' onChange={(e)=> handleSelect(e)}>
+                <option value={0}>
+                  <p>Cài đặt</p>
+                </option>
+                <option value={1}>
+                    <p>Chỉnh sửa thông tin</p>
+                </option>
+                <option value={2}>
+                    <p>Xoá nhóm</p>
+                </option>
+              </select>
+            </div>
           }
       </header>
-      <body className='mt-3'>
+      <main className='mt-3'>
         <div className='mb-3'>
           <Navbar active={pageNumber} listItems={listItems} horizontal /> 
         </div>
@@ -206,7 +208,7 @@ const GroupDetail = () => {
           }
 
         </div>
-      </body>
+      </main>
       <footer className='mb-4'></footer>
     </div>
   )

@@ -15,7 +15,7 @@ export default function Navbar({ active=null, listItems, ...style }) {
                   <Type 
                       to={item?.to} 
                       key={`item-${index}`} 
-                      className={`item d-flex justify-content-between gap-2 fs-5 text-secondary ${active===item.id ? 'active' : ''}`}
+                      className={`item d-flex justify-content-between gap-2 fs-5 ${active===item.id ? 'active' : ''}`}
                       onClick={item.onClick ? item.onClick : ()=>{}}
                   >
                       <div className='d-flex align-items-center gap-2'>
