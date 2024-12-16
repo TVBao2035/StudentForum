@@ -28,7 +28,7 @@ const GroupLayout = () => {
         <div>
             <Header />
         </div>
-        <div className='d-flex my-2 row'> 
+        <div className='d-flex my-5 py-5 row'> 
             <div className='col-2 mt-1'>
                 <Navbar listItems={items} />
             </div>

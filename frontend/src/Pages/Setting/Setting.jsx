@@ -1,19 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import { Avatar, Navbar } from '../../Components'
-import { MdOutlineKeyboardArrowRight, MdBrightness6 } from "react-icons/md";
+import { MdOutlineKeyboardArrowRight, MdBrightness6, MdPassword } from "react-icons/md";
 import { IoLogOutSharp, IoSettings } from "react-icons/io5";
 import './SettingStyle.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { logOut } from '../../API/UserAPI';
 import Swal from 'sweetalert2';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import defaultAvatar from '../../Assets/images/defaultAvatar';
 import handleColorApp from '../../Helpers/handleColorApp';
 import { RiAdminFill } from "react-icons/ri";
+import { ModalChangePassword } from '../../Components/Modal';
+import { setChangeThemes } from '../../Redux/themesSlice';
+import swalApp from '../../Helpers/swalApp';
+import { openModalChangePassword } from '../../Redux/modalChangePassword';
+
+
 export default function Setting() {
   const navigation = useNavigate();
   const user = useSelector(state => state.user);
   const [changeColor, setChangeColor] = useState(false);
+  const modal = useSelector(state => state.modal.modalChangePassword)
+  const dispatch = useDispatch();
 
   const handleLogout = async () => {
     const { isConfirmed } = await Swal.fire({
@@ -34,36 +42,20 @@ export default function Setting() {
 
     let response = await logOut();
     if (response.status === 200) {
-      Swal.fire({
-        title: response.message,
-        icon: 'success',
-        toast: true,
-        position: 'top-end',
-        timerProgressBar: true,
-        showConfirmButton: false,
-        timer: 5000,
-      });
+      swalApp('success', response.message);
       localStorage.removeItem(process.env.REACT_APP_LOGIN_LOCAL_STORAGE);
       navigation('/login');
       return;
 
     }
     if (response.status === 404) {
-      Swal.fire({
-        title: response.message,
-        icon: 'error',
-        toast: true,
-        position: 'top-end',
-        timerProgressBar: true,
-        showConfirmButton: false,
-        timer: 5000,
-      });
+      swalApp('error', response.message);
     }
 
   }
 
-  const handleBackgroupColor = () => {
-    const themes = JSON.parse(localStorage.getItem("backgroupApp"));
+  const handleThemesColor = () => {
+    const themes = JSON.parse(localStorage.getItem("themesApp"));
     var backgroupDark = {};
     if(!themes?.themesDark){
         backgroupDark = {
@@ -78,11 +70,16 @@ export default function Setting() {
         themesDark: false
       }
     }
+   
+    dispatch(setChangeThemes(!themes?.themesDark));
     setChangeColor(!changeColor);
-    localStorage.setItem("backgroupApp", JSON.stringify(backgroupDark));
+    localStorage.setItem("themesApp", JSON.stringify(backgroupDark));
 
+  }
 
+  const handleModal = ()=>{
 
+    dispatch(openModalChangePassword());
   }
 
   const listItems = [
@@ -94,10 +91,16 @@ export default function Setting() {
       to: '/account'
     },
     {
+      icon: <MdPassword />,
+      title: "Thay đổi mật khẩu",
+      type: 'text',
+      onClick: handleModal
+    },
+    {
       icon: <MdBrightness6 />,
       title: "Đổi Sáng Tối",
       type: 'text',
-      onClick: handleBackgroupColor
+      onClick: handleThemesColor
     },
     {
       icon: <IoLogOutSharp />,
@@ -122,33 +125,39 @@ export default function Setting() {
   }, [changeColor])
 
   return (
-    <div className='Setting'>
-      <div className='container w-50'>
-        <Link
-          to={`../@${user.id}`}
-          className='d-flex justify-content-between align-items-center'
+    <>
+      <div className='Setting'>
+        <div className='container w-50'>
+          <Link
+            to={`../@${user.id}`}
+            className='d-flex justify-content-between align-items-center'
 
-        >
-          <div className='d-flex gap-2 align-items-center'>
-            <Avatar
-              link={
-                user && user.avatar ? user.avatar : defaultAvatar
-              }
-              big
-            />
-            <p className='fw-bold m-0'>
-              {
-                user && user.name ? user.name : 'Loading....'
-              }
-            </p>
-          </div>
-          <div className='fs-4'>
-            <MdOutlineKeyboardArrowRight />
-          </div>
-        </Link>
-        <hr className='my-2' />
-        <Navbar listItems={listItems} />
+          >
+            <div className='d-flex gap-2 align-items-center'>
+              <Avatar
+                link={
+                  user && user.avatar ? user.avatar : defaultAvatar
+                }
+                big
+              />
+              <p className='fw-bold m-0'>
+                {
+                  user && user.name ? user.name : 'Loading....'
+                }
+              </p>
+            </div>
+            <div className='fs-4'>
+              <MdOutlineKeyboardArrowRight />
+            </div>
+          </Link>
+          <hr className='my-2' />
+          <Navbar listItems={listItems} />
+        </div>
       </div>
-    </div>
+      {
+        modal.isOpen && <ModalChangePassword />
+      }
+
+    </>
   )
 }

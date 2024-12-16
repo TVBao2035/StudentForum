@@ -26,3 +26,7 @@ export const getDetails = async (userId) => {
 export const updateUser = async ({id, name, avatar, phone, email}) => {
     return await axios.put(`/${id}`, {name, email, avatar, phone});
 }
+
+export const changePassword = async (currentPassword, newPassword) => {
+    return await axios.put('/password', {currentPassword, newPassword});
+}

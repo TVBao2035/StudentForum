@@ -93,11 +93,11 @@ const ModalUpdateGroup = () => {
 
   }, [])
   return (
-    <div className='ModalUpdateGroup position-absolute w-100 h-100 top-0' onClick={(e) => handleClose(e)}>
-        <div className='modal_container p-3'>
+    <div className='ModalUpdateGroup position-fixed w-100 h-100 top-0 text-dark' onClick={(e) => handleClose(e)}>
+        <div className='modal_container p-4 rounded-3'>
           <header className='d-flex justify-content-between'>
-            <div>
-              <p>Chỉnh sửa</p>
+            <div className='fw-bolder fs-4'>
+              <p>Chỉnh sửa nhóm</p>
             </div>
             <div onClick={() => dispatch(closeModalUpdateGroup())}>
               <TiDeleteOutline className='fs-3 text-danger' />

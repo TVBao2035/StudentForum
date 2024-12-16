@@ -62,12 +62,11 @@ export default function Input(
 
   return (
       <div className='Input mb-2 user-select-none w-100'>
-          <div className='d-flex  justify-content-center align-items-center gap-1'>
+          <div className='d-flex text-dark  justify-content-center  gap-1 flex-column w-100'>
             <label 
-              className='col-2' 
               htmlFor=""
             >{firstLetterUpperCase(label)}: </label>
-            <div className='d-flex col justify-content-center align-items-center position-relative'>
+            <div className='d-flex justify-content-center align-items-center position-relative'>
                 <input
                     name={name}
                
@@ -89,16 +88,13 @@ export default function Input(
             </div>
         </div>
         <div className=' position-relative'>
-            <div className='position-absolute d-flex row w-100'>
-                <div className='col-2'></div>
-                <div className='col  w-100 d-flex'>
-                    <span className='message_error text-danger ps-2'>
-                        {
-                            message
-                        }
-                    </span>
-                </div>
-            </div>
+              <div className='col  w-100 d-flex justify-content-start'>
+                  <span className='message_error text-danger ps-2'>
+                      {
+                          message
+                      }
+                  </span>
+              </div>
         </div>
       </div>
   )

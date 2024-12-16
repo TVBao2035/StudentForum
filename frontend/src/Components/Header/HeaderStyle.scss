@@ -1,8 +1,8 @@
 .Header {
-    background-color: #ffffff;
+   
     border-bottom: 1px solid #d7d7d7;
     .nav-link {
-      color: #495057;
+    
       &:hover {
         color: #007bff;
       }
@@ -16,3 +16,12 @@
       border: 1px solid #dee2e6;
     }
   }
+.themesDark {
+  background-color: #333333;
+}
+
+.themesBright {
+  background-color: white;
+
+
+}

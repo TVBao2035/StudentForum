@@ -9,12 +9,8 @@ export default function Home() {
 
   const fetchApi = async () => {
     let res = await getAllPost();
-    if(res?.status === 200){
-      setListPost(res.data);
-      return;
-    }
 
-    if(res.status === 404){
+    if(res.status !== 200){
       Swal.fire({
         title: "Thông Báo :v",
         text: res.message,
@@ -28,6 +24,9 @@ export default function Home() {
       });
       return;
     }
+
+    setListPost(res.data);
+    return;
   }
 
   useEffect(()=> {

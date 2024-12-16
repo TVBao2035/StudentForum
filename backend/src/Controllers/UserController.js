@@ -6,6 +6,17 @@ const UserService = require("../Services/UserService");
 require('dotenv').config();
 class UserController{
 
+    async changePassword (req, res){
+        try {
+        
+            const data = await UserService.changePassword(req.body, req.user.decode.id);
+            res.status(200).json(data);
+        } catch (error) {
+            console.log(error);
+            res.status(400).json(error);
+        }
+    }
+
     async getByGroupId(req, res){
         try {
             const groupId = req.params.id;

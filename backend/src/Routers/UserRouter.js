@@ -8,12 +8,15 @@ router.post(`/signUp`, UserController.signUp);
 router.post(`/signIn`, UserController.signIn);
 router.get(`/refresh`, checkToken, UserController.refresh);
 
-router.post('/', checkToken, UserController.create);
-router.put(`/:id`, checkToken, UserController.update);
-router.delete(`/:id`, checkToken, UserController.delete);
 
+router.put(`/password`, checkToken, UserController.changePassword);
 router.get('/user/group/:id', UserController.getByGroupId);
 router.get(`/:id`, checkToken, UserController.getDetails);
 router.get(`/`, checkToken, UserController.getAll);
+
+
+router.post('/', checkToken, UserController.create);
+router.put(`/:id`, checkToken, UserController.update);
+router.delete(`/:id`, checkToken, UserController.delete);
 
 module.exports = router;

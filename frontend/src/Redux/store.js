@@ -3,7 +3,7 @@ import userReducer from './userSlice';
 import loadingReducer from './loadingSlice';
 import postReducer from './postSlice';
 import modalReducer from './modalSlice';
-
+import themesReducer from './themesSlice';
 
 const store = configureStore({
     reducer: {
@@ -11,6 +11,7 @@ const store = configureStore({
         loading: loadingReducer,
         post: postReducer,
         modal: modalReducer,
+        themes: themesReducer
     },
 });
 

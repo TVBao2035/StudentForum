@@ -7,9 +7,42 @@ const checkUser = require("../Common/checks/checkUser");
 const checkGroup = require("../Common/checks/checktGroup");
 const createHistory = require("../Common/create/createHistory");
 const getTimeNow = require("../Helpers/getTimeNow");
+const { message } = require("../DTOs/UserDTO/createUserDTO");
 
 class UserService{
     
+    changePassword(password, userId){
+        return new Promise(async (resolve, reject) => {
+            try {
+                const user = await checkUser(userId);
+                if(user.status === 404) return resolve(user);
+                console.log(user.password);
+                const checkPassword = bcrypt.compareSync(password.currentPassword, user.password);
+                if (!checkPassword) {
+                    return resolve({
+                        status: 404,
+                        message: "Password hiện tại không đúng"
+                    })
+                }
+               
+                const newPassword =  hashPassword(password.newPassword);
+
+                user.password = newPassword;
+                await user.save();
+                await createHistory({userId, title: "Thay Đổi Password", content: `Bạn đã thay đổ Password lúc ${getTimeNow()}`})
+                resolve({
+                    status: 200,
+                    message: `Thay Đổi Password Thành Công`
+                })
+            } catch (error) {
+                reject({
+                    status: 400,
+                    message: `Lỗi Thay đổi Password ${error}`
+                })
+            }
+        })
+    }
+
     getByGroupId(groupId){
         return new Promise(async(resolve, reject) => {
             try {

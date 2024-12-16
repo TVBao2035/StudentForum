@@ -76,10 +76,10 @@ const ModalCreateGroup = () => {
     }
 
   return (
-      <div className='ModalCreateGroup position-absolute w-100 h-100 top-0 ' onClick={(e) => handleClose(e)} >
-          <div className='modal_container p-3' >
+      <div className='ModalCreateGroup position-absolute w-100 h-100 top-0 text-dark' onClick={(e) => handleClose(e)} >
+          <div className='modal_container p-4 rounded-3' >
             <header className='d-flex justify-content-between'>
-                <div>Tạo Nhóm</div>
+                <div className='fw-bolder fs-4'>Tạo Nhóm</div>
                 <div onClick={()=> dispatch(closeModalCreateGroup())}>
                     <TiDeleteOutline className='fs-3 text-danger' />
                 </div>

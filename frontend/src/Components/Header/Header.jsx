@@ -16,9 +16,9 @@ export default function Header() {
   const [showPostModal, setShowPostModal] = useState(false);
   const handleShow = () => setShowPostModal(true);
   const handleClose = () => setShowPostModal(false);
-
+  const themesRedux = useSelector(state => state.themes);
   const user = useSelector((state) => state.user);
-  //console.log(user);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = user.token;
@@ -43,16 +43,8 @@ export default function Header() {
       }
     }
   };
-
-  // useEffect(() => {
-  //   if (!token) {
-  //     dispatch(setDataMain(initialState));
-  //     navigate('/login');
-  //   }
-  // }, [token, dispatch, navigate]);
-
   return (
-    <header className="Header">
+    <header className={`Header position-fixed top-0 w-100 ${themesRedux.isChangeThemes ? "themesDark" : "themesBright"}`}>
       <div className='container d-flex justify-content-between align-items-center p-3 '>
         <div className="left-section d-flex align-items-center">
           <Link to="/" className="navbar-brand">
@@ -69,7 +61,7 @@ export default function Header() {
         </div>
 
         <div className="right-section d-flex align-items-center">
-          <span className="user-greeting d-none d-md-block me-3 text-dark">Xin chào <strong>{user.name}</strong></span>
+          <span className="user-greeting d-none d-md-block me-3 ">Xin chào <strong>{user.name}</strong></span>
 
           <div className="nav-link me-3" onClick={handleShow} style={{ cursor: 'pointer' }}>
             <IoCreate className="icon-size" size={24} />

@@ -14,6 +14,7 @@ import {  Loading, UsersTable } from './Components';
 
 import { setDataMain } from './Redux/userSlice';
 import handleColorApp from './Helpers/handleColorApp';
+import { setChangeThemes } from './Redux/themesSlice';
 
 
 
@@ -41,12 +42,14 @@ function App() {
   }
 
   useEffect(()=>{
+    const themes = JSON.parse(localStorage.getItem("themesApp"));
     if (!whitelist.some(item => item === location.pathname 
       && !localStorage.getItem(process.env.REACT_APP_LOGIN_LOCAL_STORAGE)))
     {
       fetchApi();
       dispatch(setLoading(true));
       handleColorApp();
+      dispatch(setChangeThemes(themes?.themesDark))
     }
   }, []);
   return (

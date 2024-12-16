@@ -1,6 +1,6 @@
 @import '../../Scss/colors';
 .Footer{
-    background-color: white;
+
     li{
         list-style: none;
         :hover{
@@ -10,7 +10,7 @@
             text-decoration: none;
             padding: 6px 30px;
             border-top: 2px solid #ffffff00;
-            color: $no-active;
+           // color: $no-active;
             display: flex;
             align-items: center;
             :hover{
@@ -21,5 +21,17 @@
     .active {
         color: $active;
         border-top: 2px solid $active;
+    }
+}
+.themesDark{
+    background-color: #333333;
+}
+
+.themesBright{
+    background-color: white;
+    li {
+        a {
+            color: $no-active;
+        }
     }
 }
