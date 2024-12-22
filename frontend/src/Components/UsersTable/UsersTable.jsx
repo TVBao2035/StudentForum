@@ -4,52 +4,52 @@ import Avatar from "../Avatar";
 
 export default function UsersTable({ users = [], onEdit, onDelete }) {
   return(
-    <div className="overflow-x-auto bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4">
-    <table className="min-w-full bg-white rounded-lg overflow-hidden shadow-xl">
-      <thead className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+    <div className="tw-overflow-x-auto tw-bg-gradient-to-r tw-from-blue-50 tw-to-purple-50 tw-rounded-lg tw-p-4">
+    <table className="tw-min-w-full tw-bg-white tw-rounded-lg tw-overflow-hidden tw-shadow-xl">
+      <thead className="tw-bg-gradient-to-r tw-from-indigo-600 tw-to-purple-600 tw-text-white">
         <tr>
-          <th className="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">User</th>
-          <th className="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">Email</th>
-          <th className="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">Phone</th>
-          <th className="px-6 py-4 text-left text-sm font-medium uppercase tracking-wider">Actions</th>
+          <th className="tw-px-6 tw-py-4 tw-text-left tw-text-sm tw-font-medium tw-uppercase tw-tracking-wider">User</th>
+          <th className="tw-px-6 tw-py-4 tw-text-left tw-text-sm tw-font-medium tw-uppercase tw-tracking-wider">Email</th>
+          <th className="tw-px-6 tw-py-4 tw-text-left tw-text-sm tw-font-medium tw-uppercase tw-tracking-wider">Phone</th>
+          <th className="tw-px-6 tw-py-4 tw-text-left tw-text-sm tw-font-medium tw-uppercase tw-tracking-wider">Actions</th>
         </tr>
       </thead>
-      <tbody className="divide-y divide-gray-200">
+      <tbody className="tw-divide-y tw-divide-gray-200">
         {users.map((user) => (
-          <tr key={user.id} className="hover:bg-gray-50 transition duration-150">
-            <td className="px-6 py-4 whitespace-nowrap">
-              <div className="flex items-center">
+          <tr key={user.id} className="hover:tw-bg-gray-50 tw-transition tw-duration-150">
+            <td className="tw-px-6 tw-py-4 tw-whitespace-nowrap">
+              <div className="tw-flex tw-items-center">
                 <Avatar
                  normal
-                 className="rounded-full ring-2 ring-indigo p-1"
+                 className="tw-rounded-full tw-ring-2 tw-ring-indigo tw-p-1"
                   
                   link={user.avatar}
                 />
-                <div className="ml-4">
-                  <div className="text-sm font-semibold text-gray-900">{user.name}</div>
+                <div className="tw-ml-4">
+                  <div className="tw-text-sm font-semibold tw-text-gray-900">{user.name}</div>
                 </div>
               </div>
             </td>
-            <td className="px-6 py-4 whitespace-nowrap">
-              <div className="text-sm text-gray-900">{user.email}</div>
+            <td className="tw-px-6 tw-py-4 tw-whitespace-nowrap">
+              <div className="tw-text-sm tw-text-gray-900">{user.email}</div>
             </td>
-            <td className="px-6 py-4 whitespace-nowrap">
-              <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gradient-to-r from-green-400 to-green-600 text-white shadow-sm">
+            <td className="tw-px-6 tw-py-4 tw-whitespace-nowrap">
+              <span className="tw-px-3 tw-py-1 tw-inline-flex tw-text-xs tw-leading-5 tw-font-semibold tw-rounded-full tw-bg-gradient-to-r tw-from-green-400 tw-to-green-600 tw-text-white tw-shadow-sm">
                 {user.phone}
               </span>
             </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+            <td className="tw-px-6 tw-py-4 tw-whitespace-nowrap tw-text-sm tw-font-medium">
               <button
                 onClick={() => onEdit && onEdit(user.id)} 
-                className="text-indigo-600 hover:text-indigo-900 mr-4 transition duration-150 transform hover:scale-110"
+                className="tw-text-indigo-600 hover:tw-text-indigo-900 tw-mr-4 tw-transition tw-duration-150 tw-transform hover:tw-scale-110"
               >
-                <FiEdit className="h-5 w-5" />
+                <FiEdit className="tw-h-5 tw-w-5" />
               </button>
               <button 
                 onClick={() => onDelete && onDelete(user.id)}
-                className="text-red-600 hover:text-red-900 transition duration-150 transform hover:scale-110"
+                className="tw-text-red-600 hover:tw-text-red-900 tw-transition tw-duration-150 tw-transform hover:tw-scale-110"
               >
-                <FiTrash2 className="h-5 w-5" />
+                <FiTrash2 className="tw-h-5 tw-w-5" />
               </button>
             </td>
           </tr>

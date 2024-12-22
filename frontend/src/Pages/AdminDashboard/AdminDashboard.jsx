@@ -5,55 +5,55 @@ import UsersTab from "../../Components/UsersTab/UsersTab";
 import PostsTab from "../../Components/PostsTab/PostsTab";
 import CategoriesTab from "../../Components/CategoriesTab/CategoriesTab";
 import GroupTab from "../../Components/GroupTab/GroupTab";
-import './AdminDashboardStyle.scss';
+//import './AdminDashboardStyle.scss';
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("users");
 
   return (
     <div className="Admin">
-      <div className=" min-h-screen bg-gray-100">
-        <div className="flex space-x-4 p-4 bg-white shadow-sm">
+      <div className="tw-min-h-screen tw-bg-gray-100">
+        <div className="tw-flex tw-space-x-4 tw-p-4 tw-bg-white tw-shadow-sm">
           <button
             onClick={() => setActiveTab("users")}
-            className={`px-4 py-2 rounded ${activeTab === "users" ? "bg-indigo-600 text-white" : "bg-gray-200"
+            className={`tw-px-4 tw-py-2 tw-rounded ${activeTab === "users" ? "tw-bg-indigo-600 tw-text-white" : "tw-bg-gray-200"
               }`}
           >
             Users
           </button>
           <button
             onClick={() => setActiveTab("posts")}
-            className={`px-4 py-2 rounded ${activeTab === "posts" ? "bg-indigo-600 text-white" : "bg-gray-200"
+            className={`tw-px-4 tw-py-2 tw-rounded ${activeTab === "posts" ? "tw-bg-indigo-600 tw-text-white" : "tw-bg-gray-200"
               }`}
           >
             Posts
           </button>
           <button
             onClick={() => setActiveTab("categories")}
-            className={`px-4 py-2 rounded ${activeTab === "categories"
-              ? "bg-indigo-600 text-white"
-              : "bg-gray-200"
+            className={`tw-px-4 tw-py-2 tw-rounded ${activeTab === "categories"
+              ? "tw-bg-indigo-600 tw-text-white"
+              : "tw-bg-gray-200"
               }`}
           >
             Categories
           </button>
           <button
             onClick={() => setActiveTab("groups")}
-            className={`px-4 py-2 rounded ${activeTab === "groups" ? "bg-indigo-600 text-white" : "bg-gray-200"
+            className={`tw-px-4 tw-py-2 tw-rounded ${activeTab === "groups" ? "tw-bg-indigo-600 tw-text-white" : "tw-bg-gray-200"
               }`}
           >
             Groups
           </button>
           <Link
             to="/"
-            className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2.5 px-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 active:translate-y-0 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+            className="tw-inline-flex tw-items-center tw-gap-2 tw-bg-blue-500 hover:tw-bg-blue-700 tw-text-white tw-font-semibold tw-py-2.5 tw-px-6 tw-rounded-lg tw-transition-all tw-duration-300 tw-shadow-lg hover:tw-shadow-xl tw-transform hover:-tw-translate-y-1 active:tw-translate-y-0 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-400 focus:tw-ring-opacity-50"
             aria-label="Navigate back to home page"
           >
-            <IoArrowBack className="text-xl" />
+            <IoArrowBack className="tw-text-xl" />
             <span>Back to Home</span>
           </Link>
         </div>
 
-        <div className="p-4">
+        <div className="tw-p-4">
           {activeTab === "users" && <UsersTab />}
           {activeTab === "posts" && <PostsTab />}
           {activeTab === "categories" && <CategoriesTab />}

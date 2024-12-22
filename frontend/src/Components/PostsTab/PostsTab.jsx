@@ -14,7 +14,6 @@ import {
   getAllCategory,
 } from "../../API/AdminAPI";
 import apiUploadImage from "../../Hooks/apiUploadImage";
-import './PostTabStyle.scss';
 import { useDebounce } from "../../Hooks";
 
 
@@ -248,47 +247,47 @@ export default function PostsTab() {
 
   return (
     
-    <div className=" min-h-screen bg-gradient-to-br from-gray-100 to-gray-200">
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8 flex justify-between items-center">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+    <div className="tw-min-h-screen tw-bg-gradient-to-br tw-from-gray-100 tw-to-gray-200">
+      <div className="tw-container tw-mx-auto tw-px-4 tw-py-8">
+        <div className="tw-mb-8 tw-flex tw-justify-between tw-items-center">
+          <h1 className="tw-text-3xl tw-font-bold tw-bg-gradient-to-r tw-from-indigo-600 tw-to-purple-600 tw-bg-clip-text tw-text-transparent">
             Post Manager
           </h1>
-          <div className="flex items-center space-x-4">
-            <div className="relative">
+          <div className="tw-flex tw-items-center tw-space-x-4">
+            <div className="tw-relative">
               <input
                 type="text"
                 placeholder="Search..."
                 value={search}
                 ref={inputRef}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
+                className="tw-pl-10 tw-pr-4 tw-py-2 tw-rounded-lg tw-border tw-border-gray-300 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-indigo-500 focus:tw-border-transparent tw-shadow-sm"
               //value={searchQuery}
               //onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <FiSearch className="tw-absolute tw-left-3 tw-top-1/2 tw-transform -tw-translate-y-1/2 tw-text-gray-400" />
             </div>
             <button
               onClick={() => {
                 setIsAdding(true);
                 setNewPost((prev) => ({ ...prev, userId }));
               }}
-              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-2 rounded-lg hover:opacity-90 transition duration-300 shadow-md flex items-center"
+              className="tw-bg-gradient-to-r tw-from-indigo-600 tw-to-purple-600 tw-text-white tw-px-6 tw-py-2 tw-rounded-lg hover:tw-opacity-90 tw-transition tw-duration-300 tw-shadow-md tw-flex tw-items-center"
             >
-              <FiPlus className="mr-2" /> Add New
+              <FiPlus className="tw-mr-2" /> Add New
             </button>
           </div>
         </div>
         {isAdding && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="relative bg-white p-6 rounded-2xl shadow-xl w-[36rem] max-h-[90vh] overflow-auto">
+          <div className="tw-fixed tw-inset-0 tw-bg-black tw-bg-opacity-50 tw-flex tw-justify-center tw-items-center tw-z-50">
+            <div className="tw-relative tw-bg-white tw-p-6 tw-rounded-2xl tw-shadow-xl tw-w-[36rem] tw-max-h-[90vh] tw-overflow-auto">
               <button
                 onClick={() => setIsAdding(false)}
-                className="absolute top-4 right-4 flex items-center justify-center w-10 h-10 bg-red-500 hover:bg-red-600 rounded-full shadow-md transition-transform transform hover:scale-110 focus:outline-none"
+                className="tw-absolute tw-top-4 tw-right-4 tw-flex tw-items-center tw-justify-center tw-w-10 tw-h-10 tw-bg-red-500 hover:tw-bg-red-600 tw-rounded-full tw-shadow-md tw-transition-transform tw-transform hover:tw-scale-110 focus:tw-outline-none"
               >
-                <FiX className="text-white" size={20} />
+                <FiX className="tw-text-white" size={20} />
               </button>
-              <h3 className="text-xl font-bold mb-4 text-center text-gray-800 border-b pb-4">
+              <h3 className="tw-text-xl tw-font-bold tw-mb-4 tw-text-center tw-text-gray-800 tw-border-b tw-pb-4">
                 Add New Post
               </h3>
               <select
@@ -299,7 +298,7 @@ export default function PostsTab() {
                     categoryId: parseInt(e.target.value, 10),
                   })
                 }
-                className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                className="tw-w-full tw-p-3 tw-border tw-rounded-lg tw-mb-4 focus:tw-ring-2 focus:tw-ring-indigo-500 focus:tw-outline-none"
               >
                 <option value="">Select Category</option>
                 {categories.map((category) => (
@@ -321,7 +320,7 @@ export default function PostsTab() {
                       : null,
                   })
                 }
-                className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                className="tw-w-full tw-p-3 tw-border tw-rounded-lg tw-mb-4 focus:tw-ring-2 focus:tw-ring-indigo-500 focus:tw-outline-none"
               />
 
               <textarea
@@ -330,29 +329,29 @@ export default function PostsTab() {
                 onChange={(e) =>
                   setNewPost({ ...newPost, content: e.target.value })
                 }
-                className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                className="tw-w-full tw-p-3 tw-border tw-rounded-lg tw-mb-4 focus:tw-ring-2 focus:tw-ring-indigo-500 focus:tw-outline-none"
                 rows="3"
               ></textarea>
 
-              <div className="mb-4">
-                <label className="block font-semibold mb-2 text-gray-700">
+              <div className="tw-mb-4">
+                <label className="tw-block tw-font-semibold tw-mb-2 tw-text-gray-700">
                   Post Image:
                 </label>
-                <div className="flex flex-col items-center">
+                <div className="tw-flex tw-flex-col tw-items-center">
                   {newPost.image ? (
                     <img
                       src={newPost.image}
                       alt="Post Thumbnail"
-                      className="w-28 h-28 rounded-full object-cover shadow-lg mb-3"
+                      className="tw-w-28 tw-h-28 tw-rounded-full tw-object-cover tw-shadow-lg tw-mb-3"
                     />
                   ) : (
-                    <div className="w-28 h-28 rounded-full bg-gray-100 flex items-center justify-center mb-3 shadow-inner">
-                      <span className="text-gray-400">No Image</span>
+                    <div className="tw-w-28 tw-h-28 tw-rounded-full tw-bg-gray-100 tw-flex tw-items-center tw-justify-center tw-mb-3 tw-shadow-inner">
+                      <span className="tw-text-gray-400">No Image</span>
                     </div>
                   )}
                   <label
                     htmlFor="postImageInput"
-                    className="bg-yellow-500 hover:bg-yellow-600 transition text-white px-5 py-2 rounded-full cursor-pointer"
+                    className="tw-bg-yellow-500 hover:tw-bg-yellow-600 tw-transition tw-text-white tw-px-5 tw-py-2 tw-rounded-full tw-cursor-pointer"
                   >
                     Change
                   </label>
@@ -361,22 +360,22 @@ export default function PostsTab() {
                     id="postImageInput"
                     type="file"
                     accept="image/*"
-                    className="hidden"
+                    className="tw-hidden"
                     onChange={(e) => handleUpload(e, setNewPost)}
                   />
                 </div>
               </div>
 
-              <div className="flex justify-center space-x-6 pt-4 border-t">
+              <div className="tw-flex tw-justify-center tw-space-x-6 tw-pt-4 tw-border-t">
                 <button
                   onClick={() => setIsAdding(false)}
-                  className="bg-gray-200 hover:bg-gray-300 transition px-6 py-2 rounded-full text-gray-700 font-semibold"
+                  className="tw-bg-gray-200 hover:tw-bg-gray-300 tw-transition tw-px-6 tw-py-2 tw-rounded-full tw-text-gray-700 tw-font-semibold"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleAddPost}
-                  className="bg-indigo-600 hover:bg-indigo-700 transition text-white px-6 py-2 rounded-full font-semibold"
+                  className="tw-bg-indigo-600 hover:tw-bg-indigo-700 tw-transition tw-text-white tw-px-6 tw-py-2 tw-rounded-full tw-font-semibold"
                 >
                   Add
                 </button>
@@ -397,17 +396,17 @@ export default function PostsTab() {
           onRequestClose={closeModal}
           contentLabel="Edit Post"
           appElement={document.getElementById("root")}
-          className="fixed inset-0 flex items-center justify-center z-50"
-          overlayClassName="fixed inset-0 bg-black bg-opacity-50"
+          className="tw-fixed tw-inset-0 tw-flex tw-items-center tw-justify-center tw-z-50"
+          overlayClassName="tw-fixed tw-inset-0 tw-bg-black tw-bg-opacity-50"
         >
-          <div className="relative bg-white p-6 rounded-2xl shadow-2xl w-[40rem]">
+          <div className="tw-relative tw-bg-white tw-p-6 tw-rounded-2xl tw-shadow-2xl tw-w-[40rem]">
             <button
               onClick={closeModal}
-              className="absolute top-4 right-4 flex items-center justify-center w-10 h-10 bg-red-500 hover:bg-red-600 rounded-full shadow-md transition-transform transform hover:scale-110 focus:outline-none"
+              className="tw-absolute tw-top-4 tw-right-4 tw-flex tw-items-center tw-justify-center tw-w-10 tw-h-10 tw-bg-red-500 hover:tw-bg-red-600 tw-rounded-full tw-shadow-md tw-transition-transform tw-transform hover:tw-scale-110 focus:tw-outline-none"
             >
-              <FiX className="text-white" size={20} />
+              <FiX className="tw-text-white" size={20} />
             </button>
-            <h3 className="text-xl font-bold mb-6 text-center text-gray-800 border-b pb-4">
+            <h3 className="tw-text-xl tw-font-bold tw-mb-6 tw-text-center tw-text-gray-800 tw-border-b tw-pb-4">
               Edit Post
             </h3>
 
@@ -416,7 +415,7 @@ export default function PostsTab() {
               onChange={(e) =>
                 setPostData({ ...postData, categoryId: e.target.value })
               }
-              className="w-full p-3 border rounded-lg mb-4 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              className="tw-w-full tw-p-3 tw-border tw-rounded-lg tw-mb-4 focus:tw-ring-2 focus:tw-ring-indigo-500 focus:tw-outline-none"
             >
               <option value="">Select Category</option>
               {categories.map((category) => (
@@ -441,25 +440,25 @@ export default function PostsTab() {
               }}
             />
 
-            <div className="mb-6">
-              <label className="block font-semibold mb-2 text-gray-700">
+            <div className="tw-mb-6">
+              <label className="tw-block tw-font-semibold tw-mb-2 tw-text-gray-700">
                 Post Image:
               </label>
-              <div className="flex flex-col items-center">
+              <div className="tw-flex tw-flex-col tw-items-center">
                 {postData.image ? (
                   <img
                     src={postData.image}
                     alt=""
-                    className="w-28 h-28 rounded-full object-cover shadow-lg mb-3"
+                    className="tw-w-28 tw-h-28 tw-rounded-full tw-object-cover tw-shadow-lg tw-mb-3"
                   />
                 ) : (
-                  <div className="w-28 h-28 rounded-full bg-gray-100 flex items-center justify-center mb-3 shadow-inner">
-                    <span className="text-gray-400">No Image</span>
+                  <div className="tw-w-28 tw-h-28 tw-rounded-full tw-bg-gray-100 tw-flex tw-items-center tw-justify-center tw-mb-3 tw-shadow-inner">
+                    <span className="tw-text-gray-400">No Image</span>
                   </div>
                 )}
                 <label
                   htmlFor="postImageInput"
-                  className="bg-yellow-500 hover:bg-yellow-600 transition text-white px-5 py-2 rounded-full cursor-pointer"
+                  className="tw-bg-yellow-500 hover:tw-bg-yellow-600 tw-transition tw-text-white tw-px-5 tw-py-2 tw-rounded-full tw-cursor-pointer"
                 >
                   Change
                 </label>
@@ -468,22 +467,22 @@ export default function PostsTab() {
                   id="postImageInput"
                   type="file"
                   accept="image/*"
-                  className="hidden"
+                  className="tw-hidden"
                   onChange={(e) => handleUpload(e, setPostData)}
                 />
               </div>
             </div>
 
-            <div className="flex justify-center space-x-6 pt-4 border-t">
+            <div className="tw-flex tw-justify-center tw-space-x-6 tw-pt-4 tw-border-t">
               <button
                 onClick={closeModal}
-                className="bg-gray-200 hover:bg-gray-300 transition px-6 py-2 rounded-full text-gray-700 font-semibold"
+                className="tw-bg-gray-200 hover:tw-bg-gray-300 tw-transition tw-px-6 tw-py-2 tw-rounded-full tw-text-gray-700 tw-font-semibold"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveEditPost}
-                className="bg-indigo-600 hover:bg-indigo-700 transition text-white px-6 py-2 rounded-full font-semibold"
+                className="tw-bg-indigo-600 hover:tw-bg-indigo-700 tw-transition tw-text-white tw-px-6 tw-py-2 tw-rounded-full tw-font-semibold"
               >
                 Update
               </button>

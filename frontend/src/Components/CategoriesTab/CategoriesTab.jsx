@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Swal from "sweetalert2";
 import Modal from "react-modal";
 import CategoryManager from "../CategoryManager";
-import { FiPlus, FiSearch } from "react-icons/fi";
+import { FiPlus, FiSearch, FiX } from "react-icons/fi";
 import {
   getAllCategory,
   createCategory,
@@ -25,15 +25,14 @@ export default function CategoriesTab() {
 
   const debounceValue = useDebounce(search, 800);
 
-
   const availableColors = [
-    "bg-blue-500",
-    "bg-green-500",
-    "bg-yellow-500",
-    "bg-red-500",
+    "tw-bg-blue-500",
+    "tw-bg-green-500",
+    "tw-bg-yellow-500",
+    "tw-bg-red-500",
   ];
 
-  const fetchCategories = async (search="") => {
+  const fetchCategories = async (search = "") => {
     setLoading(true);
     try {
       const response = await getAllCategory(search);
@@ -68,17 +67,17 @@ export default function CategoriesTab() {
     fetchCategories();
   }, []);
 
-  useEffect(()=>{
-    if(debounceValue.trim().length === 0){
+  useEffect(() => {
+    if (debounceValue.trim().length === 0) {
       fetchCategories();
       return;
     }
     fetchCategories(debounceValue);
   }, [debounceValue]);
 
-  useEffect(()=>{
+  useEffect(() => {
     inputRef.current?.focus();
-  }, [categories])
+  }, [categories]);
   const handleAddCategory = async () => {
     if (!newCategory.name.trim()) {
       Swal.fire("Error", "Category name cannot be empty.", "error");
@@ -168,37 +167,50 @@ export default function CategoriesTab() {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200">
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8 flex justify-between items-center">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+    <div className="tw-min-h-screen tw-bg-gradient-to-br tw-from-gray-100 tw-to-gray-200">
+      <div className="tw-container tw-mx-auto tw-px-4 tw-py-8">
+        <div className="tw-mb-8 tw-flex tw-justify-between tw-items-center">
+          <h1 className="tw-text-3xl tw-font-bold tw-bg-gradient-to-r tw-from-indigo-600 tw-to-purple-600 tw-bg-clip-text tw-text-transparent">
             Category Manager
           </h1>
-          <div className="flex items-center space-x-4">
-            <div className="relative">
+          <div className="tw-flex tw-items-center tw-space-x-4">
+            <div className="tw-relative">
               <input
                 type="text"
                 placeholder="Search..."
                 ref={inputRef}
-                className="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
+                className="tw-pl-10 tw-pr-4 tw-py-2 tw-rounded-lg tw-border tw-border-gray-300 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-indigo-500 focus:tw-border-transparent tw-shadow-sm"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <FiSearch className="tw-absolute tw-left-3 tw-top-1/2 tw-transform -tw-translate-y-1/2 tw-text-gray-400" />
             </div>
             <button
               onClick={() => setIsAdding(true)}
-              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-2 rounded-lg hover:opacity-90 transition duration-300 shadow-md flex items-center"
+              className="tw-bg-gradient-to-r tw-from-indigo-600 tw-to-purple-600 tw-text-white tw-px-6 tw-py-2 tw-rounded-lg hover:tw-opacity-90 tw-transition tw-duration-300 tw-shadow-md tw-flex tw-items-center"
             >
-              <FiPlus className="mr-2" /> Add New
+              <FiPlus className="tw-mr-2" /> Add New
             </button>
           </div>
         </div>
 
         {isAdding && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-full sm:w-96">
-              <h3 className="text-lg font-bold mb-4">Add New Category</h3>
+          <div
+            className="tw-fixed tw-inset-0 tw-bg-black tw-bg-opacity-50 tw-flex tw-justify-center tw-items-center"
+            style={{ zIndex: 1050 }}
+          >
+            <div className="tw-bg-white tw-p-6 tw-rounded-2xl tw-shadow-2xl tw-w-[30rem] tw-relative">
+              <button
+                onClick={() => setIsAdding(false)}
+                className="tw-absolute tw-top-4 tw-right-4 tw-flex tw-items-center tw-justify-center tw-w-10 tw-h-10 tw-bg-red-500 hover:tw-bg-red-600 tw-rounded-full tw-shadow-md tw-transition-transform tw-transform hover:tw-scale-110 focus:tw-outline-none"
+              >
+                <FiX className="tw-text-white" size={20} />
+              </button>
+
+              <h3 className="tw-text-xl tw-font-bold tw-mb-4 tw-text-center tw-text-gray-800 tw-border-b tw-pb-3">
+                Add New Category
+              </h3>
+
               <input
                 type="text"
                 placeholder="Name"
@@ -206,18 +218,19 @@ export default function CategoriesTab() {
                 onChange={(e) =>
                   setNewCategory({ ...newCategory, name: e.target.value })
                 }
-                className="w-full p-2 border rounded mb-2"
+                className="tw-w-full tw-p-2 tw-border tw-rounded-lg tw-mb-4 focus:tw-ring-2 focus:tw-ring-indigo-500 focus:tw-outline-none"
               />
-              <div className="flex justify-end">
+
+              <div className="tw-flex tw-justify-center tw-space-x-4 tw-pt-4 tw-border-t">
                 <button
                   onClick={() => setIsAdding(false)}
-                  className="bg-gray-300 px-4 py-2 rounded mr-2"
+                  className="tw-bg-gray-200 hover:tw-bg-gray-300 tw-transition tw-px-5 tw-py-2 tw-rounded-full tw-text-gray-700 tw-font-semibold"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleAddCategory}
-                  className="bg-indigo-600 text-white px-4 py-2 rounded"
+                  className="tw-bg-indigo-600 hover:tw-bg-indigo-700 tw-transition tw-text-white tw-px-5 tw-py-2 tw-rounded-full tw-font-semibold"
                 >
                   Add
                 </button>
@@ -237,34 +250,34 @@ export default function CategoriesTab() {
           onRequestClose={() => setIsCategoryModalOpen(false)}
           contentLabel="Edit Category"
           appElement={document.getElementById("root")}
-          className="fixed inset-0 flex items-center justify-center z-50"
-          overlayClassName="fixed inset-0 bg-black bg-opacity-50"
+          className="tw-fixed tw-inset-0 tw-flex tw-items-center tw-justify-center tw-z-50"
+          overlayClassName="tw-fixed tw-inset-0 tw-bg-black tw-bg-opacity-50"
         >
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md mx-4">
-            <div className="px-6 py-4 border-b">
-              <h2 className="text-lg font-semibold text-gray-800">
+          <div className="tw-bg-white tw-rounded-lg tw-shadow-lg tw-w-full tw-max-w-md tw-mx-4">
+            <div className="tw-px-6 tw-py-4 tw-border-b">
+              <h2 className="tw-text-lg tw-font-semibold tw-text-gray-800">
                 Edit Category
               </h2>
             </div>
-            <div className="px-6 py-4 space-y-4">
+            <div className="tw-px-6 tw-py-4 tw-space-y-4">
               <input
                 type="text"
                 placeholder="Category Name"
                 value={categoryName}
                 onChange={(e) => setCategoryName(e.target.value)}
-                className="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                className="tw-w-full tw-px-4 tw-py-2 tw-border tw-rounded-md tw-shadow-sm focus:tw-ring-indigo-500 focus:tw-border-indigo-500"
               />
             </div>
-            <div className="px-6 py-4 border-t flex justify-end space-x-4">
+            <div className="tw-px-6 tw-py-4 tw-border-t tw-flex tw-justify-end tw-space-x-4">
               <button
                 onClick={() => setIsCategoryModalOpen(false)}
-                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition"
+                className="tw-px-4 tw-py-2 tw-bg-gray-200 tw-text-gray-800 tw-rounded-md hover:tw-bg-gray-300 tw-transition"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveEditCategory}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition"
+                className="tw-px-4 tw-py-2 tw-bg-indigo-600 tw-text-white tw-rounded-md hover:tw-bg-indigo-700 tw-transition"
               >
                 Update
               </button>

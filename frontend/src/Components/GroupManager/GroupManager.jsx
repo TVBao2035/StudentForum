@@ -3,57 +3,57 @@ import { FiTrash2, FiEdit2 } from "react-icons/fi";
 
 export default function GroupManager({ groups = [], onEdit, onDelete }) {
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="tw-bg-gradient-to-br tw-from-gray-50 tw-to-gray-100 tw-min-h-screen tw-py-8 tw-px-4 sm:tw-px-6 lg:tw-px-8">
+      <div className="tw-max-w-7xl tw-mx-auto">
+        <div className="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-6">
           {groups.map((group) => (
             <div
               key={group.id}
-              className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-1"
+              className="tw-bg-white tw-rounded-xl tw-shadow-md tw-overflow-hidden hover:tw-shadow-2xl tw-transition-all tw-duration-500 tw-transform hover:-tw-translate-y-1"
             >
-              <div className="relative group">
+              <div className="tw-relative tw-group">
                 {[group.id] ? (
                   <img
                     src={group.image}
                     alt="Group Thumbnail"
-                    className="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="tw-w-full tw-h-48 tw-object-cover tw-transition-transform tw-duration-700 tw-group-hover:tw-scale-110"
                   />
                 ) : (
-                  <div className="w-full h-48 bg-gradient-to-r from-gray-100 to-gray-200 flex items-center justify-center">
-                    <span className="text-gray-500 text-sm">
+                  <div className="tw-w-full tw-h-48 tw-bg-gradient-to-r tw-from-gray-100 tw-to-gray-200 tw-flex tw-items-center tw-justify-center">
+                    <span className="tw-text-gray-500 tw-text-sm">
                       Image not available
                     </span>
                   </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="tw-absolute tw-inset-0 tw-bg-gradient-to-t tw-from-black/70 tw-via-black/20 tw-to-transparent tw-opacity-0 tw-group-hover:tw-opacity-100 tw-transition-opacity tw-duration-500" />
               </div>
 
-              <div className="p-6">
-                <div className="space-y-2">
-                  <h2 className="text-xl font-bold text-gray-900 hover:text-blue-600 transition-colors duration-300 truncate">
+              <div className="tw-p-6">
+                <div className="tw-space-y-2">
+                  <h2 className="tw-text-xl tw-font-bold tw-text-gray-900 hover:tw-text-blue-600 tw-transition-colors tw-duration-300 tw-truncate">
                     {group.name}
                   </h2>
                 </div>
 
-                <div className="mt-3">
-                  <p className="text-gray-600 text-sm line-clamp-2 leading-relaxed">
+                <div className="tw-mt-3">
+                  <p className="tw-text-gray-600 tw-text-sm tw-line-clamp-2 tw-leading-relaxed">
                     {group.description}
                   </p>
                 </div>
 
-                <div className="flex space-x-3 mt-6">
+                <div className="tw-flex tw-space-x-3 tw-mt-6">
                   <button
                     onClick={() => onEdit && onEdit(group.id)}
-                    className="flex-1 flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2 rounded-lg transition-all duration-300 text-sm font-medium shadow-md hover:shadow-lg"
+                    className="tw-flex-1 tw-flex tw-items-center tw-justify-center tw-space-x-2 tw-bg-gradient-to-r tw-from-blue-600 tw-to-blue-700 hover:tw-from-blue-700 hover:tw-to-blue-800 tw-text-white tw-px-4 tw-py-2 tw-rounded-lg tw-transition-all tw-duration-300 tw-text-sm tw-font-medium tw-shadow-md hover:tw-shadow-lg"
                   >
-                    <FiEdit2 className="w-4 h-4" />
+                    <FiEdit2 className="tw-w-4 tw-h-4" />
                     <span>Edit</span>
                   </button>
                   <button
                     onClick={() => onDelete && onDelete(group.id)}
-                    className="flex-1 flex items-center justify-center space-x-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-4 py-2 rounded-lg transition-all duration-300 text-sm font-medium shadow-md hover:shadow-lg"
+                    className="tw-flex-1 tw-flex tw-items-center tw-justify-center tw-space-x-2 tw-bg-gradient-to-r tw-from-red-600 tw-to-red-700 hover:tw-from-red-700 hover:tw-to-red-800 tw-text-white tw-px-4 tw-py-2 tw-rounded-lg tw-transition-all tw-duration-300 tw-text-sm tw-font-medium tw-shadow-md hover:tw-shadow-lg"
                   >
-                    <FiTrash2 className="w-4 h-4" />
+                    <FiTrash2 className="tw-w-4 tw-h-4" />
                     <span>Delete</span>
                   </button>
                 </div>

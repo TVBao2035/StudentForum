@@ -27,7 +27,7 @@ export default function CategoryManager({
           <div
             {...provided.droppableProps}
             ref={provided.innerRef}
-            className="space-y-4 max-h-[70vh] overflow-auto"
+            className="tw-space-y-4 tw-max-h-[70vh] tw-overflow-auto"
           >
             {categories
               .filter((category) => category && category.id)
@@ -42,28 +42,28 @@ export default function CategoryManager({
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
-                      className="flex items-center justify-between p-4 bg-white rounded-lg shadow-md hover:shadow-xl transition duration-300"
+                      className="tw-flex tw-items-center tw-justify-between tw-p-4 tw-bg-white tw-rounded-lg tw-shadow-md hover:tw-shadow-xl tw-transition tw-duration-300"
                     >
-                      <div className="flex items-center">
+                      <div className="tw-flex tw-items-center">
                         <div
-                          className={`w-4 h-4 rounded-full ${
-                            category.color ? category.color : "bg-gray-500"
-                          } mr-4 shadow-sm`}
+                          className={`tw-w-4 tw-h-4 tw-rounded-full ${
+                            category.color ? category.color : "tw-bg-gray-500"
+                          } tw-mr-4 tw-shadow-sm`}
                         ></div>
-                        <span className="font-medium">{category.name}</span>
+                        <span className="tw-font-medium">{category.name}</span>
                       </div>
-                      <div className="space-x-2">
+                      <div className="tw-space-x-2">
                         <button
                           onClick={() => onEdit && onEdit(category.id)}
-                          className="text-indigo-600 hover:text-indigo-900 transition duration-150 transform hover:scale-110"
+                          className="tw-text-indigo-600 hover:tw-text-indigo-900 tw-transition tw-duration-150 tw-transform hover:tw-scale-110"
                         >
-                          <FiEdit className="h-5 w-5" />
+                          <FiEdit className="tw-h-5 tw-w-5" />
                         </button>
                         <button
                           onClick={() => onDelete && onDelete(category.id)}
-                          className="text-red-600 hover:text-red-900 transition duration-150 transform hover:scale-110"
+                          className="tw-text-red-600 hover:tw-text-red-900 tw-transition tw-duration-150 tw-transform hover:tw-scale-110"
                         >
-                          <FiTrash2 className="h-5 w-5" />
+                          <FiTrash2 className="tw-h-5 tw-w-5" />
                         </button>
                       </div>
                     </div>
