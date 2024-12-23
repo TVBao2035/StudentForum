@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { IoCreate } from 'react-icons/io5';
 import { FaFacebookMessenger } from "react-icons/fa";
@@ -9,40 +9,47 @@ import { ModalCreatePost } from '../Modal';
 
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
-import { logOut } from '../../API/UserAPI';
+import { getAll, logOut } from '../../API/UserAPI';
 import { initialState, setDataMain } from '../../Redux/userSlice';
+import { useDebounce } from '../../Hooks';
+import swalApp from '../../Helpers/swalApp';
 
 export default function Header() {
   const [showPostModal, setShowPostModal] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  const [listUsers, setListUsers] = useState([]);
+  const debounce = useDebounce(searchValue, 600);
+
   const handleShow = () => setShowPostModal(true);
   const handleClose = () => setShowPostModal(false);
   const themesRedux = useSelector(state => state.themes);
   const user = useSelector((state) => state.user);
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const token = user.token;
-
-  const handleLogout = async () => {
-    const result = await Swal.fire({
-      title: 'Bạn có chắc chắn muốn đăng xuất?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Có, đăng xuất!',
-      cancelButtonText: 'Không, quay lại'
-    });
-
-    if (result.isConfirmed) {
-      try {
-        await logOut();
-        dispatch(setDataMain(initialState));
-        Swal.fire('Đã đăng xuất!', '', 'success');
-        navigate('/login');
-      } catch (error) {
-        Swal.fire('Có lỗi xảy ra!', 'Vui lòng thử lại sau.', 'error');
-      }
+  const inputRef = useRef(null);
+  const fetchApiSearch = async (value)=>{
+    let res = await getAll(value, 5);
+    if(res.status !== 200){
+      swalApp("error", res.message);
+      setListUsers([]);
+      return;
     }
-  };
+    setListUsers(res.data);
+  }
+  const handleClick =() => {
+    setListUsers([]);
+    setSearchValue("");
+    inputRef.current?.focus();
+
+  }
+  useEffect(()=>{
+    if(debounce.trim().length === 0) {
+      setListUsers([]);
+      return;
+    }
+
+    fetchApiSearch(debounce);
+  }, [debounce]);
+console.log(listUsers);
+
   return (
     <header className={`Header position-fixed top-0 w-100 ${themesRedux.isChangeThemes ? "themesDark" : "themesBright"}`}>
       <div className='container d-flex justify-content-between align-items-center p-3 '>
@@ -56,7 +63,27 @@ export default function Header() {
               className="form-control rounded-pill"
               placeholder="Tìm kiếm trên diễn đàn..."
               style={{ width: '300px' }}
+              ref={inputRef}
+              onChange={(e) => setSearchValue(e.target.value)}
+              value={searchValue}
             />
+            <div className='position-relative'>
+              <div className='position-absolute w-100 rounded-4 overflow-hidden pt-1'>
+                {
+                  listUsers.map(userItem => 
+                  <Link to={`/@${userItem.id}`} onClick={handleClick} key={userItem.id} className='d-flex gap-2 align-items-center py-1 px-3 bg-white'>
+                    <div>
+                      <Avatar link={userItem.avatar} small />
+                    </div>
+                    <div>
+                      <p className='text-dark'>{userItem.name}</p>
+                    </div>
+                  </Link>
+
+                  )
+                }
+              </div>
+            </div>
           </div>
         </div>
 

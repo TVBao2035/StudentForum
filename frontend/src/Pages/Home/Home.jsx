@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Post } from '../../Components'
+import { Loading, Post } from '../../Components'
 import { getAllPost } from '../../API/PostAPI'
 import './HomeStyle.scss';
 import Swal from 'sweetalert2';
+
+import timeOut from '../../Helpers/timeOut';
 export default function Home() {
   const [listPost, setListPost] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchApi = async () => {
     let res = await getAllPost();
@@ -24,15 +27,17 @@ export default function Home() {
       });
       return;
     }
-
     setListPost(res.data);
+    await timeOut(300);
+    setLoading();
     return;
   }
 
   useEffect(()=> {
     fetchApi();
   }, [useSelector(state => state.post.like.changeLike)]);
-  
+  console.log(loading);
+  if(!!loading) return <Loading/>;
   return (
     <div className='Home mb-5 pb-5'>
       <div className='container px-5 mx-5'>

@@ -5,7 +5,7 @@ import UsersTab from "../../Components/UsersTab/UsersTab";
 import PostsTab from "../../Components/PostsTab/PostsTab";
 import CategoriesTab from "../../Components/CategoriesTab/CategoriesTab";
 import GroupTab from "../../Components/GroupTab/GroupTab";
-//import './AdminDashboardStyle.scss';
+import './AdminDashboardStyle.scss';
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("users");
 

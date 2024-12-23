@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar, Navbar } from '../../Components'
+import { Avatar, Loading, Navbar } from '../../Components'
 import { MdOutlineKeyboardArrowRight, MdBrightness6, MdPassword } from "react-icons/md";
 import { IoLogOutSharp, IoSettings } from "react-icons/io5";
 import './SettingStyle.scss';
@@ -14,6 +14,7 @@ import { ModalChangePassword } from '../../Components/Modal';
 import { setChangeThemes } from '../../Redux/themesSlice';
 import swalApp from '../../Helpers/swalApp';
 import { openModalChangePassword } from '../../Redux/modalChangePassword';
+import { setLoading } from '../../Redux/loadingSlice';
 
 
 export default function Setting() {
@@ -22,6 +23,7 @@ export default function Setting() {
   const [changeColor, setChangeColor] = useState(false);
   const modal = useSelector(state => state.modal.modalChangePassword)
   const dispatch = useDispatch();
+
 
   const handleLogout = async () => {
     const { isConfirmed } = await Swal.fire({
@@ -45,6 +47,7 @@ export default function Setting() {
       swalApp('success', response.message);
       localStorage.removeItem(process.env.REACT_APP_LOGIN_LOCAL_STORAGE);
       navigation('/login');
+      dispatch(setLoading(true));
       return;
 
     }
@@ -74,7 +77,6 @@ export default function Setting() {
     dispatch(setChangeThemes(!themes?.themesDark));
     setChangeColor(!changeColor);
     localStorage.setItem("themesApp", JSON.stringify(backgroupDark));
-
   }
 
   const handleModal = ()=>{
@@ -123,6 +125,7 @@ export default function Setting() {
   useEffect(() => {
     handleColorApp();
   }, [changeColor])
+
 
   return (
     <>

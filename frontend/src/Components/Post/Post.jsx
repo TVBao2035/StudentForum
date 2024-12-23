@@ -1,6 +1,6 @@
 import './PostStyle.scss';
 import Avatar from '../Avatar';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useState } from 'react';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { AiOutlineLike } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa6";
@@ -12,7 +12,6 @@ import ContaierComment from '../Comment/ContainerComment';
 import { changeLike, resetComment, setComment } from '../../Redux/postSlice';
 import SendMessage from '../SendMessage';
 import { createLike, deleteLike } from '../../API/LikeAPI';
-import handleColorApp from '../../Helpers/handleColorApp';
 
 export default function Post(
     { id, userId, name, createdAt, content, avatar, image, category, like,...style}
@@ -46,10 +45,10 @@ export default function Post(
         setIsOpenComment(!isOpenComment);
     }
   return (
-    <div className='Post d-flex flex-column align-items-center'>
+    <div className='Post d-flex flex-column align-items-center px-5'>
         <div className={` overflow-hidden block_main border p-2 pb-0 rounded-3 ${Object.keys(style)}`}>
             <header className='d-flex justify-content-between'>
-                <div className='d-flex gap-1 align-items-center'>
+                <div className='d-flex gap-2 align-items-center'>
                     <div className="d-block">
                         <Link to={`/@${userId}`}>
                               <Avatar normal link={avatar}/>
@@ -70,7 +69,7 @@ export default function Post(
                     </Link>
                 }
             </header>
-            <main className='my-2'>
+            <main className='my-3'>
                 {/* <div className='block_content'>{content}</div> */}
                 <div className='block_content' dangerouslySetInnerHTML={{ __html: content }}></div>
                 <div className='block_category'>#{category?.name}</div>

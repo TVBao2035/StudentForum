@@ -77,7 +77,7 @@ class UserService{
         })
     }
 
-    getAll(search){
+    getAll(search, limit){
         return new Promise(async (resolve, reject) => {
             try {
                 var searchName = {}
@@ -97,6 +97,7 @@ class UserService{
                       
                     }
                 }
+              
                 const data = await db.User.findAll({
                     where: {
                         [Op.and]:[
@@ -106,7 +107,8 @@ class UserService{
                     },
                     attributes: {
                         exclude: ['password', 'isDelete']
-                    }
+                    },
+                    limit: limit
                 });
                 resolve({
                     status: 200,

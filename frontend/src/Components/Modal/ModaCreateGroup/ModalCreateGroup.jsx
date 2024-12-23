@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { closeModalCreateGroup } from '../../../Redux/modalGroupSlice';
 import apiUploadImage from '../../../Hooks/apiUploadImage';
 import Avatar from '../../Avatar';
+import swalApp from '../../../Helpers/swalApp';
 
 const initMessageList = {
     name: "",
@@ -57,7 +58,7 @@ const ModalCreateGroup = () => {
                 let res =  await apiUploadImage(formData);
                 data.image = res.data.url;
             } catch (error) {
-                alert("Lỗi upload ảnh");
+                swalApp("error", "Lỗi upload ảnh");
                 return;
             }
         }
@@ -67,7 +68,7 @@ const ModalCreateGroup = () => {
   
         let res = await createGroup(data);
         if(res.status !== 200){
-            alert("Error");
+            swalApp("error", res.message);
             return ;
         }
         setData(initData);

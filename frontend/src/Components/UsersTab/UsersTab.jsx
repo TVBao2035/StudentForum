@@ -12,6 +12,8 @@ import {
 import apiUploadImage from "../../Hooks/apiUploadImage";
 import { useDebounce } from "../../Hooks";
 import Input from "../Input";
+import Loading from "../Loading";
+import swalApp from "../../Helpers/swalApp";
 
 
 var formData = new FormData();
@@ -103,7 +105,7 @@ export default function UsersTab() {
           let res = await apiUploadImage(formData);
           newUser.avatar = res.data.url;
         } catch (error) {
-          alert("Lỗi upload ảnh");
+          swalApp("error", "Lỗi upload ảnh");
           return;
         }
     }
@@ -154,7 +156,7 @@ export default function UsersTab() {
         userData.avatar = res.data.url;
         setIsChangeImage(false);
       } catch (error) {
-        alert("Lỗi upload ảnh");
+        swalApp("error", "Lỗi upload ảnh");
         return;
       }
     }
@@ -228,11 +230,11 @@ export default function UsersTab() {
     }
   };
 
-  if (loading) return <div>Loading users...</div>;
+  if (loading) return <Loading/>;
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="tw-min-h-screen tw-bg-gradient-to-br tw-from-gray-100 tw-to-gray-200">
+    <div style={{color: "black"}} className="tw-min-h-screen tw-bg-gradient-to-br tw-from-gray-100 tw-to-gray-200">
       <div className="tw-container tw-mx-auto tw-px-4 tw-py-8">
         <div className="tw-mb-8 tw-flex tw-justify-between tw-items-center">
           <h1 className="tw-text-3xl tw-font-bold tw-bg-gradient-to-r tw-from-indigo-600 tw-to-purple-600 tw-bg-clip-text tw-text-transparent">
@@ -241,6 +243,7 @@ export default function UsersTab() {
           <div className="tw-flex tw-items-center tw-space-x-4">
             <div className="tw-relative">
               <input
+            
                 type="text"
                 placeholder="Search..."
                 onChange={handleSearch}
@@ -299,6 +302,7 @@ export default function UsersTab() {
               <input
                 type="text"
                 placeholder="Phone"
+              
                 value={newUser.phone}
                 onChange={(e) =>
                   setNewUser({ ...newUser, phone: e.target.value })
@@ -377,10 +381,11 @@ export default function UsersTab() {
           onRequestClose={closeModal}
           contentLabel="Edit User"
           appElement={document.getElementById("root")}
+        
           className="tw-fixed tw-inset-0 tw-flex tw-items-center tw-justify-center tw-z-50"
           overlayClassName="tw-fixed tw-inset-0 tw-bg-black tw-bg-opacity-50"
         >
-          <div className="tw-bg-white tw-rounded-2xl tw-shadow-lg tw-w-[32rem] tw-p-6 tw-relative">
+          <div style={{ color: "black" }} className="tw-bg-white tw-rounded-2xl tw-shadow-lg tw-w-[32rem] tw-p-6 tw-relative">
             <button
               onClick={closeModal}
               className="tw-absolute tw-top-4 tw-right-4 tw-flex tw-items-center tw-justify-center tw-w-10 tw-h-10 tw-bg-red-500 hover:tw-bg-red-600 tw-rounded-full tw-shadow-md tw-transition-transform tw-transform hover:tw-scale-110 focus:tw-outline-none"

@@ -2,10 +2,11 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Row, Col, Button, Card, Tab, Tabs, Alert } from 'react-bootstrap';
 import { getFriendsByUserId, getFriendInvitation, acceptFriendInvitation, deleteInvitation } from '../../API/FriendAPI';
 import { useSelector } from 'react-redux'; 
-import { Avatar } from '../../Components';
+import { Avatar, Loading } from '../../Components';
 import { Link } from 'react-router-dom';
 import timeFormat from '../../Helpers/timeFormat';
 import './MakeFriendStyle.scss';
+import timeOut from '../../Helpers/timeOut';
 
 
 function FriendInvitation({ invitation, onAccept, onCancel }) {
@@ -60,6 +61,7 @@ export default function MakeFriend() {
       console.error('Error while getting friend requests:', error);
       setError('Không thể tải danh sách lời mời. Vui lòng thử lại sau.');
     } finally {
+      await timeOut(300);
       setLoading(false);
     }
   }, [userId]);
@@ -77,6 +79,7 @@ export default function MakeFriend() {
       console.error('Error while getting friends:', error);
       setError('Không thể tải danh sách bạn bè. Vui lòng thử lại sau.');
     } finally {
+      await timeOut(300);
       setLoading(false);
     }
   }, [userId]);
@@ -92,9 +95,7 @@ export default function MakeFriend() {
 
   const handleAccept = async (invitationId, friendId) => {
     try {
-      //console.log( {invitationId, friendId });
-      //const res = await acceptFriendInvitation(invitationId, userId, friendId);
-      //console.log(res.data);
+
       await acceptFriendInvitation( userId, friendId, invitationId);
       setInvitations(invitations.filter((invite) => invite.id !== invitationId));
     } catch (error) {
@@ -116,7 +117,7 @@ export default function MakeFriend() {
       setError('Không thể hủy lời mời. Vui lòng thử lại sau.');
     }
   };
-
+  if(loading) return <Loading />
   return (
     <div className="MakeFriend px-5 mx-5">
       <div className="container px-5 mx-5">
