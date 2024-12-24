@@ -21,6 +21,7 @@ const ModalCreatePost = ({ show, handleClose }) => {
   //const [images, setImages] = useState(null);
   const [groupId, setGroupId] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
+  const [isAddImg, setIsAddImg] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -50,7 +51,7 @@ const ModalCreatePost = ({ show, handleClose }) => {
       formData.append("file", e.target.files[0]);
       formData.append("upload_preset", process.env.REACT_APP_UPDATE_ACCESS_NAME);
       formData.append("asset_folder", "StudentForum");
-      //setImages(imageUrl);
+      setIsAddImg(true);
     }
   };
 
@@ -84,13 +85,16 @@ const ModalCreatePost = ({ show, handleClose }) => {
       content: content,
       image: imagePreview,
     };
-    try {
-      
-      let res = await apiUploadImage(formData);
-      postData.image = res.data.url;
-    } catch (error) {
-      swalApp("error", "Lỗi upload ảnh");
-      return;
+    console.log(isAddImg);
+    if(isAddImg){
+      try {
+        let res = await apiUploadImage(formData);
+        postData.image = res.data.url;
+        setIsAddImg(false);
+      } catch (error) {
+        swalApp("error", "Lỗi upload ảnh");
+        return;
+      }
     }
     try {
       const response = await createPost(postData);
