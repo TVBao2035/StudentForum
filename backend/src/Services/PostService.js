@@ -55,7 +55,7 @@ class PostService {
 
                 post.isDelete = true;
                 await post.save();
-                createHistory({
+                await createHistory({
                     userId: post.userId,
                     title: `Xóa bài đăng`,
                     content: `Bạn đã xóa bài đăng của mình lúc ${getTimeNow()}`
@@ -93,7 +93,7 @@ class PostService {
                 post.categoryId = categoryId;
                 post.image = image;
                 await post.save();
-                createHistory({
+                await createHistory({
                     userId: post.userId,
                     title: `Cập nhật bài đăng`,
                     content: `Bạn đã cập nhật bài đăng của mình lúc ${getTimeNow()}`
@@ -140,7 +140,7 @@ class PostService {
                     content,
                     image
                 })
-                createHistory({
+                await createHistory({
                     userId,
                     title: `Tạo mới bài đăng`,
                     content: `Bạn đã tạo mới bài đăng lúc ${getTimeNow()}`

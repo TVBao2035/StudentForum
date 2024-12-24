@@ -59,6 +59,7 @@ class FriendService{
             }
         })
     }
+    
     deleteFriend(userId, friendId){
         return new Promise ( async(resolve, reject) => {
             try {
@@ -218,15 +219,17 @@ class FriendService{
     createFriendInvitation({userId, friendId}){
         return new Promise(async(resolve, reject) => {
             try {
+                console.log(userId, friendId);
                 const user = await checkUser(userId);
                 if (user?.status === 404) {
                     return resolve(user);
                 }
+                console.log(user.id);
                 const friend = await checkUser(friendId);
                 if (friend?.status === 404) {
                     return resolve(friend)
                 }
-                
+                console.log(friend.id);
                 const invitation = await db.Friend.findOne({
                     where: {
                         [Op.and]: [
@@ -234,6 +237,7 @@ class FriendService{
                         ]
                     }
                 });
+               
                 // check invitation is existing
                 if(invitation && invitation.isDelete === false){
                     return resolve({
@@ -241,18 +245,17 @@ class FriendService{
                         message: `Lời Mời Kết Bạn Đã Tồn Tại`
                     }) 
                 }
-
                 await createHistory({
-                    userId: invitation.userId,
+                    userId,
                     title: `Bạn đã gửi yêu cầu kết bạn `,
                     content: `Bạn đã gửi yêu câu kết bạn ${friend.name} lúc ${getTimeNow()}`
                 });
                 await createHistory({
-                    userId: invitation.friendId,
+                    userId: friendId,
                     title: `Lời mời kết bạn`,
                     content: `${user.name} đã gửi yêu câu kết bạn tới bạn lúc ${getTimeNow()}`
                 })
-                // if invitation has deleted then update isDelete = false and isAccept = false;
+               // if invitation has deleted then update isDelete = false and isAccept = false;
                 if(invitation && invitation.isDelete){
                     invitation.isDelete = false;
                     invitation.isAccept = false;

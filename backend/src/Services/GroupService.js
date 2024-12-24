@@ -183,7 +183,7 @@ class GroupService {
         })
     }
 
-    update({id, name, description, image}){
+    update({id, name, description, image}, user){
         return new Promise(async(resolve, reject) => {
             try {
                 const group = await checkGroup(id);
@@ -193,15 +193,15 @@ class GroupService {
                 group.description = description;
                 group.image = image;
                 await group.save();
+                await createHistory({
+                    userId: user.id,
+                    title: `Chỉnh sửa thông tin nhóm `,
+                    content: `Bạn đã chỉnh sửa thông tin nhóm ${group.name} lúc ${getTimeNow()}`
+                });
                 resolve({
                     status: 200,
                     message: `Cập nhật nhóm thành công`
                 })
-                await createHistory({
-                    userId: group.userId,
-                    title: `Chỉnh sửa thông tin nhóm `,
-                    content: `Bạn đã chỉnh sửa thông tin nhóm ${group.name} lúc ${getTimeNow()}`
-                });
             } catch (error) {
                 reject({
                     status: 400,
@@ -211,15 +211,16 @@ class GroupService {
         })
     }
 
-    delete(groupId){
+    delete(groupId, user){
         return new Promise(async(resolve, reject) => {
             try {
                 const group = await checkGroup(groupId);
                 if(group.status === 404) return resolve(group);
                 group.isDelete = true;
                 await group.save();
+              
                 await createHistory({
-                    userId: group.userId,
+                    userId: user.id,
                     title: `Xóa nhóm `,
                     content: `Bạn đã xóa nhóm ${group.name} lúc ${getTimeNow()}`
                 });

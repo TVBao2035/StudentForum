@@ -18,7 +18,8 @@ export default function Post(
 ) {
     const user = useSelector(state => state.user);
     const dispath = useDispatch();
-
+    console.log(createdAt)
+    console.log(timeFormat(createdAt));
     const [isOpenComment, setIsOpenComment] = useState(false);
 
     const userLiked = (like?.some(e => e.userId === user.id));

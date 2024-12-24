@@ -32,6 +32,7 @@ class CategoryController{
             res.status(400).json(error);
         }
     }
+    
     async create(req, res){
         try {
             const {value, error} = createCategoryDTO.validate(req.body);

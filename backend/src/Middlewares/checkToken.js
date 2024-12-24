@@ -20,8 +20,8 @@ const checkToken = (req, res, next) => {
         }
         next();
     } catch (error) {
-        res.status(403).json({
-            status: 403,
+        res.status(401).json({
+            status: 401,
             message: `Token Is Invalid`
         })
     }

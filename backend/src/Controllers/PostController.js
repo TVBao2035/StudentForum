@@ -13,6 +13,7 @@ class PostController{
             res.status(400).json(error);
         }
     }
+    
     async delete(req, res){
         try {
             const id = req.params.id;

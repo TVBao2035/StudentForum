@@ -21,22 +21,35 @@ const timeFormat = (time)=>{
     if (takeYears === 1 && (takeMonths >= 0 || takeMonths + 12 > 1))
         return `${day}/${month}/${date.getFullYear()}`;
 
+    if(takeYears === 1)
+        return `${day}/${month}/${date.getFullYear()}`;
+    
     if (takeYears === 0 && takeMonths > 1)
+        return `${day}/${month}/${date.getFullYear()}`;
+
+    if(takeMonths > 1)
         return `${day}/${month}/${date.getFullYear()}`;
 
     if(takeMonths === 1 && takeDates < 0 )
         return `${takeDates+30} ngày trước`;
-
+    
+    if(takeMonths === 1){
+        return `${day}/${month}/${date.getFullYear()}`;
+    }
     if(takeMonths === 0 && takeDates > 1)
         return `${takeDates} ngày trước`
-
+    if(takeDates > 1){
+        return `${takeDates} ngày trước`
+    }
     if(takeDates === 1 && takeHours < 0)
         return `${takeHours + 24} giờ trước`;
-
+    if(takeDates === 1){
+        return `Hôm qua`;
+    }
     if(takeDates ===0 && takeHours > 1)
         return `${takeHours} giờ trước`;
     
-    if(takeHours > 1)
+    if(takeHours >= 1)
         return `${takeHours} giờ trước`;
 
     if(takeHours === 1 && takeMinutes < 0)

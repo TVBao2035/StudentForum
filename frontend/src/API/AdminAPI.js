@@ -1,8 +1,8 @@
 import axios from "../Configs/axios.js";
 
 //User
-export const getAllUser = (search="") => {
-  return axios.get(`?search=${search}`);
+export const getAllUser = (search="", limit="") => {
+  return axios.get(`?search=${search}&limit=${limit}`);
 };
 
 export const createUser = async ({ name, email, phone, avatar, password }) => {

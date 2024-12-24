@@ -52,7 +52,7 @@ instance.interceptors.response.use(function (response) {
         case 403: 
             var { isConfirmed } = await Swal.fire({
                 title: "Thông Báo :v",
-                text: "Hết Phiên Đăng Nhập, Vui Lòng Đăng Nhập Lại.",
+                text: "Bạn không có quyền truy cập vào trang này",
                 icon: "question",
                 buttonsStyling: "blue",
                 confirmButtonColor: "#007bff",
@@ -60,8 +60,7 @@ instance.interceptors.response.use(function (response) {
                 grow: 'row'
             });
             if(isConfirmed){
-                window.location.href = '/login';
-                localStorage.clear(process.env.REACT_APP_LOGIN_LOCAL_STORAGE);
+                window.location.href = '/';
                 return Promise.resolve(error.response.data);
             }
         case 404: 

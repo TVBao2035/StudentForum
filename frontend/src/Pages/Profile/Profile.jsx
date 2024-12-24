@@ -13,6 +13,7 @@ import { acceptFriendInvitation, createInvitation, deleteFriend, cancelFriendInv
 import { getAllPostByUserId } from '../../API/PostAPI';
 import './ProfileStyle.scss';
 import { BsFillPersonPlusFill, BsFillPersonXFill, BsPersonCheckFill, BsPersonFillUp } from 'react-icons/bs';
+import swalApp from '../../Helpers/swalApp';
 
 export default function Profile() {
   
@@ -32,17 +33,7 @@ export default function Profile() {
   const handleCallAPI = async (callBack, userId, friendId) => {
     let res = await callBack(userId, friendId);
     if(res.status !== 200){
-      Swal.fire({
-        title: "Thông Báo :v",
-        text: res.message,
-        icon: "question",
-        showCloseButton: true,
-        showCancelButton: true,
-        buttonsStyling: "blue",
-        confirmButtonColor: "#007bff",
-        cancelButtonColor: "#dc3545",
-        grow: 'row'
-      });
+     swalApp("error", res.message);
       return;
     }
     handleGetData(getFriendsByUserId, id, setListFriends);
@@ -53,17 +44,7 @@ export default function Profile() {
     let res = await callAPI(paramId);
 
     if(res.status !== 200){
-      Swal.fire({
-        title: "Thông Báo :v",
-        text: res.message,
-        icon: "question",
-        showCloseButton: true,
-        showCancelButton: true,
-        buttonsStyling: "blue",
-        confirmButtonColor: "#007bff",
-        cancelButtonColor: "#dc3545",
-        grow: 'row'
-      });
+      swalApp("error", res.message);
       return;
     }
 
@@ -81,17 +62,7 @@ export default function Profile() {
     }
 
     if(res.status === 404){
-      Swal.fire({
-        title: "Thông Báo :v",
-        text: res.message,
-        icon: "question",
-        showCloseButton: true,
-        showCancelButton: true,
-        buttonsStyling: "blue",
-        confirmButtonColor: "#007bff",
-        cancelButtonColor: "#dc3545",
-        grow: 'row'
-      });
+      swalApp("error", res.message);
       return;
     }
   }
@@ -136,7 +107,7 @@ export default function Profile() {
                         </Link>
                       </div>
                     :
-                        userDetails?.isOwner &&  userDetails?.isFriend ? 
+                        userDetails?.isFriend ? 
                       <div className='d-flex gap-2'>
                         <button 
                         className='btn btn-outline-primary fw-medium d-flex align-items-center gap-1'

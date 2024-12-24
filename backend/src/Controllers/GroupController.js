@@ -65,7 +65,7 @@ class GroupController{
                 })
             }
 
-            const data = await GroupService.update(value);
+            const data = await GroupService.update(value, req.user.decode);
             res.status(200).json(data);
         } catch (error) {
             console.log(error);
@@ -76,11 +76,11 @@ class GroupController{
     async delete(req, res){
         try {
             const groupId = req.params.id;
-            const data = await GroupService.delete(groupId);
+            const data = await GroupService.delete(groupId, req.user.decode);
             res.status(200).json(data);
         } catch (error) {
             console.log(error);
-            res.status(400).jon(error);
+            res.status(400).json(error);
         }
     }
 

@@ -1,14 +1,32 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import UsersTab from "../../Components/UsersTab/UsersTab";
 import PostsTab from "../../Components/PostsTab/PostsTab";
 import CategoriesTab from "../../Components/CategoriesTab/CategoriesTab";
 import GroupTab from "../../Components/GroupTab/GroupTab";
 import './AdminDashboardStyle.scss';
+import { useSelector } from "react-redux";
+import Loading from "../../Components/Loading";
+import timeOut from '../../Helpers/timeOut';
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("users");
+  const user = useSelector(state => state.user);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  useEffect(()=>{
+    if(!user.isAdmin){
+      navigate('/');
+      return;
+    }
+    runningLoading();
+  }, [])
 
+  const runningLoading = async () =>{
+    await timeOut(5000);
+    setLoading(false);
+  }
+  if(loading) return <Loading />
   return (
     <div className="Admin">
       <div className="tw-min-h-screen tw-bg-gray-100">

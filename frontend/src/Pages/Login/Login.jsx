@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { signIn } from '../../API/UserAPI';
+import { logOut, signIn } from '../../API/UserAPI';
 import './LoginStyle.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { setDataMain } from '../../Redux/userSlice';
 import { setLoading } from '../../Redux/loadingSlice';
 import timeOut from '../../Helpers/timeOut';
+import swalApp from '../../Helpers/swalApp';
 
 export default function Login() {
   const initInfor = {
@@ -75,7 +76,21 @@ export default function Login() {
       }
     }
   }
+  const fetchLogout = async () => {
+    let response = await logOut();
+    if (response.status === 200) {
+      swalApp('success', response.message);
+      localStorage.removeItem(process.env.REACT_APP_LOGIN_LOCAL_STORAGE);
+      naigate('/login');
+      return;
+
+    }
+    if (response.status === 404) {
+      swalApp('error', response.message);
+    }
+  }
   useEffect(()=> {
+    fetchLogout();
     localStorage.removeItem(process.env.REACT_APP_LOGIN_LOCAL_STORAGE);
   }, []);
   
