@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { HistoryItem } from '../../Components'
+import { HistoryItem, Loading } from '../../Components'
 import { getAllHistoryByUserId, updateStateHistory } from '../../API/HistoryAPI'
 import { useSelector } from 'react-redux'
+import swalApp from '../../Helpers/swalApp';
 
 export default function Notification() {
   const user = useSelector(state => state.user);
@@ -10,7 +11,7 @@ export default function Notification() {
   const getHistory = async (userId) => {
     let res = await getAllHistoryByUserId(userId);
     if(res.status !== 200){
-      alert(res.message);
+       swalApp("error", res.message);
       return;
     }
     setListHistories(res.data);
@@ -19,7 +20,7 @@ export default function Notification() {
 
     let res = await updateStateHistory(id);
     if(res.status !==200) {
-      alert(res.message);
+       swalApp("error", res.message);
       return;
     }
     getHistory(user.id);
@@ -31,7 +32,7 @@ export default function Notification() {
     setLoading(true);
   }, [user.id]);
 
-  if(!user || !loading) return "Loading........";
+  if(!user || !loading) return <Loading />;
   return (
     <div className='Notification px-5 mx-5'>
       <div className='container px-5 mx-5'>

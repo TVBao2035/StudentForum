@@ -15,6 +15,8 @@ import {
 } from "../../API/AdminAPI";
 import apiUploadImage from "../../Hooks/apiUploadImage";
 import { useDebounce } from "../../Hooks";
+import Loading from "../Loading";
+import swalApp from "../../Helpers/swalApp";
 
 
 var formData = new FormData();
@@ -133,7 +135,7 @@ export default function PostsTab() {
       newPost.image = res.data.url;
       setIsChangeImage(false);
     } catch (error) {
-      alert("Lỗi upload ảnh");
+      swalApp("error", "Lỗi upload ảnh");
       return;
     }
 
@@ -180,7 +182,7 @@ export default function PostsTab() {
         let res = await apiUploadImage(formData);
         postData.image = res.data.url;
       } catch (error) {
-        alert("Lỗi upload ảnh");
+        swalApp("error", "Lỗi upload ảnh");
         return;
       }
     }
@@ -242,12 +244,12 @@ export default function PostsTab() {
     }
   };
 
-  if (loading) return <div>Loading posts...</div>;
+  if (loading) return <Loading/>;
   if (error) return <div>{error}</div>;
 
   return (
     
-    <div className="tw-min-h-screen tw-bg-gradient-to-br tw-from-gray-100 tw-to-gray-200">
+    <div style={{color: "black"}} className="tw-min-h-screen tw-bg-gradient-to-br tw-from-gray-100 tw-to-gray-200">
       <div className="tw-container tw-mx-auto tw-px-4 tw-py-8">
         <div className="tw-mb-8 tw-flex tw-justify-between tw-items-center">
           <h1 className="tw-text-3xl tw-font-bold tw-bg-gradient-to-r tw-from-indigo-600 tw-to-purple-600 tw-bg-clip-text tw-text-transparent">
@@ -399,7 +401,7 @@ export default function PostsTab() {
           className="tw-fixed tw-inset-0 tw-flex tw-items-center tw-justify-center tw-z-50"
           overlayClassName="tw-fixed tw-inset-0 tw-bg-black tw-bg-opacity-50"
         >
-          <div className="tw-relative tw-bg-white tw-p-6 tw-rounded-2xl tw-shadow-2xl tw-w-[40rem]">
+          <div style={{ color: "black" }} className="tw-relative tw-bg-white tw-p-6 tw-rounded-2xl tw-shadow-2xl tw-w-[40rem]">
             <button
               onClick={closeModal}
               className="tw-absolute tw-top-4 tw-right-4 tw-flex tw-items-center tw-justify-center tw-w-10 tw-h-10 tw-bg-red-500 hover:tw-bg-red-600 tw-rounded-full tw-shadow-md tw-transition-transform tw-transform hover:tw-scale-110 focus:tw-outline-none"

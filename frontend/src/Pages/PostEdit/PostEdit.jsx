@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { deletePost, getDetailsPost, updatePost } from "../../API/PostAPI";
 import { useEffect, useState } from "react";
-import { Avatar, Input } from "../../Components";
+import { Avatar, Input, Loading } from "../../Components";
 
 import timeFormat from "../../Helpers/timeFormat";
 import { getAllCategories } from "../../API/CategoryAPI";
@@ -44,7 +44,7 @@ const PostEdit = () => {
     const fetchAllComment = async (postId) => {
         let res = await getAllCommentByPostId(postId);
         if (res.status !== 200) {
-            alert(res.message);
+             swalApp("error", res.message);
             return;
         }
         setCommentsList(res.data)
@@ -52,7 +52,7 @@ const PostEdit = () => {
     const fetchGetAllCategories = async () => {
         let res = await getAllCategories();
         if (res.status !== 200) {
-            alert(res.message);
+             swalApp("error", res.message);
             return;
         }
         setCategoriesList(res.data);
@@ -61,7 +61,7 @@ const PostEdit = () => {
     const fetchGetPost = async (postId) => {
         let res = await getDetailsPost(postId);
         if (res.status !== 200) {
-            alert(res.message);
+             swalApp("error", res.message);
             return;
         }
         setPost({ ...res.data, rootImage: res.data.image });
@@ -130,7 +130,7 @@ const PostEdit = () => {
         countComments(commentsList);
     }, [commentsList])
 
-    if (isLoading) return "...Loading"
+    if (isLoading) return <Loading/>
     return (
         <div className="PostEdit container mb-5 d-flex flex-column gap-4 mt-2">
             <header className="d-flex justify-content-between">
@@ -210,7 +210,7 @@ const PostEdit = () => {
                             </div>
                         }
                         {
-                            post?.image && <Avatar link={post?.image} none-round w-75 />
+                            post?.image && <Avatar link={post?.image}  none-round  />
                         }
                         <div className="d-flex justify-content-center">
                             {

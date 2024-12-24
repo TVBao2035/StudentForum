@@ -7,6 +7,8 @@ import Swal from 'sweetalert2';
 import { Input } from '../../Components';
 import { useDispatch } from 'react-redux';
 import { setDataMain } from '../../Redux/userSlice';
+import { setLoading } from '../../Redux/loadingSlice';
+import timeOut from '../../Helpers/timeOut';
 
 export default function Login() {
   const initInfor = {
@@ -66,7 +68,9 @@ export default function Login() {
         });
         localStorage.setItem(process.env.REACT_APP_LOGIN_LOCAL_STORAGE, true);
         naigate('/');
-
+        dispatch(setLoading(true));
+        await timeOut(2000);
+        dispatch(setLoading(false));
         return;
       }
     }

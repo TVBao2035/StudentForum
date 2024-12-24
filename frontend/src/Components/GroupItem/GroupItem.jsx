@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
  const GroupItem = ({group, isJoin, image, fetchCreate, fetchDelete}) => {
     
     const user = useSelector(state => state.user);
-
+    
 
   return (
       <div className='GroupItem d-flex col-xl-3 col-md-6 col-12 flex-column gap-3  p-3'>

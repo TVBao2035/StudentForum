@@ -4,7 +4,7 @@ import Avatar from "../Avatar";
 
 export default function UsersTable({ users = [], onEdit, onDelete }) {
   return(
-    <div className="tw-overflow-x-auto tw-bg-gradient-to-r tw-from-blue-50 tw-to-purple-50 tw-rounded-lg tw-p-4">
+    <div style={{color: "black"}} className="tw-overflow-x-auto tw-bg-gradient-to-r tw-from-blue-50 tw-to-purple-50 tw-rounded-lg tw-p-4">
     <table className="tw-min-w-full tw-bg-white tw-rounded-lg tw-overflow-hidden tw-shadow-xl">
       <thead className="tw-bg-gradient-to-r tw-from-indigo-600 tw-to-purple-600 tw-text-white">
         <tr>

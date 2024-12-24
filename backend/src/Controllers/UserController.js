@@ -109,8 +109,9 @@ class UserController{
     async getAll(req, res){
         try {
             const search = req.query.search;
+            const limit = req.query.limit;
             
-            const data = await UserService.getAll(search);
+            const data = await UserService.getAll(search, limit.trim().length===0? null : Number(limit));
             res.status(200).json(data);
         } catch (error) {
             console.log(error);

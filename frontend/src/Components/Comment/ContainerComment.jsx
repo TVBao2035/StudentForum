@@ -3,6 +3,7 @@ import { getAllCommentByPostId } from '../../API/CommentAPI';
 import Comment from './Comment';
 import './CommentStyle.scss';
 import { useSelector } from 'react-redux';
+import swalApp from '../../Helpers/swalApp';
 const  ContaierComment = ({postId, ...style}) => {
 
   const [comments, setComments] = useState([]);
@@ -14,7 +15,7 @@ const  ContaierComment = ({postId, ...style}) => {
       setComments(res.data);
       return;
     }
-    alert(res.message);
+   swalApp("error", res.message);
   }
 
   const commentRedux = useSelector(state => state.post.comment);

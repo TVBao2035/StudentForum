@@ -10,6 +10,7 @@ import {
   deleteCategory,
 } from "../../API/AdminAPI";
 import { useDebounce } from "../../Hooks";
+import Loading from "../Loading";
 
 export default function CategoriesTab() {
   const [categories, setCategories] = useState([]);
@@ -163,11 +164,11 @@ export default function CategoriesTab() {
     }
   };
 
-  if (loading) return <div>Loading categories...</div>;
+  if (loading) return <Loading/>;
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="tw-min-h-screen tw-bg-gradient-to-br tw-from-gray-100 tw-to-gray-200">
+    <div style={{ color: "black" }} className="tw-min-h-screen tw-bg-gradient-to-br tw-from-gray-100 tw-to-gray-200">
       <div className="tw-container tw-mx-auto tw-px-4 tw-py-8">
         <div className="tw-mb-8 tw-flex tw-justify-between tw-items-center">
           <h1 className="tw-text-3xl tw-font-bold tw-bg-gradient-to-r tw-from-indigo-600 tw-to-purple-600 tw-bg-clip-text tw-text-transparent">
@@ -253,7 +254,7 @@ export default function CategoriesTab() {
           className="tw-fixed tw-inset-0 tw-flex tw-items-center tw-justify-center tw-z-50"
           overlayClassName="tw-fixed tw-inset-0 tw-bg-black tw-bg-opacity-50"
         >
-          <div className="tw-bg-white tw-rounded-lg tw-shadow-lg tw-w-full tw-max-w-md tw-mx-4">
+          <div style={{ color: "black" }} className="tw-bg-white tw-rounded-lg tw-shadow-lg tw-w-full tw-max-w-md tw-mx-4">
             <div className="tw-px-6 tw-py-4 tw-border-b">
               <h2 className="tw-text-lg tw-font-semibold tw-text-gray-800">
                 Edit Category

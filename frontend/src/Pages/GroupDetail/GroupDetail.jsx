@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate, useNavigation } from 'react-router-dom'
 import { deleteGroup, deleteGroupInvitation, getDetailGroup, updateStateGroupInvitation } from '../../API/GroupAPI';
-import { Avatar, FriendItem, Navbar, Post } from '../../Components';
+import { Avatar, FriendItem, Loading, Navbar, Post } from '../../Components';
 import { getAllPostByGroupId } from '../../API/PostAPI';
 import { useDispatch, useSelector } from 'react-redux';
 import {FriendListPage, GroupInvitation, PostListPage} from '../../Pages';
 import { AiOutlineUserDelete } from 'react-icons/ai'
 import { openModalUpdateGroup } from '../../Redux/modalGroupSlice';
+import swalApp from '../../Helpers/swalApp';
+import timeOut from '../../Helpers/timeOut';
 
 const GroupDetail = () => {
   const dispatch = useDispatch();
@@ -17,10 +19,12 @@ const GroupDetail = () => {
   const [inforGroup, setInforGroup] = useState();
   const [groupPosts, setGroupPosts] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
-  
+  const [loading, setLoading] = useState(true);
   const getGroup = async (groupId) => {
     let res = await getDetailGroup(groupId);
     setInforGroup(res.data);
+    await timeOut(300);
+    setLoading(false);
   }
 
   const getGroupPosts = async(groupId) => {
@@ -31,7 +35,7 @@ const GroupDetail = () => {
   const handleAcceptInvitation = async (invitationId, callBack) => {
     let res = await updateStateGroupInvitation(invitationId);
     if (res.status !== 200) {
-      alert("Error");
+     swalApp("error", res.message);
       return;
     }
     getGroup(groupId);
@@ -41,7 +45,7 @@ const GroupDetail = () => {
   const handleDeleteInvitation = async (invitationId, callBack) => {
     let res = await deleteGroupInvitation(invitationId);
     if (res.status !== 200) {
-      alert("Error");
+     swalApp("error", res.message);
       return;
     }
     getGroup(groupId);
@@ -51,7 +55,7 @@ const GroupDetail = () => {
   const handleDeleteMember = async (invitationId) => {
     let res = await deleteGroupInvitation(invitationId);
     if (res.status !== 200) {
-      alert("Error");
+      swalApp("error", res.message);
       return;
     }
     getGroup(groupId);
@@ -74,7 +78,7 @@ const GroupDetail = () => {
     }else if(Number(e.target.value) === 2){
       let res = await deleteGroup(inforGroup.id);
       if(res.status !== 200){
-        alert("Error");
+        swalApp("error", res.message);
         e.target.value = 0;
         return ;
       }
@@ -112,6 +116,8 @@ const GroupDetail = () => {
     useSelector(state => state.post.like.changeLike),
     useSelector(state => state.modal.modalGroup),
   ])
+  
+  if(loading) return <Loading />
   return (
     <div className='GroupDetail'>
       <header className='d-flex gap-2 align-items-center '>

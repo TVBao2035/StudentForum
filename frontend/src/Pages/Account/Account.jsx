@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import { setDataMain } from "../../Redux/userSlice";
 import { Input, Loading } from "../../Components";
 import handleColorApp from "../../Helpers/handleColorApp";
+import swalApp from "../../Helpers/swalApp";
+import timeOut from "../../Helpers/timeOut";
 
 var formData = new FormData();
 export default function Account() {
@@ -42,7 +44,7 @@ export default function Account() {
             return ;
         }
 
-        alert(res.message);
+        swalApp("error", res.message);
     }
     useEffect( () => {
         fetchApi(user.id)
@@ -145,6 +147,7 @@ export default function Account() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        await timeOut(300);
         setIsLoading(true);
         const newErrors = { ...errors };
 
@@ -172,7 +175,7 @@ export default function Account() {
                 let res = await apiUploadImage(formData);
                 userData.avatar = res.data.url;
             } catch (error) {
-                alert("Lỗi upload ảnh");
+                swalApp("error", "Lỗi upload ảnh");
                 return;
             }
         }
@@ -187,6 +190,7 @@ export default function Account() {
 
             if (response.status === 200) {
                 navigator('/');
+                await timeOut(300);
                 setIsLoading(false);
                 dispatch(setDataMain({
                     id: user.id,

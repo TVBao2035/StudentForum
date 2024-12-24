@@ -5,6 +5,7 @@ import {  getAllCategories } from '../../../API/CategoryAPI';
 import { createPost } from '../../../API/PostAPI';
 import { useSelector } from 'react-redux';
 import apiUploadImage from '../../../Hooks/apiUploadImage';
+import swalApp from '../../../Helpers/swalApp';
 
 
 var formData = new FormData();
@@ -88,7 +89,7 @@ const ModalCreatePost = ({ show, handleClose }) => {
       let res = await apiUploadImage(formData);
       postData.image = res.data.url;
     } catch (error) {
-      alert("Lỗi upload ảnh");
+      swalApp("error", "Lỗi upload ảnh");
       return;
     }
     try {
@@ -110,7 +111,7 @@ const ModalCreatePost = ({ show, handleClose }) => {
   return (
     <Modal show={show} onHide={handleCloseModal}>
       <Modal.Header closeButton>
-        <Modal.Title>Tạo bài đăng mới</Modal.Title>
+        <Modal.Title style={{ color: "black" }}>Tạo bài đăng mới</Modal.Title>
       </Modal.Header>
       <Modal.Body>
 

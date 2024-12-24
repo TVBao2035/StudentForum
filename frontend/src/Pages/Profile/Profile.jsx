@@ -198,7 +198,7 @@ export default function Profile() {
               </div>
             </div>
             <div className='d-flex'>
-              <div className='col border-start border-top border-end p-3'>
+              <div className='col d-flex flex-column gap-2 border-start border-top border-end p-3'>
                   <InformationUserBar
                   email={userDetails?.email}
                   phone={userDetails?.phone} 
