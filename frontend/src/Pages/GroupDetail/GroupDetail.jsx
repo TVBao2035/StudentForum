@@ -127,7 +127,7 @@ const GroupDetail = () => {
             </div>
             <div className='d-flex flex-column gap-1'>
               <div>
-                <h5>{inforGroup?.name}</h5>
+                <h5 className='fs-4 fw-bold'>{inforGroup?.name}</h5>
                 <p>{inforGroup?.description}</p>
                 <p>{`${inforGroup?.groupuser.length} thành viên + ${groupPosts?.length} bài đăng trên nhóm`}</p>
               </div>
