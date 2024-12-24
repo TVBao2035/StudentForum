@@ -136,6 +136,7 @@ const Register = () => {
         
         if (credentials.password !== credentials.confirmPassword) {
             setErrorMessage('Mật khẩu và xác nhận mật khẩu không khớp!');
+            return;
         }
 
         const { confirmPassword, ...newCredentials } = credentials;

@@ -52,7 +52,16 @@ export default function Account() {
 
     const handleInputChange = (event) => {
         const { name, value } = event.target; 
-
+        if (name === 'name') {
+            if (!value) {
+                setErrors((preErrors) => ({
+                    ...preErrors,
+                    name: 'Tên đăng nhập không được để trống!',
+                }));
+            } else {
+                setErrors((preErrors) => ({ ...preErrors, name: undefined}));
+            }
+        }
 
         if (name === 'email') {
             if (!value) {
@@ -139,7 +148,9 @@ export default function Account() {
         setIsLoading(true);
         const newErrors = { ...errors };
 
-       
+       if (!userData.name) {
+            newErrors.name = 'Tên đăng nhập không được để trống!';
+       }
 
         if (!userData.email) {
             newErrors.email = 'Email không được để trống!';
@@ -152,8 +163,10 @@ export default function Account() {
         setErrors(newErrors);
 
         if (Object.values(newErrors).some((error) => error)) {
+            setIsLoading(false);
             return;
         }
+        
         if(Number(typeSelect) === 1){
             try {
                 let res = await apiUploadImage(formData);
@@ -266,14 +279,16 @@ export default function Account() {
                                     </div>
                                     <div className="col-md-12 col-lg-8 col-xl-8">
                                         <div className="form-item">
-                                            <label className="form-label mb-3">Tên đăng nhập</label>
+                                            <label htmlFor="name" className="form-label my-3">Tên đăng nhập</label>
                                             <input
                                                 type="text"
                                                 name="name"
+                                                id="name"
                                                 className="form-control"
                                                 value={userData.name}
                                                 onChange={handleInputChange}
                                             />
+                                            {errors.name && <div className="text-danger">{errors.name}</div>}
                                         </div>
                                        
                                         <div className="form-item">

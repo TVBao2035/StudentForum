@@ -393,7 +393,7 @@ class UserService{
                 if(checkEmail){
                     return resolve({
                         status: 404,
-                        message: `Email Đã Tồn Tại!!`
+                        message: `Email đã tồn tại!!`
                     })
                 }
                 const checkPhone = await db.User.findOne({
@@ -404,7 +404,7 @@ class UserService{
                 if(checkPhone){
                     return resolve({
                         status: 404,
-                        message: `Phone Đã Tồn Tại!!`
+                        message: `Số điện thoại đã tồn tại!!`
                     })
                 }
                 password = hashPassword(password);
