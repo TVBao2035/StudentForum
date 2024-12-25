@@ -25,7 +25,10 @@ class PostService {
                             {groupId}
                         ]
                     },
-                    include: postInclude
+                    include: postInclude,
+                    order: [
+                        ['createdAt', "DESC"],
+                    ]
                 });
 
                 resolve({

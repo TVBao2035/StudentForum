@@ -12,14 +12,15 @@ import timeOut from '../../Helpers/timeOut';
 
 const GroupDetail = () => {
   const dispatch = useDispatch();
-  const location = useLocation();
   const navigate = useNavigate();
+  const location = useLocation();
   const groupId = location.pathname.split("/")[2].split("@")[1];
   const user = useSelector(state => state.user);
   const [inforGroup, setInforGroup] = useState();
   const [groupPosts, setGroupPosts] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [loading, setLoading] = useState(true);
+
   const getGroup = async (groupId) => {
     let res = await getDetailGroup(groupId);
     setInforGroup(res.data);
@@ -66,7 +67,6 @@ const GroupDetail = () => {
   }
 
   const handleSelect = async (e) => {
-    console.log(e.target.value);
     if(Number(e.target.value) === 1){
       dispatch(openModalUpdateGroup({
         id: inforGroup.id,
@@ -136,7 +136,7 @@ const GroupDetail = () => {
                   inforGroup?.groupuser.map((member, index) => {
                     let displayMaxUser = 3;
                     if (index === displayMaxUser){
-                      return <p className='pb-1 text-dark'>{`+${parseInt(inforGroup?.groupuser?.length - displayMaxUser)}`}</p>
+                      return <p className='pb-1'>{`+${parseInt(inforGroup?.groupuser?.length - displayMaxUser)}`}</p>
                     } else if (index < displayMaxUser){
                         return <Link 
                                   key={`${member.invitation.avatar}-${index}`} 
