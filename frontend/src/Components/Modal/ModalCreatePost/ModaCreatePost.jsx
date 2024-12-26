@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import { Editor } from '@tinymce/tinymce-react';
+import Swal from "sweetalert2";
 import {  getAllCategories } from '../../../API/CategoryAPI';
 import { createPost } from '../../../API/PostAPI';
 import { useSelector } from 'react-redux';
@@ -25,12 +26,14 @@ const ModalCreatePost = ({ show, handleClose }) => {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      try {
-        const response = await getAllCategories();
-
-        setCategories(response.data);
-      } catch (error) {
-        console.error('Error fetching categories', error);
+      if (categories.length === 0) {
+        try {
+          const response = await getAllCategories();
+  
+          setCategories(response.data);
+        } catch (error) {
+          console.error('Error fetching categories', error);
+        }
       }
     };
     
@@ -99,7 +102,8 @@ const ModalCreatePost = ({ show, handleClose }) => {
     try {
       const response = await createPost(postData);
       if (response.status === 200) {
-        setSuccessMessage('Post created successfully!');
+        //setSuccessMessage('Post created successfully!');
+        Swal.fire("Success", "Post created successfully!", "success");
         handleClose();
       }
       else {
