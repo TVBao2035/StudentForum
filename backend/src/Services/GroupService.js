@@ -91,17 +91,14 @@ class GroupService {
     createInvitation(invitation){
         return new Promise(async (resolve, reject) => {
             try {
+                console.log(invitation);
                 const groupuser = await db.GroupUser.findOne({
                     where: {
                         userId: invitation.userId,
                         groupId: invitation.groupId
                     }
                 });
-                const group = await db.Group.findOne({
-                    where: {
-                        id: groupuser.groupId
-                    }
-                })
+                var group;
                 if(groupuser && groupuser?.isDelete === false){
                     return resolve({
                         status: 404,
@@ -110,6 +107,12 @@ class GroupService {
                 } else if(groupuser?.isDelete === true){
                     groupuser.isDelete = false;
                     groupuser.isAccept = false;
+                    group = await db.Group.findOne({
+                        where: {
+                            id: groupuser.groupId
+                        }
+                    })
+                    console.log(group.name);
                     await groupuser.save();
                     await createHistory({
                         userId: invitation.userId,
@@ -124,7 +127,11 @@ class GroupService {
                 }
 
                 const data = await db.GroupUser.create(invitation);
-          
+                group = await db.Group.findOne({
+                    where: {
+                        id: data.groupId
+                    }
+                })
                 data.isAccept = false;
                 await data.save();
                 await createHistory({

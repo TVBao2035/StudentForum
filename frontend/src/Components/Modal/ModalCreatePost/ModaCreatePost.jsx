@@ -7,6 +7,7 @@ import { createPost } from '../../../API/PostAPI';
 import { useSelector } from 'react-redux';
 import apiUploadImage from '../../../Hooks/apiUploadImage';
 import swalApp from '../../../Helpers/swalApp';
+import { useLocation } from 'react-router-dom';
 
 
 var formData = new FormData();
@@ -23,8 +24,12 @@ const ModalCreatePost = ({ show, handleClose }) => {
   const [groupId, setGroupId] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
   const [isAddImg, setIsAddImg] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
+    if (location.pathname.split('@')[0] === '/group/G') {
+     setGroupId(location?.pathname?.split("/")[2].split("@")[1]);
+    }
     const fetchCategories = async () => {
       if (categories.length === 0) {
         try {
@@ -38,6 +43,7 @@ const ModalCreatePost = ({ show, handleClose }) => {
     };
     
     if (show) {
+    
       fetchCategories();
     }
   }, [show]);
@@ -88,7 +94,7 @@ const ModalCreatePost = ({ show, handleClose }) => {
       content: content,
       image: imagePreview,
     };
-    console.log(isAddImg);
+  
     if(isAddImg){
       try {
         let res = await apiUploadImage(formData);
