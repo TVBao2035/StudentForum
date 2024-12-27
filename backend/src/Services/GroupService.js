@@ -58,16 +58,16 @@ class GroupService {
                         ]
                     }
                 })
+                if(!invitation) return resolve({
+                    status: 404,
+                    message: `Không tìm thấy lời mời với ID : ${invitationId}`
+                });
+                
                 const group = await db.Group.findOne({
                     where: {
                         id: invitation.groupId
                     }
                 })
-                if(!invitation) return resolve({
-                    status: 404,
-                    message: `Không tìm thấy lời mời với ID : ${invitationId}`
-                });
-
                 invitation.isDelete = true;
                 await invitation.save();
                 await createHistory({

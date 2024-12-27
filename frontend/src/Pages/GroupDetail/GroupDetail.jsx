@@ -54,6 +54,7 @@ const GroupDetail = () => {
   }
 
   const handleDeleteMember = async (invitationId) => {
+    console.log(invitationId);
     let res = await deleteGroupInvitation(invitationId);
     if (res.status !== 200) {
       swalApp("error", res.message);
@@ -207,7 +208,7 @@ const GroupDetail = () => {
                   id={member.invitation.id}
                   onClick={inforGroup?.captain.id !== member.invitation.id
                     && inforGroup?.captain.id === user?.id ?
-                    () => handleDeleteMember(member.invitation.id) : () => { }}
+                    () => handleDeleteMember(member?.id) : () => { }}
                 />)
               }
             </FriendListPage>
