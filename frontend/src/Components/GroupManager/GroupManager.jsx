@@ -6,7 +6,7 @@ export default function GroupManager({ groups = [], onEdit, onDelete }) {
     <div className="tw-bg-gradient-to-br tw-from-gray-50 tw-to-gray-100 tw-min-h-screen tw-py-8 tw-px-4 sm:tw-px-6 lg:tw-px-8">
       <div className="tw-max-w-7xl tw-mx-auto">
         <div className="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-6">
-          {groups.map((group) => (
+          {groups?.map((group) => (
             <div
               key={group.id}
               className="tw-bg-white tw-rounded-xl tw-shadow-md tw-overflow-hidden hover:tw-shadow-2xl tw-transition-all tw-duration-500 tw-transform hover:-tw-translate-y-1"

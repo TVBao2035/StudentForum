@@ -38,7 +38,7 @@ export default function CategoriesTab() {
     try {
       const response = await getAllCategory(search);
       if (Array.isArray(response.data)) {
-        const updatedCategories = response.data
+        const updatedCategories = response?.data
           .filter((category) => category && category.id)
           .map((category) => ({
             ...category,
@@ -126,7 +126,7 @@ export default function CategoriesTab() {
         });
 
         setCategories((prevCategories) =>
-          prevCategories.map((category) =>
+          prevCategories?.map((category) =>
             category.id === selectedCategory.id
               ? { ...category, name: categoryName }
               : category

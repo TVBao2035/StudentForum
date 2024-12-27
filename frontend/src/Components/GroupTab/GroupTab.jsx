@@ -189,7 +189,7 @@ export default function GroupTab() {
         });
 
         setGroups((prevGroups) =>
-          prevGroups.map((group) =>
+          prevGroups?.map((group) =>
             group.id === selectedGroup.id ? { ...group, ...groupData } : group
           )
         );

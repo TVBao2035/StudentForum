@@ -176,7 +176,7 @@ const GroupDetail = () => {
         </div>
         <div >
           {
-            pageNumber === 2 && inforGroup?.captain.id === user?.id ?
+            pageNumber === 2 && inforGroup?.captain?.id === user?.id ?
               <GroupInvitation 
                 handleAcceptInvitation={handleAcceptInvitation}
                 handleDeleteInvitation={handleDeleteInvitation}
@@ -197,7 +197,7 @@ const GroupDetail = () => {
             pageNumber === 3 &&
             <FriendListPage>
               {
-                inforGroup.groupuser.map(member =>  
+                inforGroup?.groupuser?.map(member =>  
                 <FriendItem
                   icon={
                     inforGroup?.captain.id === user?.id
@@ -206,7 +206,7 @@ const GroupDetail = () => {
                   avatar={member.invitation.avatar}
                   name={member.invitation.name}
                   id={member.invitation.id}
-                  onClick={inforGroup?.captain.id !== member.invitation.id
+                  onClick={inforGroup?.captain.id !== member?.invitation?.id
                     && inforGroup?.captain.id === user?.id ?
                     () => handleDeleteMember(member?.id) : () => { }}
                 />)
