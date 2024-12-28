@@ -23,6 +23,11 @@ const GroupDetail = () => {
 
   const getGroup = async (groupId) => {
     let res = await getDetailGroup(groupId);
+    if(res.status !== 200){
+      swalApp("error", res.message);
+      navigate("/group/discover");
+      return;
+    }
     setInforGroup(res.data);
     await timeOut(300);
     setLoading(false);
@@ -83,7 +88,7 @@ const GroupDetail = () => {
         e.target.value = 0;
         return ;
       }
-
+      swalApp("success", res.message);
       navigate("/group/discover")
     }
   }

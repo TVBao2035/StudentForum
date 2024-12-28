@@ -50,9 +50,6 @@ const ModalCreateGroup = () => {
     }
 
     const handleSubmit = async () => {
-    
-       console.log(formData.get('file'));
-       console.log(typeSelect);
         if (Number(typeSelect) === 1){ // user is using file for image
             try {
                 let res =  await apiUploadImage(formData);
@@ -71,6 +68,7 @@ const ModalCreateGroup = () => {
             swalApp("error", res.message);
             return ;
         }
+        swalApp("success", res.message);
         setData(initData);
         setMessageList(initMessageList);
         dispatch(closeModalCreateGroup());

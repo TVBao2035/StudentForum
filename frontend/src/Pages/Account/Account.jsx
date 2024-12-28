@@ -143,8 +143,6 @@ export default function Account() {
         }
     };
 
-
-
     const handleSubmit = async (event) => {
         event.preventDefault();
         await timeOut(300);
@@ -193,11 +191,11 @@ export default function Account() {
                 await timeOut(300);
                 setIsLoading(false);
                 dispatch(setDataMain({
-                    id: user.id,
                     name: userData.name,
                     phone: userData.phone,
                     email: userData.email,
-                    avatar: userData.avatar
+                    avatar: userData.avatar,
+                    ...user
                 }))
                 Swal.fire({
                     title: 'Cập nhật thông tin tài khoản thành công!',
@@ -206,7 +204,7 @@ export default function Account() {
                     position: 'top-end',
                     timerProgressBar: true,
                     showConfirmButton: false,
-                    timer: 1000,
+                    timer: 5000,
                 });
             } 
         } catch (error) {
@@ -303,9 +301,9 @@ export default function Account() {
                                                 type="email"
                                                 name="email"
                                                 id="email"
+                                                disabled
                                                 className="form-control"
                                                 value={userData.email}
-                                                onChange={handleInputChange}
                                             />
                                             {errors.email && <div className="text-danger">{errors.email}</div>}
                                         </div>

@@ -31,7 +31,7 @@ export default function Input(
             setMessage(pre => {
                 return {
                     ...pre,
-                    [e.target.name]: `This ${firstLetterUpperCase(e.target.name)} Is Not Blank!!!`
+                    [e.target.name]: `Trường ${firstLetterUpperCase(e.target.name)} không được để trống!!!`
                 }
             })
            return;
@@ -42,7 +42,7 @@ export default function Input(
             setMessage(pre => {
                 return {
                     ...pre,
-                    [e.target.name]: "Email Is Invalid!!!"
+                    [e.target.name]: "Email không hợp lệ!!!"
                 }
             })
             return;
@@ -52,7 +52,7 @@ export default function Input(
             setMessage(pre => {
                 return {
                     ...pre,
-                    [e.target.name]: "Password Is At Least 3 Letters!!!"
+                    [e.target.name]: "Password có ít nhất 3 ký tự!!!"
                 }
             })
             return;
@@ -62,7 +62,7 @@ export default function Input(
 
   return (
       <div className='Input mb-2 user-select-none w-100'>
-          <div className='d-flex text-dark  justify-content-center  gap-1 flex-column w-100'>
+          <div className='d-flex justify-content-center  gap-1 flex-column w-100'>
             <label 
               htmlFor=""
             >{firstLetterUpperCase(label)}: </label>

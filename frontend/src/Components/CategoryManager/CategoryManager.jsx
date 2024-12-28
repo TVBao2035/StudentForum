@@ -29,7 +29,13 @@ export default function CategoryManager({
             ref={provided.innerRef}
             className="tw-space-y-4 tw-max-h-[70vh] tw-overflow-auto"
           >
-            {categories
+            {
+            categories.length === 0 ? (
+              <div className="tw-flex tw-items-center" >
+                <span >Không tìm thấy thể loại bài đăng</span>
+              </div>
+            ): 
+            categories
               .filter((category) => category && category.id)
               .map((category, index) => (
                 <Draggable

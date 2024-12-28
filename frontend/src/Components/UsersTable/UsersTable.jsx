@@ -3,6 +3,7 @@ import { FiEdit, FiTrash2 } from "react-icons/fi";
 import Avatar from "../Avatar";
 
 export default function UsersTable({ users = [], onEdit, onDelete }) {
+
   return(
     <div style={{color: "black"}} className="tw-overflow-x-auto tw-bg-gradient-to-r tw-from-blue-50 tw-to-purple-50 tw-rounded-lg tw-p-4">
     <table className="tw-min-w-full tw-bg-white tw-rounded-lg tw-overflow-hidden tw-shadow-xl">
@@ -15,14 +16,22 @@ export default function UsersTable({ users = [], onEdit, onDelete }) {
         </tr>
       </thead>
       <tbody className="tw-divide-y tw-divide-gray-200">
-        {users.map((user) => (
+        {
+        users.length === 0 ? (
+          <tr key={"None"} className="hover:tw-bg-gray-50 tw-transition tw-duration-150">
+            <td className="tw-px-6 tw-py-4 tw-whitespace-nowrap">
+              <span className="tw-text-sm tw-text-gray-900 tw-items-center">Không tìm thấy người dùng</span>
+            </td>
+          </tr>
+        ):(
+          users.map((user) => (
           <tr key={user.id} className="hover:tw-bg-gray-50 tw-transition tw-duration-150">
             <td className="tw-px-6 tw-py-4 tw-whitespace-nowrap">
               <div className="tw-flex tw-items-center">
                 <Avatar
-                 normal
-                 className="tw-rounded-full tw-ring-2 tw-ring-indigo tw-p-1"
-                  
+                  normal
+                  className="tw-rounded-full tw-ring-2 tw-ring-indigo tw-p-1"
+
                   link={user.avatar}
                 />
                 <div className="tw-ml-4">
@@ -40,12 +49,12 @@ export default function UsersTable({ users = [], onEdit, onDelete }) {
             </td>
             <td className="tw-px-6 tw-py-4 tw-whitespace-nowrap tw-text-sm tw-font-medium">
               <button
-                onClick={() => onEdit && onEdit(user.id)} 
+                onClick={() => onEdit && onEdit(user.id)}
                 className="tw-text-indigo-600 hover:tw-text-indigo-900 tw-mr-4 tw-transition tw-duration-150 tw-transform hover:tw-scale-110"
               >
                 <FiEdit className="tw-h-5 tw-w-5" />
               </button>
-              <button 
+              <button
                 onClick={() => onDelete && onDelete(user.id)}
                 className="tw-text-red-600 hover:tw-text-red-900 tw-transition tw-duration-150 tw-transform hover:tw-scale-110"
               >
@@ -53,7 +62,9 @@ export default function UsersTable({ users = [], onEdit, onDelete }) {
               </button>
             </td>
           </tr>
-        ))}
+          ))
+        )
+      }
       </tbody>
     </table>
   </div>

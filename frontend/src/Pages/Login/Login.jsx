@@ -79,7 +79,6 @@ export default function Login() {
   const fetchLogout = async () => {
     let response = await logOut();
     if (response.status === 200) {
-      swalApp('success', response.message);
       localStorage.removeItem(process.env.REACT_APP_LOGIN_LOCAL_STORAGE);
       naigate('/login');
       return;

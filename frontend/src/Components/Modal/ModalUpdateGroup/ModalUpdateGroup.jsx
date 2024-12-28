@@ -76,7 +76,7 @@ const ModalUpdateGroup = () => {
       swalApp('error', res.message);
       return;
     }
-
+    swalApp("success", res.message);
     setData(initData);
     setMessageList(initMessageList);
     dispatch(closeModalUpdateGroup());

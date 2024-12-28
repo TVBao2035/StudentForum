@@ -79,12 +79,12 @@ const ModalCreatePost = ({ show, handleClose }) => {
     setError(null);
     setSuccessMessage("");
     if (!selectedCategory) {
-      setError("Please select a category!");
+      setError("Vui lòng chọn thể loại bài đăng!");
       return;
     }
 
     if (!content) {
-      setError("Please enter content!")
+      setError("Vui lòng nhập nội dung!")
       return;
     }
     const postData = {
@@ -109,7 +109,7 @@ const ModalCreatePost = ({ show, handleClose }) => {
       const response = await createPost(postData);
       if (response.status === 200) {
         //setSuccessMessage('Post created successfully!');
-        Swal.fire("Success", "Post created successfully!", "success");
+        Swal.fire("Success", "Tạo bài đăng thành công", "success");
         handleClose();
       }
       else {

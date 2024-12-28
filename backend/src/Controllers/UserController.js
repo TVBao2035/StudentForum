@@ -8,7 +8,6 @@ class UserController{
 
     async changePassword (req, res){
         try {
-        
             const data = await UserService.changePassword(req.body, req.user.decode.id);
             res.status(200).json(data);
         } catch (error) {

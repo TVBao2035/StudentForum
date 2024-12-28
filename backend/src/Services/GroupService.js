@@ -271,9 +271,25 @@ class GroupService {
         })
     }
 
-    getById(groupId) {
+    getById(groupId, user) {
         return new Promise(async (resolve, reject) => {
             try {
+                const checkUserExitInGroup = await db.GroupUser.findOne({
+                    where:{
+                        [Op.and]:[
+                            {groupId},
+                            {userId: user.id},
+                            {isAccept: true},
+                            {isDelete: false}
+                        ]
+                    }
+                });
+                if(!checkUserExitInGroup){
+                    return resolve({
+                        status: 404,
+                        message: "Bạn không có quyền truy cập vào nhóm"
+                    });
+                }
                 const group = await checkGroup(groupId);
 
                 if (group.status === 404) return resolve(group);

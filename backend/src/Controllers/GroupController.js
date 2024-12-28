@@ -16,6 +16,7 @@ class GroupController{
             res.status(400).json(error);
         }
     }
+
     async deleteInvitation(req, res){
         try {
             const invitationId = req.params.id;
@@ -104,7 +105,7 @@ class GroupController{
     async getById(req, res){
         try {
             const groupId = req.params.id;
-            const data = await GroupService.getById(groupId);
+            const data = await GroupService.getById(groupId, req.user.decode);
             res.status(200).json(data);
         } catch (error) {
             console.log(error);

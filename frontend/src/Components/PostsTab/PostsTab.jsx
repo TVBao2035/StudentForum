@@ -130,14 +130,16 @@ export default function PostsTab() {
       Swal.fire("Error", "Please fill in all required fields.", "error");
       return;
     }
-    try {
-      let res = await apiUploadImage(formData);
-      newPost.image = res.data.url;
-      setIsChangeImage(false);
-    } catch (error) {
-      swalApp("error", "Lỗi upload ảnh");
-      return;
-    }
+    if(isChangeImage){
+      try {
+        let res = await apiUploadImage(formData);
+        newPost.image = res.data.url;
+        setIsChangeImage(false);
+      } catch (error) {
+        swalApp("error", "Lỗi upload ảnh");
+        return;
+      }
+        }
 
     try {
 

@@ -27,7 +27,7 @@ export default function Home() {
     <div className='Home mb-5 pb-5'>
       <div className='container px-5 mx-5'>
         {
-          listPost.map(post => (
+          listPost?.map(post => (
             <Post 
               small
               key={`post-${post?.id}`} 
