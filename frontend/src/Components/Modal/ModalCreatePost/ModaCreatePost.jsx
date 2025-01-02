@@ -70,7 +70,8 @@ const ModalCreatePost = ({ show, handleClose }) => {
     setSelectedCategory("");
     setError("");
     setGroupId(null);
-    //setImages(null);
+    formData = new FormData();
+    setIsAddImg(false);
     setSuccessMessage("");
     handleClose();
   }
@@ -111,6 +112,14 @@ const ModalCreatePost = ({ show, handleClose }) => {
         //setSuccessMessage('Post created successfully!');
         Swal.fire("Success", "Tạo bài đăng thành công", "success");
         handleClose();
+        setImagePreview("");
+        setContent("");
+        setSelectedCategory("");
+        setError("");
+        setGroupId(null);
+        formData = new FormData();
+        setIsAddImg(false);
+        setSuccessMessage("");
       }
       else {
         setError(response.message || 'Something went wrong!');

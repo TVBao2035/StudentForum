@@ -13,8 +13,8 @@ import swalApp from '../../Helpers/swalApp';
 
 export default function Login() {
   const initInfor = {
-    email: "bao@gmail.com",
-    password: "12345"
+    email: "",
+    password: ""
 
   }
 
